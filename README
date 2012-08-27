@@ -11,14 +11,18 @@ Django-DownloadView provides (class-based) generic download views for Django.
 
 Example, in some urls.py:
 
-::
+.. code-block:: python
 
-  >>> from django.conf.urls import url, url_patterns
-  >>> from django_downloadview import DownloadView
-  >>> download = DownloadView.as_view(file='path/to/file.pdf')
-  >>> url_patterns = (
-  ...     url('^download/file.pdf$', download, name='download'),
-  ... )
+   from django.conf.urls import url, url_patterns
+   from django_downloadview import ObjectDownloadView
+   from demoproject.download.models import Document  # A model with a FileField.
+
+
+   download = ObjectDownloadView.as_view(model=Document, file_attribute='file')
+
+   url_patterns = ('',
+       url('^download/file.pdf$', download, name='download'),
+   )
  
 
 **********
