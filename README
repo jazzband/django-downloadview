@@ -1,0 +1,26 @@
+###################
+Django-DownloadView
+###################
+
+Django-DownloadView provides (class-based) generic download views for Django.
+
+Example, in some urls.py:
+
+::
+
+  >>> from django.conf.urls import url, url_patterns
+  >>> from django_downloadview import DownloadView
+  >>> download = DownloadView.as_view(file='path/to/file.pdf')
+  >>> url_patterns = (
+  ...     url('^download/file.pdf$', download, name='download'),
+  ... )
+ 
+
+**********
+Ressources
+**********
+
+* online documentation: http://django-downloadview.readthedocs.org
+* PyPI page: http://pypi.python.org/pypi/django-downloadview
+* code repository: https://github.com/benoitbryon/django-downloadview
+* bugtracker: https://github.com/benoitbryon/django-downloadview/issues
