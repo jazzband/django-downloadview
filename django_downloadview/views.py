@@ -39,9 +39,9 @@ class DownloadView(DownloadMixin, View):
 
 
 class ObjectDownloadView(DownloadMixin, BaseDetailView):
-    file_attribute = 'file'
+    file_field = 'file'
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        self.file = getattr(self.object, self.file_attribute)
+        self.file = getattr(self.object, self.file_field)
         return self.render_to_response()
