@@ -54,7 +54,8 @@ maintainer-clean: distclean
 
 
 test:
-	bin/nosetests --config=etc/nose.cfg
+	#bin/nosetests --config=etc/nose.cfg
+	bin/demo test download
 
 
 documentation:
