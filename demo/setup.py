@@ -15,7 +15,8 @@ NAME = 'django-downloadview-demo'
 README = read_relative_file('README')
 VERSION = '0.1'
 PACKAGES = ['demoproject']
-REQUIRES = ['django-downloadview']
+REQUIRES = ['django-downloadview',
+            'django-nose']
 
 
 setup(name=NAME,
