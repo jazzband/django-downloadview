@@ -1,5 +1,5 @@
 """django-downloadview provides generic download views for Django."""
-from django_downloadview.views import DownloadView
+from django_downloadview.views import DownloadView, ObjectDownloadView
 
 
 #: Implement :pep:`396`
