@@ -19,7 +19,7 @@ class DownloadMixin(object):
         """Returns a response with a file as attachment."""
         mime_type = self.get_mime_type()
         if isinstance(self.file, File):
-            absolute_filename = self.file.name
+            absolute_filename = self.file.path
         else:
             absolute_filename = abspath(self.file)
         filename = basename(absolute_filename)

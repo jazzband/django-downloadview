@@ -42,6 +42,8 @@ update: develop
 
 clean:
 	find $(ROOT_DIR)/ -name "*.pyc" -delete
+	find $(ROOT_DIR)/ -name ".noseids" -delete
+	rm nosetests.xml
 
 
 distclean: clean
@@ -54,8 +56,7 @@ maintainer-clean: distclean
 
 
 test:
-	#bin/nosetests --config=etc/nose.cfg
-	bin/demo test download
+	bin/demo test demo
 
 
 documentation:

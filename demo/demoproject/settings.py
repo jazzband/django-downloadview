@@ -159,3 +159,16 @@ LOGGING = {
 }
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+NOSE_ARGS = ['--verbose',
+             '--nocapture',
+             '--rednose',
+             '--with-id', # allows --failed which only reruns failed tests
+             '--id-file=%s' % join(data_dir, 'test', 'noseids'),
+             '--with-doctest',
+             '--with-xunit',
+             '--xunit-file=%s' % join(data_dir, 'test', 'nosetests.xml'),
+             '--with-coverage',
+             '--cover-erase',
+             '--cover-package=django_downloadview',
+             '--no-path-adjustment',
+            ]
