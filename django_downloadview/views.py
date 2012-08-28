@@ -1,5 +1,6 @@
-from os.path import abspath, basename
+import os
 import shutil
+from wsgiref.util import FileWrapper
 
 from django.core.files import File
 from django.http import HttpResponse
@@ -20,16 +21,19 @@ class DownloadMixin(object):
         mime_type = self.get_mime_type()
         if isinstance(self.file, File):
             absolute_filename = self.file.path
+            wrapper = FileWrapper(self.file.file)
+            size = self.file.size
         else:
-            absolute_filename = abspath(self.file)
-        filename = basename(absolute_filename)
-        response = self.response_class(mimetype=mime_type)
-        # Open file as read binary.
-        with open(absolute_filename, 'rb') as f:
-            shutil.copyfileobj(f, response)
+            absolute_filename = os.path.abspath(self.file)
+            wrapper = FileWrapper(file(absolute_filename))
+            size = os.path.getsize(absolute_filename)
+        basename = os.path.basename(absolute_filename)
+        response = self.response_class(wrapper, content_type=mime_type,
+                                       mimetype=mime_type)
+        response['Content-Length'] = size
         # Do not call fsock.close() as  HttpResponse needs it open
         # Garbage collector will close it
-        response['Content-Disposition'] = 'attachment; filename=%s' % filename
+        response['Content-Disposition'] = 'attachment; filename=%s' % basename
         return response
 
 
