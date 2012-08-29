@@ -1,0 +1,19 @@
+django_downloadview Package
+===========================
+
+:mod:`django_downloadview` Package
+----------------------------------
+
+.. automodule:: django_downloadview.__init__
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`views` Module
+-------------------
+
+.. automodule:: django_downloadview.views
+    :members:
+    :undoc-members:
+    :show-inheritance:
+

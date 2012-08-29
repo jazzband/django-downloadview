@@ -59,8 +59,16 @@ test:
 	bin/demo test demo
 
 
-documentation:
+apidoc:
+	rm -rf docs/api/*
+	bin/sphinx-apidoc --suffix txt --output-dir $(ROOT_DIR)/docs/api django_downloadview
+
+
+sphinx:
 	make --directory=docs clean html doctest
+
+
+documentation: apidoc sphinx
 
 
 release:
