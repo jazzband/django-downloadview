@@ -12,6 +12,20 @@ from django.views.static import was_modified_since
 
 
 class DownloadMixin(object):
+    """Placeholders and base implementation to create file download views.
+
+    The get_file() method is a placeholder, which raises NotImplementedError
+    in base implementation.
+
+    The other methods provide an implementation that use the file object
+    returned by get_file(), supposing the file is hosted on the local
+    filesystem.
+
+    You may override one or several methods to adapt the implementation to your
+    use case.
+
+    """
+    #: Response class to be used in render_to_response().
     response_class = HttpResponse
 
     def get_file(self):
@@ -19,9 +33,28 @@ class DownloadMixin(object):
         raise NotImplementedError()
 
     def get_filename(self):
-        """Return absolute filename."""
+        """Return server-side absolute filename of the file to serve.
+
+        "filename" is used server-side, whereas "basename" is the filename
+        that the client receives for download (i.e. used client side).
+
+        """
         file_obj = self.get_file()
         return file_obj.name
+
+    def get_basename(self):
+        """Return client-side filename, without path, of the file to be served.
+
+        "basename" is the filename that the client receives for download,
+        whereas "filename" is used server-side.
+
+        The base implementation returns the basename of the server-side
+        filename.
+
+        You may override this method to change the behavior.
+
+        """
+        return os.path.basename(self.get_filename())
 
     def get_file_wrapper(self):
         """Return a wsgiref.util.FileWrapper instance for the file to serve."""
@@ -32,7 +65,7 @@ class DownloadMixin(object):
             return self.file_wrapper
 
     def get_mime_type(self):
-        """Return mime-type."""
+        """Return mime-type of the file to serve."""
         try:
             return self.mime_type
         except AttributeError:
@@ -43,7 +76,7 @@ class DownloadMixin(object):
             return self.mime_type
 
     def get_encoding(self):
-        """Return encoding of self.file."""
+        """Return encoding of the file to serve."""
         try:
             return self.encoding
         except AttributeError:
@@ -52,7 +85,7 @@ class DownloadMixin(object):
             return self.encoding
 
     def get_modification_time(self):
-        """Return last modification time of self.file."""
+        """Return last modification time of the file to serve."""
         try:
             return self.modification_time
         except AttributeError:
@@ -82,7 +115,7 @@ class DownloadMixin(object):
             return HttpResponseNotModified(mimetype=mime_type)
         # Stream the file.
         filename = self.get_filename()
-        basename = os.path.basename(filename)
+        basename = self.get_basename()
         encoding = self.get_encoding()
         wrapper = self.get_file_wrapper()
         response = self.response_class(wrapper, content_type=mime_type,
@@ -95,11 +128,27 @@ class DownloadMixin(object):
 
 
 class DownloadView(DownloadMixin, View):
+    """Download a file from storage and filename."""
+    #: Server-side name (including path) of the file to serve.
+    #:
+    #: If ``storage`` is not None, then the filename will be passed to the
+    #: storage, else filename is supposed to be an absolute filename of a file
+    #: located on the local filesystem.
     filename = None
+
+    #: Storage to use to fetch the file.
+    #:
+    #: Defaults to Django's DefaultStorage(), which itself defaults to a
+    #: FileSystemStorage relative to settings.MEDIA_ROOT.
+    #:
+    #: The ``storage`` can be set to None, but you should use one. As an
+    #: example, storage classes may encapsulate some security checks
+    #: (FileSystemStorage actually refuses to serve files outside its root
+    #: location).
     storage = DefaultStorage()
 
     def get_file(self):
-        """Return a file object for the file to serve."""
+        """Use filename and storage to return file object to serve."""
         try:
             return self._file
         except AttributeError:
@@ -113,13 +162,50 @@ class DownloadView(DownloadMixin, View):
                 raise Http404
 
     def get(self, request, *args, **kwargs):
+        """Handle GET requests: stream a file."""
         return self.render_to_response()
 
 
 class ObjectDownloadView(DownloadMixin, BaseDetailView):
+    """Download view for models which contain a FileField.
+
+    This class extends BaseDetailView, so you can use its arguments to target
+    the instance to operate on: slug, slug_kwarg, model, queryset...
+    See Django's DetailView reference for details.
+
+    In addition to BaseDetailView arguments, you can set arguments related to
+    the file to be downloaded.
+
+    The main one is ``file_field``.
+
+    The other arguments are provided for convenience, in case your model holds
+    some metadata about the file, such as its basename, its modification time,
+    its MIME type... These fields may be particularly handy if your file
+    storage is not the local filesystem.
+
+    """
+    #: Name of the model's attribute which contains the file to be streamed.
+    #: Typically the name of a FileField.
     file_field = 'file'
 
+    #: Optional name of the model's attribute which contains the basename.
+    basename_field = None
+
+    #: Optional name of the model's attribute which contains the encoding.
+    encoding_field = None
+
+    #: Optional name of the model's attribute which contains the MIME type.
+    mime_type_field = None
+
+    #: Optional name of the model's attribute which contains the modification
+    # time.
+    modification_time_field = None
+
+    #: Optional name of the model's attribute which contains the size.
+    size_field = None
+
     def get_fieldfile(self):
+        """Return FieldFile instance (i.e. FileField attribute)."""
         self.object = self.get_object()
         try:
             return self.fieldfile
@@ -128,10 +214,49 @@ class ObjectDownloadView(DownloadMixin, BaseDetailView):
             return self.fieldfile
 
     def get_file(self):
+        """Return File instance."""
         return self.get_fieldfile().file
 
+    def get_filename(self):
+        """Return absolute filename."""
+        file_obj = self.get_file()
+        return file_obj.name
+
+    def get_basename(self):
+        """Return client-side filename."""
+        if self.basename_field:
+            return getattr(self.object, self.basename_field)
+        else:
+            return super(ObjectDownloadView, self).get_basename()
+
+    def get_mime_type(self):
+        """Return mime-type."""
+        if self.mime_type_field:
+            return getattr(self.object, self.mime_type_field)
+        else:
+            return super(ObjectDownloadView, self).get_mime_type()
+
+    def get_encoding(self):
+        """Return encoding of the file to serve."""
+        if self.encoding_field:
+            return getattr(self.object, self.encoding_field)
+        else:
+            return super(ObjectDownloadView, self).get_encoding()
+
+    def get_modification_time(self):
+        """Return last modification time of the file to serve."""
+        if self.modification_time_field:
+            return getattr(self.object, self.modification_time_field)
+        else:
+            return super(ObjectDownloadView, self).get_modification_time()
+
     def get_size(self):
-        return self.get_fieldfile().size
+        """Return size of the file to serve."""
+        if self.size_field:
+            return getattr(self.object, self.size_field)
+        else:
+            return self.get_fieldfile().size
 
     def get(self, request, *args, **kwargs):
+        """Handle GET requests: stream a file."""
         return self.render_to_response()
