@@ -69,8 +69,8 @@ class DownloadMixin(object):
         try:
             return self.mime_type
         except AttributeError:
-            filename = self.get_filename()
-            self.mime_type, self.encoding = mimetypes.guess_type(filename)
+            basename = self.get_basename()
+            self.mime_type, self.encoding = mimetypes.guess_type(basename)
             if not self.mime_type:
                 self.mime_type = 'application/octet-stream'
             return self.mime_type
@@ -204,9 +204,18 @@ class ObjectDownloadView(DownloadMixin, BaseDetailView):
     #: Optional name of the model's attribute which contains the size.
     size_field = None
 
+    def get_object(self):
+        """Return model instance, using cache or a get_queryset()."""
+        try:
+            return self._object
+        except AttributeError:
+            self._object = super(ObjectDownloadView, self).get_object()
+        return self._object
+
+    object = property(get_object)
+
     def get_fieldfile(self):
         """Return FieldFile instance (i.e. FileField attribute)."""
-        self.object = self.get_object()
         try:
             return self.fieldfile
         except AttributeError:
