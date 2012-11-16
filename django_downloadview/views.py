@@ -1,11 +1,11 @@
+"""Views."""
 import mimetypes
 import os
-import shutil
 from wsgiref.util import FileWrapper
 
 from django.core.files import File
 from django.core.files.storage import DefaultStorage
-from django.http import HttpResponse
+from django.http import Http404, HttpResponse, HttpResponseNotModified
 from django.views.generic.base import View
 from django.views.generic.detail import BaseDetailView
 from django.views.static import was_modified_since
@@ -100,7 +100,7 @@ class DownloadMixin(object):
         except AttributeError:
             try:
                 self.size = self.stat.st_size
-            except AttributeError:              
+            except AttributeError:
                 self.size = os.path.getsize(self.get_filename())
             return self.size
 
@@ -110,7 +110,8 @@ class DownloadMixin(object):
         modification_time = self.get_modification_time()
         size = self.get_size()
         # Respect the If-Modified-Since header.
-        if_modified_since = self.request.META.get('HTTP_IF_MODIFIED_SINCE', None)
+        if_modified_since = self.request.META.get('HTTP_IF_MODIFIED_SINCE',
+                                                  None)
         if not was_modified_since(if_modified_since, modification_time, size):
             return HttpResponseNotModified(mimetype=mime_type)
         # Stream the file.
