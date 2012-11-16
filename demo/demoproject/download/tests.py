@@ -71,11 +71,13 @@ class DownloadViewTestCase(DownloadTestCase):
         """Download_hello_world view returns hello-world.txt as attachement."""
         response = self.client.get(self.download_hello_world_url)
         self.assertEquals(response.status_code, 200)
-        self.assertEquals(response['Content-Type'], 'text/plain')
+        self.assertEquals(response['Content-Type'],
+                          'text/plain; charset=utf-8')
+        self.assertFalse('ContentEncoding' in response)
         self.assertEquals(response['Content-Disposition'],
                           'attachment; filename=hello-world.txt')
         self.assertEqual(open(self.files['hello-world.txt']).read(),
-                         response.content) 
+                         response.content)
 
 
 class ObjectDownloadViewTestCase(DownloadTestCase):
@@ -89,8 +91,10 @@ class ObjectDownloadViewTestCase(DownloadTestCase):
         )
         response = self.client.get(self.download_document_url)
         self.assertEquals(response.status_code, 200)
-        self.assertEquals(response['Content-Type'], 'text/plain')
+        self.assertEquals(response['Content-Type'],
+                          'text/plain; charset=utf-8')
+        self.assertFalse('ContentEncoding' in response)
         self.assertEquals(response['Content-Disposition'],
                           'attachment; filename=hello-world.txt')
         self.assertEqual(open(self.files['hello-world.txt']).read(),
-                         response.content) 
+                         response.content)

@@ -3,6 +3,7 @@ import mimetypes
 import os
 from wsgiref.util import FileWrapper
 
+from django.conf import settings
 from django.core.files import File
 from django.core.files.storage import DefaultStorage
 from django.http import Http404, HttpResponse, HttpResponseNotModified
@@ -84,6 +85,14 @@ class DownloadMixin(object):
             self.mime_type, self.encoding = mimetypes.guess_type(filename)
             return self.encoding
 
+    def get_charset(self):
+        """Return the charset of the file to serve."""
+        try:
+            return self.charset
+        except AttributeError:
+            self.charset = settings.DEFAULT_CHARSET
+        return self.charset
+
     def get_modification_time(self):
         """Return last modification time of the file to serve."""
         try:
@@ -107,20 +116,23 @@ class DownloadMixin(object):
     def render_to_response(self, **response_kwargs):
         """Returns a response with a file as attachment."""
         mime_type = self.get_mime_type()
+        charset = self.get_charset()
+        content_type = '%s; charset=%s' % (mime_type, charset)
         modification_time = self.get_modification_time()
         size = self.get_size()
         # Respect the If-Modified-Since header.
         if_modified_since = self.request.META.get('HTTP_IF_MODIFIED_SINCE',
                                                   None)
         if not was_modified_since(if_modified_since, modification_time, size):
-            return HttpResponseNotModified(mimetype=mime_type)
+            return HttpResponseNotModified(content_type=content_type)
         # Stream the file.
         filename = self.get_filename()
         basename = self.get_basename()
         encoding = self.get_encoding()
         wrapper = self.get_file_wrapper()
-        response = self.response_class(wrapper, content_type=mime_type,
-                                       mimetype=mime_type)
+        response = self.response_class(wrapper, content_type=content_type)
+        if encoding:
+            response['Content-Encoding'] = encoding
         response['Content-Length'] = size
         # Do not call fsock.close() as HttpResponse needs it open.
         # Garbage collector will close it.
@@ -198,6 +210,9 @@ class ObjectDownloadView(DownloadMixin, BaseDetailView):
     #: Optional name of the model's attribute which contains the MIME type.
     mime_type_field = None
 
+    #: Optional name of the model's attribute which contains the charset.
+    charset_field = None
+
     #: Optional name of the model's attribute which contains the modification
     # time.
     modification_time_field = None
@@ -245,6 +260,13 @@ class ObjectDownloadView(DownloadMixin, BaseDetailView):
             return getattr(self.object, self.mime_type_field)
         else:
             return super(ObjectDownloadView, self).get_mime_type()
+
+    def get_charset(self):
+        """Return charset of the file to serve."""
+        if self.charset_field:
+            return getattr(self.object, self.charset_field)
+        else:
+            return super(ObjectDownloadView, self).get_charset()
 
     def get_encoding(self):
         """Return encoding of the file to serve."""
