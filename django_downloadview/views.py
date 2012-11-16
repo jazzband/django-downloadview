@@ -6,10 +6,12 @@ from wsgiref.util import FileWrapper
 from django.conf import settings
 from django.core.files import File
 from django.core.files.storage import DefaultStorage
-from django.http import Http404, HttpResponse, HttpResponseNotModified
+from django.http import Http404, HttpResponseNotModified
 from django.views.generic.base import View
 from django.views.generic.detail import BaseDetailView
 from django.views.static import was_modified_since
+
+from django_downloadview.response import DownloadResponse
 
 
 class DownloadMixin(object):
@@ -27,7 +29,7 @@ class DownloadMixin(object):
 
     """
     #: Response class to be used in render_to_response().
-    response_class = HttpResponse
+    response_class = DownloadResponse
 
     def get_file(self):
         """Return a django.core.files.File object, which is to be served."""
@@ -130,13 +132,16 @@ class DownloadMixin(object):
         basename = self.get_basename()
         encoding = self.get_encoding()
         wrapper = self.get_file_wrapper()
-        response = self.response_class(wrapper, content_type=content_type)
-        if encoding:
-            response['Content-Encoding'] = encoding
-        response['Content-Length'] = size
-        # Do not call fsock.close() as HttpResponse needs it open.
-        # Garbage collector will close it.
-        response['Content-Disposition'] = 'attachment; filename=%s' % basename
+        response = self.response_class(content=wrapper,
+                                       content_type=content_type,
+                                       content_length=size,
+                                       filename=filename,
+                                       basename=basename,
+                                       content_encoding=encoding,
+                                       expires=None)
+        # Do not close the file as response class may need it open: the wrapper
+        # is an iterator on the content of the file.
+        # Garbage collector will close the file.
         return response
 
 
@@ -172,7 +177,7 @@ class DownloadView(DownloadMixin, View):
                     self._file = File(open(self.filename))
                 return self._file
             except IOError:
-                raise Http404
+                raise Http404()
 
     def get(self, request, *args, **kwargs):
         """Handle GET requests: stream a file."""
