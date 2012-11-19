@@ -1,0 +1,118 @@
+###################
+Nginx optimisations
+###################
+
+If you serve Django behind Nginx, then you can delegate the file download
+service to Nginx and get increased performance:
+
+* lower resources used by Python/Django workers ;
+* faster download.
+
+See `Nginx X-accel documentation`_ for details.
+
+
+****************************
+Configure some download view
+****************************
+
+As an example, let's consider the following download view:
+
+* mapped on ``/document/<object-slug>/download``
+* returns DownloadResponse corresponding to Document's model FileField
+* Document storage root is :file:`/var/www/files/`.
+
+Configure Document storage:
+
+.. code-block:: python
+
+   storage = FileSystemStorage(location='var/www/files',
+                               url='/optimized-download')
+
+As is, Django is to serve the files, i.e. load chunks into memory and stream
+them.
+
+Nginx is much more efficient for the actual streaming.
+
+
+***************
+Configure Nginx
+***************
+
+See `Nginx X-accel documentation`_ for details.
+
+In this documentation, let's suppose we have something like this:
+
+.. code-block:: nginx
+
+   # Will serve /var/www/files/myfile.tar.gz
+   # When passed URI /protected_files/myfile.tar.gz
+   location /optimized-download {
+       internal;
+       alias /var/www/files;
+   }
+
+.. note::
+
+   ``/optimized-download`` is not available for the client, i.e. users
+   won't be able to download files via ``/optimized-download/<filename>``.
+
+.. warning::
+
+   Make sure Nginx can read the files to download! Check permissions.
+
+
+************************************************
+Global delegation, with XAccelRedirectMiddleware
+************************************************
+
+If you want to delegate all file downloads to Nginx, then use
+:py:class:`django_downloadview.nginx.XAccelRedirectMiddleware`.
+
+Register it in your settings:
+
+.. code-block:: python
+
+   MIDDLEWARE_CLASSES = (
+       # ...
+       'django_downloadview.nginx.XAccelRedirectMiddleware',
+       # ...
+   )
+
+Optionally customize configuration (default is "use Nginx's defaults").
+
+.. code-block:: python
+
+   NGINX_DOWNLOAD_MIDDLEWARE_EXPIRES = False  # Force no expiration.
+   NGINX_DOWNLOAD_MIDDLEWARE_WITH_BUFFERING = False  # Force buffering off.
+   NGINX_DOWNLOAD_MIDDLEWARE_LIMIT_RATE = False  # Force limit rate off.
+
+
+*************************************************
+Local delegation, with x_accel_redirect decorator
+*************************************************
+
+If you want to delegate file downloads to Nginx on a per-view basis, then use
+:py:func:`django_downloadview.nginx.x_accel_redirect` decorator.
+
+In some urls.py:
+
+.. code-block:: python
+
+   # ... import Document and django.core.urls
+
+   from django_downloadview import ObjectDownloadView
+   from django_downloadview.nginx import x_accel_redirect
+
+
+   download = x_accel_redirect(ObjectDownloadView.as_view(model=Document))
+
+   # ... URL patterns using ``download`` 
+
+
+**********
+References
+**********
+
+.. target-notes::
+
+.. _`Nginx X-accel documentation`: http://wiki.nginx.org/X-accel 

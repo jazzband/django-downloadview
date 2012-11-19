@@ -25,6 +25,14 @@ django_downloadview Package
     :undoc-members:
     :show-inheritance:
 
+:mod:`nginx` Module
+-------------------
+
+.. automodule:: django_downloadview.nginx
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 :mod:`response` Module
 ----------------------
 
