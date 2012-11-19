@@ -50,3 +50,13 @@ class DownloadResponse(HttpResponse):
         if expires:
             self['Expires'] = expires
         self['Content-Disposition'] = 'attachment; filename=%s' % basename
+
+
+def is_download_response(response):
+    """Return ``True`` if ``response`` is a download response.
+
+    Current implementation returns True if ``response`` is an instance of
+    :py:class:`django_downloadview.DownloadResponse`.
+
+    """
+    return isinstance(response, DownloadResponse)
