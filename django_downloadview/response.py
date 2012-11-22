@@ -6,7 +6,7 @@ class DownloadResponse(HttpResponse):
     """File download response."""
     def __init__(self, content, content_type, content_length, basename,
                  status=200, content_encoding=None, expires=None,
-                 filename=None):
+                 filename=None, url=None):
         """Constructor.
 
         It differs a bit from HttpResponse constructor.
@@ -35,8 +35,20 @@ class DownloadResponse(HttpResponse):
           It is used to set the "Expires" header.
 
         * ``filename`` is the server-side name of the file.
-          It may be used by decorators or middlewares to delegate the actual
-          streaming to a more efficient server (i.e. Nginx, Lighttpd...).
+          It may be used by decorators or middlewares.
+
+        * ``url`` is the actual URL of the file content.
+
+          * If Django is to serve the file, then ``url`` should be
+            ``request.get_full_path()``. This should be the default behaviour
+            when ``url`` is None.
+
+          * If ``url`` is not None and differs from
+            ``request.get_full_path()``, then it means that the actual download
+            should be performed at another location. In that case,
+            DownloadResponse doesn't return a redirection, but ``url`` may be
+            caught and used by download middlewares or decorators (Nginx,
+            Lighttpd...).
 
         """
         super(DownloadResponse, self).__init__(content=content, status=status,
