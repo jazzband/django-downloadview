@@ -115,7 +115,7 @@ class DownloadMixin(object):
                 self.size = os.path.getsize(self.get_filename())
             return self.size
 
-    def render_to_response(self, **response_kwargs):
+    def render_to_response(self, **kwargs):
         """Returns a response with a file as attachment."""
         mime_type = self.get_mime_type()
         charset = self.get_charset()
@@ -132,13 +132,15 @@ class DownloadMixin(object):
         basename = self.get_basename()
         encoding = self.get_encoding()
         wrapper = self.get_file_wrapper()
-        response = self.response_class(content=wrapper,
-                                       content_type=content_type,
-                                       content_length=size,
-                                       filename=filename,
-                                       basename=basename,
-                                       content_encoding=encoding,
-                                       expires=None)
+        response_kwargs = {'content': wrapper,
+                           'content_type': content_type,
+                           'content_length': size,
+                           'filename': filename,
+                           'basename': basename,
+                           'content_encoding': encoding,
+                           'expires': None}
+        response_kwargs.update(kwargs)
+        response = self.response_class(**response_kwargs)
         # Do not close the file as response class may need it open: the wrapper
         # is an iterator on the content of the file.
         # Garbage collector will close the file.
