@@ -199,9 +199,9 @@ class ObjectDownloadView(DownloadMixin, BaseDetailView):
     The main one is ``file_field``.
 
     The other arguments are provided for convenience, in case your model holds
-    some metadata about the file, such as its basename, its modification time,
-    its MIME type... These fields may be particularly handy if your file
-    storage is not the local filesystem.
+    some (deserialized) metadata about the file, such as its basename, its
+    modification time, its MIME type... These fields may be particularly handy
+    if your file storage is not the local filesystem.
 
     """
     #: Name of the model's attribute which contains the file to be streamed.
