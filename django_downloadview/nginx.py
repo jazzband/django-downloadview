@@ -15,15 +15,22 @@ from django_downloadview.utils import content_type_to_charset
 
 
 #: Default value for X-Accel-Buffering header.
-DEFAULT_BUFFERING = None
-if not hasattr(settings, 'NGINX_DOWNLOAD_MIDDLEWARE_BUFFERING'):
-    setattr(settings, 'NGINX_DOWNLOAD_MIDDLEWARE_BUFFERING', DEFAULT_BUFFERING)
+DEFAULT_WITH_BUFFERING = None
+if not hasattr(settings, 'NGINX_DOWNLOAD_MIDDLEWARE_WITH_BUFFERING'):
+    setattr(settings, 'NGINX_DOWNLOAD_MIDDLEWARE_WITH_BUFFERING',
+            DEFAULT_WITH_BUFFERING)
 
 
 #: Default value for X-Accel-Limit-Rate header.
 DEFAULT_LIMIT_RATE = None
 if not hasattr(settings, 'NGINX_DOWNLOAD_MIDDLEWARE_LIMIT_RATE'):
-    setattr(settings, 'NGINX_DOWNLOAD_MIDDLEWARE_LIMIT', DEFAULT_LIMIT_RATE)
+    setattr(settings, 'NGINX_DOWNLOAD_MIDDLEWARE_LIMIT_RATE', DEFAULT_LIMIT_RATE)
+
+
+#: Default value for X-Accel-Limit-Rate header.
+DEFAULT_EXPIRES = None
+if not hasattr(settings, 'NGINX_DOWNLOAD_MIDDLEWARE_EXPIRES'):
+    setattr(settings, 'NGINX_DOWNLOAD_MIDDLEWARE_EXPIRES', DEFAULT_EXPIRES)
 
 
 class XAccelRedirectResponse(HttpResponse):
@@ -84,7 +91,7 @@ class BaseXAccelRedirectMiddleware(BaseDownloadMiddleware):
                                       limit_rate=self.limit_rate)
 
 
-class XAccelRedirectMiddleware():
+class XAccelRedirectMiddleware(BaseXAccelRedirectMiddleware):
     """Apply X-Accel-Redirect globally.
 
     XAccelRedirectResponseHandler with django settings.

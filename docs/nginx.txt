@@ -109,6 +109,131 @@ In some urls.py:
    # ... URL patterns using ``download`` 
 
 
+********************
+Sample configuration
+********************
+
+In this sample configuration...
+
+* we register files in some "myapp.models.Document" model
+* store files in :file:`/var/www/private/` folder
+* publish files at ``/download/<pk>/`` URL
+* restrict access to authenticated users with the ``login_required`` decorator
+* delegate file download to Nginx, via ``/private/`` internal URL.
+
+Nginx
+=====
+
+:file:`/etc/nginx/sites-available/default`:
+
+.. code-block:: nginx
+
+   charset utf-8;
+
+   # Django-powered service.
+   upstream frontend {
+       server 127.0.0.1:8000 fail_timeout=0;
+   }
+
+   server {
+       listen 80 default;
+
+       # File-download proxy.
+       # See http://wiki.nginx.org/X-accel
+       # and https://github.com/benoitbryon/django-downloadview
+       location /private/ {
+           internal;
+           # Location to files on disk.
+           # See Django's settings.NGINX_DOWNLOAD_MIDDLEWARE_MEDIA_ROOT
+           alias /var/www/private/;
+       }
+
+       # Proxy to Django-powered frontend.
+       location / {
+           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+           proxy_set_header Host $http_host;
+           proxy_redirect off;
+           proxy_pass http://frontend;
+       }
+   }
+
+Django settings
+===============
+
+:file:`settings.py`:
+
+.. code-block:: python
+
+   MYAPP_STORAGE_LOCATION = '/var/www/private/'
+   NGINX_DOWNLOAD_MIDDLEWARE_MEDIA_ROOT = MYAPP_STORAGE_LOCATION
+   MIDDLEWARE_CLASSES = (
+       # ...
+       'django_downloadview.nginx.XAccelRedirectMiddleware',
+       # ...
+   ) 
+   INSTALLED_APPS = (
+       # ...
+       'myapp',
+       # ...
+   )
+
+In some model
+=============
+
+:file:`myapp/models.py`:
+
+.. code-block:: python
+
+   from django.conf import settings
+   from django.db import models
+   from django.core.files.storage import FileSystemStorage
+
+
+   storage = FileSystemStorage(location=settings.MYAPP_STORAGE_LOCATION)
+
+
+   class Document(models.Model):
+       file = models.ImageField(storage=storage)
+
+URL patterns
+============
+
+:file:`myapp/urls.py`:
+
+.. code-block:: python
+
+   from django.conf.urls import url, url_patterns
+   from django.contrib.auth.decorators import login_required
+
+   from django_downloadview import ObjectDownloadView
+
+   from myapp.models import Document
+
+
+   download = login_required(ObjectDownloadView.as_view(model=Document))
+
+   url_patterns = ('',
+       url('^download/(?P<pk>[0-9]+/$', download, name='download'),
+   )
+
+
+*************
+Common issues
+*************
+
+``Unknown charset "utf-8" to override``
+=======================================
+
+Add ``charset utf-8;`` in your nginx configuration file.
+
+``open() "path/to/something" failed (2: No such file or directory)``
+====================================================================
+
+Check your ``settings.NGINX_DOWNLOAD_MIDDLEWARE_MEDIA_ROOT`` in Django
+configuration VS ``alias`` in nginx configuration: in a standard configuration,
+they should be equal.
+
+
 **********
 References
 **********

@@ -16,6 +16,7 @@ class BaseDownloadMiddleware(object):
         """Call ``process_download_response()`` if ``response`` is download."""
         if self.is_download_response(response):
             return self.process_download_response(request, response)
+        return response
 
     def process_download_response(self, request, response):
         """Handle file download response."""
