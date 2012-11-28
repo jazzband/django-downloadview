@@ -19,14 +19,10 @@ As an example, let's consider the following download view:
 
 * mapped on ``/document/<object-slug>/download``
 * returns DownloadResponse corresponding to Document's model FileField
-* Document storage root is :file:`/var/www/files/`.
+* Document storage root is :file:`/var/www/files/`
+* FileField's ``upload_to`` is "document".
 
-Configure Document storage:
-
-.. code-block:: python
-
-   storage = FileSystemStorage(location='var/www/files',
-                               url='/optimized-download')
+Files live in ``/var/www/files/document/`` folder.
 
 As is, Django is to serve the files, i.e. load chunks into memory and stream
 them.
@@ -82,6 +78,8 @@ Optionally customize configuration (default is "use Nginx's defaults").
 
 .. code-block:: python
 
+   NGINX_DOWNLOAD_MIDDLEWARE_MEDIA_ROOT = MEDIA_ROOT
+   NGINX_DOWNLOAD_MIDDLEWARE_MEDIA_URL = '/optimized-download'
    NGINX_DOWNLOAD_MIDDLEWARE_EXPIRES = False  # Force no expiration.
    NGINX_DOWNLOAD_MIDDLEWARE_WITH_BUFFERING = False  # Force buffering off.
    NGINX_DOWNLOAD_MIDDLEWARE_LIMIT_RATE = False  # Force limit rate off.
@@ -104,7 +102,9 @@ In some urls.py:
    from django_downloadview.nginx import x_accel_redirect
 
 
-   download = x_accel_redirect(ObjectDownloadView.as_view(model=Document))
+   download = x_accel_redirect(ObjectDownloadView.as_view(model=Document),
+                               media_root=settings.MEDIA_ROOT,
+                               media_url='/optimized-download')
 
    # ... URL patterns using ``download`` 
 

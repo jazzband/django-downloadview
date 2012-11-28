@@ -10,6 +10,8 @@ from django.core.urlresolvers import reverse_lazy as reverse
 from django.test import TestCase
 from django.test.utils import override_settings
 
+from django_downloadview.nginx import XAccelRedirectResponse
+
 from demoproject.download.models import Document
 
 
@@ -98,3 +100,24 @@ class ObjectDownloadViewTestCase(DownloadTestCase):
                           'attachment; filename=hello-world.txt')
         self.assertEqual(open(self.files['hello-world.txt']).read(),
                          response.content)
+
+
+class XAccelRedirectDecoratorTestCase(DownloadTestCase):
+    @temporary_media_root()
+    def test_response(self):
+        document = Document.objects.create(
+            slug='hello-world',
+            file=File(open(self.files['hello-world.txt'])),
+        )
+        download_url = reverse('download_document_nginx',
+                               kwargs={'slug': 'hello-world'})
+        response = self.client.get(download_url)
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(isinstance(response, XAccelRedirectResponse))
+        self.assertEquals(response['Content-Type'],
+                          'text/plain; charset=utf-8')
+        self.assertFalse('ContentEncoding' in response)
+        self.assertEquals(response['Content-Disposition'],
+                          'attachment; filename=hello-world.txt')
+        self.assertEquals(response['X-Accel-Redirect'],
+                          '/download-optimized/document/hello-world.txt') 

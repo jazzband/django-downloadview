@@ -6,10 +6,12 @@ See `Nginx X-accel documentation <http://wiki.nginx.org/X-accel>`_.
 from datetime import datetime, timedelta
 
 from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpResponse
 
-from django_downloadview.middlewares import BaseDownloadMiddleware
 from django_downloadview.decorators import DownloadDecorator
+from django_downloadview.middlewares import BaseDownloadMiddleware
+from django_downloadview.utils import content_type_to_charset
 
 
 #: Default value for X-Accel-Buffering header.
@@ -24,19 +26,15 @@ if not hasattr(settings, 'NGINX_DOWNLOAD_MIDDLEWARE_LIMIT_RATE'):
     setattr(settings, 'NGINX_DOWNLOAD_MIDDLEWARE_LIMIT', DEFAULT_LIMIT_RATE)
 
 
-def content_type_to_charset(content_type):
-    return 'utf-8'
-
-
 class XAccelRedirectResponse(HttpResponse):
     """Http response that delegate serving file to Nginx."""
-    def __init__(self, url, content_type, basename=None, expires=None,
+    def __init__(self, redirect_url, content_type, basename=None, expires=None,
                  with_buffering=None, limit_rate=None):
         """Return a HttpResponse with headers for Nginx X-Accel-Redirect."""
         super(XAccelRedirectResponse, self).__init__(content_type=content_type)
-        basename = basename or url.split('/')[-1]
+        basename = basename or redirect_url.split('/')[-1]
         self['Content-Disposition'] = 'attachment; filename=%s' % basename
-        self['X-Accel-Redirect'] = url
+        self['X-Accel-Redirect'] = redirect_url
         self['X-Accel-Charset'] = content_type_to_charset(content_type)
         if with_buffering is not None:
             self['X-Accel-Buffering'] = with_buffering and 'yes' or 'no'
@@ -52,18 +50,25 @@ class XAccelRedirectResponse(HttpResponse):
 
 class BaseXAccelRedirectMiddleware(BaseDownloadMiddleware):
     """Looks like a middleware, but configurable."""
-    def __init__(self, expires=None, with_buffering=None, limit_rate=None):
+    def __init__(self, media_root, media_url, expires=None,
+                 with_buffering=None, limit_rate=None):
         """Constructor."""
+        self.media_root = media_root
+        self.media_url = media_url
         self.expires = expires
         self.with_buffering = with_buffering
         self.limit_rate = limit_rate
 
-    def file_to_url(response):
-        return response.filename
+    def get_redirect_url(self, response):
+        """Return redirect URL for file wrapped into response."""
+        absolute_filename = response.filename
+        relative_filename = absolute_filename[len(self.media_root):]
+        return '/'.join((self.media_url.rstrip('/'),
+                         relative_filename.strip('/')))
 
     def process_download_response(self, request, response):
         """Replace DownloadResponse instances by NginxDownloadResponse ones."""
-        url = self.file_to_url(response)
+        redirect_url = self.get_redirect_url(response)
         if self.expires:
             expires = self.expires
         else:
@@ -71,8 +76,8 @@ class BaseXAccelRedirectMiddleware(BaseDownloadMiddleware):
                 expires = response.expires
             except AttributeError:
                 expires = None
-        return XAccelRedirectResponse(url=url,
-                                      content_type=response.content_type,
+        return XAccelRedirectResponse(redirect_url=redirect_url,
+                                      content_type=response['Content-Type'],
                                       basename=response.basename,
                                       expires=expires,
                                       with_buffering=self.with_buffering,
@@ -87,8 +92,22 @@ class XAccelRedirectMiddleware():
     """
     def __init__(self):
         """Use Django settings as configuration."""
+        try:
+            media_root = settings.NGINX_DOWNLOAD_MIDDLEWARE_MEDIA_ROOT
+        except AttributeError:
+            raise ImproperlyConfigured(
+                'settings.NGINX_DOWNLOAD_MIDDLEWARE_MEDIA_ROOT is required by '
+                '%s middleware' % self.__class__.name)
+        try:
+            media_url = settings.NGINX_DOWNLOAD_MIDDLEWARE_MEDIA_URL
+        except AttributeError:
+            raise ImproperlyConfigured(
+                'settings.NGINX_DOWNLOAD_MIDDLEWARE_MEDIA_URL is required by '
+                '%s middleware' % self.__class__.name)
         super(XAccelRedirectMiddleware, self).__init__(
-            expires=settings.NGINX_DOWNLOAD_MIDDLEWARE_EXPIRESS,
+            media_root,
+            media_url,
+            expires=settings.NGINX_DOWNLOAD_MIDDLEWARE_EXPIRES,
             with_buffering=settings.NGINX_DOWNLOAD_MIDDLEWARE_WITH_BUFFERING,
             limit_rate=settings.NGINX_DOWNLOAD_MIDDLEWARE_LIMIT_RATE)
 
