@@ -4,37 +4,29 @@ SHELL = /bin/bash
 PROJECT = 'django-downloadview'
 ROOT_DIR = $(shell pwd)
 DATA_DIR = $(ROOT_DIR)/var
-VIRTUALENV = virtualenv
-VIRTUALENV_DIR = $(ROOT_DIR)/lib/virtualenv
-PIP = $(VIRTUALENV_DIR)/bin/pip
+WGET = wget
+PYTHON = python
+BUILDOUT_BOOTSTRAP_URL = https://raw.github.com/buildout/buildout/1.6.3/bootstrap/bootstrap.py
+BUILDOUT_BOOTSTRAP = $(ROOT_DIR)/lib/buildout/bootstrap.py
 BUILDOUT = $(ROOT_DIR)/bin/buildout
 BUILDOUT_ARGS = -N
 
 
-virtualenv:
-	if [ ! -x $(PIP) ]; then \
-	    if [[ "`$(VIRTUALENV) --version`" < "`echo '1.8'`" ]]; then \
-	        $(VIRTUALENV) --no-site-packages --distribute $(VIRTUALENV_DIR); \
-	    else \
-	        $(VIRTUALENV) $(VIRTUALENV_DIR); \
-	    fi; \
-	    $(PIP) install -U pip; \
-	fi
-
-
 buildout:
-	# Install zc.buildout.
-	if [ ! -x $(BUILDOUT) ]; then \
+	# Download zc.buildout bootstrap.
+	if [ ! -f $(BUILDOUT_BOOTSTRAP) ]; then \
 	    mkdir -p $(ROOT_DIR)/lib/buildout; \
-	    $(PIP) install zc.buildout; \
-	    mkdir -p `dirname $(BUILDOUT)`; \
-	    ln -s $(VIRTUALENV_DIR)/bin/buildout $(BUILDOUT); \
+	    $(WGET) $(BUILDOUT_BOOTSTRAP_URL) -O $(BUILDOUT_BOOTSTRAP); \
+	fi
+	# Bootstrap buildout.
+	if [ ! -f $(BUILDOUT) ]; then \
+	    $(PYTHON) $(BUILDOUT_BOOTSTRAP) --distribute; \
 	fi
 	# Run zc.buildout.
 	$(BUILDOUT) $(BUILDOUT_ARGS)
 
 
-develop: virtualenv buildout
+develop: buildout
 
 
 update: develop
@@ -43,11 +35,11 @@ update: develop
 clean:
 	find $(ROOT_DIR)/ -name "*.pyc" -delete
 	find $(ROOT_DIR)/ -name ".noseids" -delete
-	rm nosetests.xml
 
 
 distclean: clean
 	rm -rf $(ROOT_DIR)/*.egg-info
+	rm -rf $(ROOT_DIR)/demo/*.egg-info
 
 
 maintainer-clean: distclean
@@ -60,7 +52,9 @@ test:
 
 
 apidoc:
+	cp docs/api/index.txt docs/api-backup.txt
 	rm -rf docs/api/*
+	mv docs/api-backup.txt docs/api/index.txt
 	bin/sphinx-apidoc --suffix txt --output-dir $(ROOT_DIR)/docs/api django_downloadview
 
 
@@ -69,6 +63,13 @@ sphinx:
 
 
 documentation: apidoc sphinx
+
+
+runserver:
+	bin/demo runserver
+
+
+demo: develop runserver
 
 
 release:

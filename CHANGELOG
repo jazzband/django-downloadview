@@ -1,0 +1,9 @@
+Changelog
+=========
+
+1.0 (unreleased)
+----------------
+
+- Introduced optimizations for Nginx X-Accel: a middleware and a decorator
+- Introduced generic views: DownloadView and ObjectDownloadView
+- Initialized project

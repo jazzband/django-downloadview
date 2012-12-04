@@ -1,6 +1,8 @@
-"""Let Nginx serve files for increased performance.
+"""Optimizations for Nginx.
 
-See `Nginx X-accel documentation <http://wiki.nginx.org/X-accel>`_.
+See also `Nginx X-accel documentation <http://wiki.nginx.org/X-accel>`_ and
+:doc:`narrative documentation about Nginx optimizations
+</optimizations/nginx>`.
 
 """
 from datetime import datetime, timedelta
@@ -15,6 +17,16 @@ from django_downloadview.utils import content_type_to_charset
 
 
 #: Default value for X-Accel-Buffering header.
+#: Also default value for
+#: ``settings.NGINX_DOWNLOAD_MIDDLEWARE_WITH_BUFFERING``.
+#:
+#: See http://wiki.nginx.org/X-accel#X-Accel-Limit-Buffering
+#:
+#: Default value is None, which means "let Nginx choose", i.e. use Nginx
+#: defaults or specific configuration.
+#: 
+#: If set to ``False``, Nginx buffering is disabled.
+#: If set to ``True``, Nginx buffering is enabled.
 DEFAULT_WITH_BUFFERING = None
 if not hasattr(settings, 'NGINX_DOWNLOAD_MIDDLEWARE_WITH_BUFFERING'):
     setattr(settings, 'NGINX_DOWNLOAD_MIDDLEWARE_WITH_BUFFERING',
@@ -22,19 +34,37 @@ if not hasattr(settings, 'NGINX_DOWNLOAD_MIDDLEWARE_WITH_BUFFERING'):
 
 
 #: Default value for X-Accel-Limit-Rate header.
+#: Also default value for ``settings.NGINX_DOWNLOAD_MIDDLEWARE_LIMIT_RATE``.
+#:
+#: See http://wiki.nginx.org/X-accel#X-Accel-Limit-Rate
+#:
+#: Default value is None, which means "let Nginx choose", i.e. use Nginx
+#: defaults or specific configuration.
+#: 
+#: If set to ``False``, Nginx limit rate is disabled.
+#: Else, it indicates the limit rate in bytes.
 DEFAULT_LIMIT_RATE = None
 if not hasattr(settings, 'NGINX_DOWNLOAD_MIDDLEWARE_LIMIT_RATE'):
     setattr(settings, 'NGINX_DOWNLOAD_MIDDLEWARE_LIMIT_RATE', DEFAULT_LIMIT_RATE)
 
 
-#: Default value for X-Accel-Limit-Rate header.
+#: Default value for X-Accel-Limit-Expires header.
+#: Also default value for ``settings.NGINX_DOWNLOAD_MIDDLEWARE_EXPIRES``.
+#:
+#: See http://wiki.nginx.org/X-accel#X-Accel-Limit-Expires
+#:
+#: Default value is None, which means "let Nginx choose", i.e. use Nginx
+#: defaults or specific configuration.
+#: 
+#: If set to ``False``, Nginx buffering is disabled.
+#: Else, it indicates the expiration delay, in seconds.
 DEFAULT_EXPIRES = None
 if not hasattr(settings, 'NGINX_DOWNLOAD_MIDDLEWARE_EXPIRES'):
     setattr(settings, 'NGINX_DOWNLOAD_MIDDLEWARE_EXPIRES', DEFAULT_EXPIRES)
 
 
 class XAccelRedirectResponse(HttpResponse):
-    """Http response that delegate serving file to Nginx."""
+    """Http response that delegates serving file to Nginx."""
     def __init__(self, redirect_url, content_type, basename=None, expires=None,
                  with_buffering=None, limit_rate=None):
         """Return a HttpResponse with headers for Nginx X-Accel-Redirect."""
@@ -56,7 +86,14 @@ class XAccelRedirectResponse(HttpResponse):
 
 
 class BaseXAccelRedirectMiddleware(BaseDownloadMiddleware):
-    """Looks like a middleware, but configurable."""
+    """Looks like a middleware, but it is configurable.
+
+    Standard Django middlewares are configured globally via settings. Instances
+    of this class are to be configured individually. It makes it possible to
+    use this class as the factory in
+    :py:class:`django_downloadview.decorators.DownloadDecorator`.
+
+    """
     def __init__(self, media_root, media_url, expires=None,
                  with_buffering=None, limit_rate=None):
         """Constructor."""
@@ -92,11 +129,7 @@ class BaseXAccelRedirectMiddleware(BaseDownloadMiddleware):
 
 
 class XAccelRedirectMiddleware(BaseXAccelRedirectMiddleware):
-    """Apply X-Accel-Redirect globally.
-
-    XAccelRedirectResponseHandler with django settings.
-
-    """
+    """Apply X-Accel-Redirect globally, via Django settings."""
     def __init__(self):
         """Use Django settings as configuration."""
         try:
@@ -122,6 +155,6 @@ class XAccelRedirectMiddleware(BaseXAccelRedirectMiddleware):
 #: Apply BaseXAccelRedirectMiddleware to ``view_func`` response.
 #:
 #: Proxies additional arguments (``*args``, ``**kwargs``) to
-#: :py:meth:`django_downloadview.nginx.BaseXAccelRedirectMiddleware.__init__`:
-#: ``expires``, ``with_buffering``, and ``limit_rate``.
+#: :py:class:`BaseXAccelRedirectMiddleware` constructor (``expires``,
+#: ``with_buffering``, and ``limit_rate``).
 x_accel_redirect = DownloadDecorator(BaseXAccelRedirectMiddleware)

@@ -1,0 +1,10 @@
+#########################
+About django-downloadview
+#########################
+
+.. toctree::
+
+   alternatives
+   license
+   authors
+   changelog

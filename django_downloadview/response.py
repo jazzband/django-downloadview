@@ -3,7 +3,12 @@ from django.http import HttpResponse
 
 
 class DownloadResponse(HttpResponse):
-    """File download response."""
+    """File download response.
+
+    ``content`` attribute is supposed to be a file object wrapper, which makes
+    this response "lazy".
+
+    """
     def __init__(self, content, content_type, content_length, basename,
                  status=200, content_encoding=None, expires=None,
                  filename=None, url=None):
@@ -68,7 +73,7 @@ def is_download_response(response):
     """Return ``True`` if ``response`` is a download response.
 
     Current implementation returns True if ``response`` is an instance of
-    :py:class:`django_downloadview.DownloadResponse`.
+    :py:class:`django_downloadview.response.DownloadResponse`.
 
     """
     return isinstance(response, DownloadResponse)

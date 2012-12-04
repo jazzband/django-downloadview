@@ -1,4 +1,9 @@
-"""View decorators."""
+"""View decorators.
+
+See also decorators provided by server-specific modules, such as
+:py:func:`django_downloadview.nginx.x_accel_redirect`.
+
+"""
 
 
 class DownloadDecorator(object):

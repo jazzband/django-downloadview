@@ -1,0 +1,25 @@
+############
+Installation
+############
+
+This project is open-source, published under BSD license.
+See :doc:`/about/license` for details.
+
+If you want to install a development environment, you should go to :doc:`/dev`
+documentation.
+
+Install the package with your favorite Python installer. As an example, with
+pip:
+
+.. code-block:: sh
+
+   pip install django-downloadview
+
+There is no need to register this application in your Django's
+``INSTALLED_APPS`` setting.
+
+Next, you'll have to setup some download view(s). See :doc:`demo project
+<demo>` for examples, and :doc:`API documentation <api/django_downloadview>`.
+
+Optionally, you may setup additional :doc:`server optimizations
+<optimizations/index>`.

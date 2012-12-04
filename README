@@ -4,11 +4,6 @@ Django-DownloadView
 
 Django-DownloadView provides (class-based) generic download views for Django.
 
-.. warning::
-
-   This project is experimental. It may be renamed or modified without
-   notices.
-
 Example, in some urls.py:
 
 .. code-block:: python

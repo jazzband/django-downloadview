@@ -1,0 +1,51 @@
+#############
+Optimizations
+#############
+
+Some reverse proxies allow applications to delegate actual download to the
+proxy:
+
+* with Django, manage permissions, generate files...
+* let the reverse proxy serve the file.
+
+As a result, you get increased performance: reverse proxies are more efficient
+than Django at serving static files.
+
+.. toctree::
+
+   nginx
+
+Currently, only `nginx's X-Accel`_ is supported, but `contributions are
+welcome`_!
+
+
+*****************
+How does it work?
+*****************
+
+The feature is inspired by `Django's TemplateResponse`_: the download views
+return some :py:class:`django_downloadview.response.DownloadResponse` instance.
+Such a response doesn't contain file data.
+
+By default, at the end of Django's request/response handling, Django is to
+iterate over the ``content`` attribute of the response. In a
+``DownloadResponse``, this ``content`` attribute is a file wrapper.
+
+It means that decorators and middlewares are given an opportunity to capture
+the ``DownloadResponse`` before the content of the file is loaded into memory
+As an example, :py:class:`django_downloadview.nginx.XAccelRedirectMiddleware`
+replaces ``DownloadResponse`` intance by some
+:py:class:`django_downloadview.nginx.XAccelRedirectResponse`.
+
+
+**********
+References
+**********
+
+.. target-notes::
+
+.. _`nginx's X-Accel`: http://wiki.nginx.org/X-accel
+.. _`contributions are welcome`:
+   https://github.com/benoitbryon/django-downloadview/issues?labels=optimizations
+.. _`Django's TemplateResponse`:
+   https://docs.djangoproject.com/en/1.4/ref/template-response/
