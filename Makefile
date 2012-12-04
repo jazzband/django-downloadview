@@ -65,11 +65,12 @@ sphinx:
 documentation: apidoc sphinx
 
 
-runserver:
+demo: develop
+	mkdir -p var/media/document
+	bin/demo syncdb --noinput
+	cp $(ROOT_DIR)/demo/demoproject/download/fixtures/hello-world.txt var/media/document/
+	bin/demo loaddata $(ROOT_DIR)/demo/demoproject/download/fixtures/demo.json
 	bin/demo runserver
-
-
-demo: develop runserver
 
 
 release:

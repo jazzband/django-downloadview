@@ -1,0 +1,10 @@
+[
+    {
+        "pk": 1, 
+        "model": "download.document", 
+        "fields": {
+            "slug": "hello-world", 
+            "file": "document/hello-world.txt"
+        }
+    }
+]

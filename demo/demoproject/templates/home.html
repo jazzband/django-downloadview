@@ -1,0 +1,15 @@
+{% load url from future %}
+<html>
+	<head>
+        <title>django-downloadview demo</title>
+	</head>
+	<body>
+        <h1>Welcome to django-downloadview demo!</h1>
+		<p>Here are some demo links. Browse the code to see how they are implemented</p>
+		<ul>
+            <li><a href="{% url 'download_hello_world' %}">DownloadView</a></li>
+            <li><a href="{% url 'download_document' 'hello-world' %}">ObjectDownloadView</a></li>
+            <li><a href="{% url 'download_document_nginx' 'hello-world' %}">ObjectDownloadView decorated with nginx X-Accel-Redirect</a> (better if served behind nginx)</li>
+        </ul>
+    </body>
+</html>
