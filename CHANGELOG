@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0 (unreleased)
+1.0 (2012-12-04)
 ----------------
 
 - Introduced optimizations for Nginx X-Accel: a middleware and a decorator
