@@ -23,6 +23,48 @@ Django-downloadview can replace Django's builtin static file view:
   serve files with Django.
 
 
+***************
+django-sendfile
+***************
+
+`django-sendfile`_ is a wrapper around web-server specific methods for sending
+files to web clients.
+
+API is made of a single ``sendfile()`` function.
+
+Views call the ``sendfile`` function. They don't care about the backend.
+There, django-downloadview's class-based views return some DownloadResponse.
+
+Optimizations are supported via backends. Backends are configured in settings.
+There, django-downloadview uses middlewares instead.
+
+It seems that django-senfile main focus is simplicity, whereas
+django-downloadview main focus is reusability. You may choose
+django-downloadview if you need integration with class-based views.
+
+As of 2012-12-10, ``django-sendfile`` seems quite popular and may be a good
+alternative.
+
+
+********************
+django-private-files
+********************
+
+`django-private-files`_ provides utilities for controlling access to static
+files based on conditions you can specify within your Django application.
+
+
+**********************
+django-protected-files
+**********************
+
+`django-protected-files`_ is a Django application that lets you serve protected
+static files via your frontend server after authorizing the user against
+``django.contrib.auth``.
+
+As of 2012-12-10, this project seems inactive.
+
+
 **********
 References
 **********
@@ -31,3 +73,7 @@ References
 
 .. _`Django has a builtin static file view`:
    https://docs.djangoproject.com/en/1.4/ref/contrib/staticfiles/#static-file-development-view
+.. _`django-sendfile`: http://pypi.python.org/pypi/django-sendfile
+.. _`django-private-files`: http://pypi.python.org/pypi/django-private-files
+.. _`django-protected-files`:
+   https://github.com/lincolnloop/django-protected-files
