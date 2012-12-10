@@ -95,6 +95,14 @@ Test and build
 Use `the Makefile`_.
 
 
+*********************
+Demo project included
+*********************
+
+The :doc:`/demo` is part of the tests. Maintain it along with code and
+documentation.
+
+
 **********
 References
 **********
