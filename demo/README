@@ -2,8 +2,8 @@
 Demo project
 ############
 
-The :file:`demo/` folder holds a demo project to illustrate (and test)
-django-downloadview usage.
+The :file:`demo/` folder holds a demo project to illustrate django-downloadview
+usage.
 
 
 ***********************
@@ -45,6 +45,44 @@ at http://localhost:8000/
    contains to your needs.
 
 Browse and use :file:`demo/demoproject/` as a sandbox.
+
+
+*********************************
+Base example provided in the demo
+*********************************
+
+In the "demoproject" project, there is an application called "download".
+
+:file:`demo/demoproject/settings.py`:
+
+.. literalinclude:: ../demo/demoproject/settings.py
+   :language: python
+   :lines: 33-49
+   :emphasize-lines: 44
+
+This application holds a ``Document`` model.
+
+:file:`demo/demoproject/download/models.py`:
+
+.. literalinclude:: ../demo/demoproject/download/models.py
+   :language: python 
+
+.. note::
+
+   The ``storage`` is the default one, i.e. it uses ``settings.MEDIA_ROOT``.
+   Combined to this ``upload_to`` configuration, files for ``Document`` model
+   live in :file:`var/media/document/` folder, relative to your
+   django-downloadview clone root.
+
+There is a download view named "download_document" for this model:
+
+:file:`demo/demoproject/download/urls.py`:
+
+.. literalinclude:: ../demo/demoproject/download/urls.py
+   :language: python
+
+As is, Django is to serve the files, i.e. load chunks into memory and stream
+them.
 
 
 **********

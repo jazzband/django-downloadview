@@ -41,6 +41,14 @@ django_downloadview Package
     :undoc-members:
     :show-inheritance:
 
+:mod:`test` Module
+------------------
+
+.. automodule:: django_downloadview.test
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 :mod:`utils` Module
 -------------------
 

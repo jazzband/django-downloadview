@@ -10,7 +10,7 @@ Example, in some urls.py:
 
    from django.conf.urls import url, url_patterns
    from django_downloadview import ObjectDownloadView
-   from demoproject.download.models import Document  # A model with a FileField.
+   from demoproject.download.models import Document  # A model with a FileField
 
 
    # ObjectDownloadView inherits from django.views.generic.BaseDetailView.
