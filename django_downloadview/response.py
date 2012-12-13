@@ -1,4 +1,8 @@
 """HttpResponse subclasses."""
+import os
+import mimetypes
+
+from django.conf import settings
 from django.http import HttpResponse
 
 
@@ -9,64 +13,111 @@ class DownloadResponse(HttpResponse):
     this response "lazy".
 
     """
-    def __init__(self, content, content_type, content_length, basename,
-                 status=200, content_encoding=None, expires=None,
-                 filename=None, url=None):
+    def __init__(self, file_instance, attachment=True, basename=None,
+                 status=200, content_type=None):
         """Constructor.
 
         It differs a bit from HttpResponse constructor.
 
-        Required arguments:
+        file_instance:
+          A file wrapper object. Could be a FieldFile.
 
-        * ``content`` is supposed to be an iterable that can read the file.
-          Consider :py:class:`wsgiref.util.FileWrapper`` as a good candidate.
+        attachement:
+          Boolean, whether to return the file as attachment or not. Affects
+          "Content-Disposition" header.
+          Defaults to ``True``.
 
-        * ``content_type`` contains mime-type and charset of the file.
-          It is used as "Content-Type" header.
+        basename:
+          Unicode. Only used if ``attachment`` is ``True``. Client-side name
+          of the file to stream. Affects "Content-Disposition" header.
+          Defaults to basename(``file_instance.name``).
 
-        * ``content_length`` is the size, in bytes, of the file.
-          It is used as "Content-Length" header.
+        status:
+          HTTP status code.
+          Defaults to 200.
 
-        * ``basename`` is the client-side name of the file ("save as" name).
-          It is used in "Content-Disposition" header.
-
-        Optional arguments:
-
-        * ``status`` is HTTP status code.
-
-        * ``content_encoding`` is used for "Content-Encoding" header.
-
-        * ``expires`` is a datetime.
-          It is used to set the "Expires" header.
-
-        * ``filename`` is the server-side name of the file.
-          It may be used by decorators or middlewares.
-
-        * ``url`` is the actual URL of the file content.
-
-          * If Django is to serve the file, then ``url`` should be
-            ``request.get_full_path()``. This should be the default behaviour
-            when ``url`` is None.
-
-          * If ``url`` is not None and differs from
-            ``request.get_full_path()``, then it means that the actual download
-            should be performed at another location. In that case,
-            DownloadResponse doesn't return a redirection, but ``url`` may be
-            caught and used by download middlewares or decorators (Nginx,
-            Lighttpd...).
+        content_type:
+          Value for "Content-Type" header.
+          If ``None``, then mime-type and encoding will be populated by the
+          response (default implementation uses mimetypes, based on file name).
+          Defaults is ``None``.
 
         """
-        super(DownloadResponse, self).__init__(content=content, status=status,
+        self.file = file_instance
+        super(DownloadResponse, self).__init__(content=self.file,
+                                               status=status,
                                                content_type=content_type)
-        self.filename = filename
         self.basename = basename
-        self['Content-Length'] = content_length
-        if content_encoding:
-            self['Content-Encoding'] = content_encoding
-        self.expires = expires
-        if expires:
-            self['Expires'] = expires
-        self['Content-Disposition'] = 'attachment; filename=%s' % basename
+        self.attachment = attachment
+        if not content_type:
+            del self['Content-Type']  # Will be set later.
+        # Apply default headers.
+        for header, value in self.default_headers.items():
+            if not header in self:
+                self[header] = value  # Does self support setdefault?
+
+    @property
+    def default_headers(self):
+        """Return dictionary of automatically-computed headers.
+
+        Uses an internal ``_default_headers`` cache.
+        Default values are computed if only cache hasn't been set.
+
+        """
+        try:
+            return self._default_headers
+        except AttributeError:
+            headers = {}
+            headers['Content-Type'] = self.get_content_type()
+            headers['Content-Length'] = self.file.size
+            if self.attachment:
+                headers['Content-Disposition'] = 'attachment; filename=%s' \
+                                                 % self.get_basename()
+            self._default_headers = headers
+            return self._default_headers
+
+    def items(self):
+        """Return iterable of (header, value).
+
+        This method is called by http handlers just before WSGI's
+        start_response() is called... but it is not called by
+        django.test.ClientHandler! :'(
+
+        """
+        return super(DownloadResponse, self).items()
+
+    def get_basename(self):
+        """Return basename."""
+        if self.attachment and self.basename:
+            return self.basename
+        else:
+            return os.path.basename(self.file.name)
+
+    def get_content_type(self):
+        """Return a suitable "Content-Type" header for ``self.file``."""
+        try:
+            return self.file.content_type
+        except AttributeError:
+            content_type_template = '%(mime_type)s; charset=%(charset)s'
+            return content_type_template % {'mime_type': self.get_mime_type(),
+                                            'charset': self.get_charset()}
+
+    def get_mime_type(self):
+        """Return mime-type of the file."""
+        default_mime_type = 'application/octet-stream'
+        basename = self.get_basename()
+        mime_type, encoding = mimetypes.guess_type(basename)
+        return mime_type or default_mime_type
+
+    def get_encoding(self):
+        """Return encoding of the file to serve."""
+        basename = self.get_basename()
+        mime_type, encoding = mimetypes.guess_type(basename)
+        return encoding
+
+    def get_charset(self):
+        """Return the charset of the file to serve."""
+        return settings.DEFAULT_CHARSET
 
 
 def is_download_response(response):

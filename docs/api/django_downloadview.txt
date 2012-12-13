@@ -17,6 +17,14 @@ django_downloadview Package
     :undoc-members:
     :show-inheritance:
 
+:mod:`files` Module
+-------------------
+
+.. automodule:: django_downloadview.files
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 :mod:`middlewares` Module
 -------------------------
 
