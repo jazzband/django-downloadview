@@ -47,7 +47,10 @@ class DownloadMixin(object):
         return self.get_file().modified_time
 
     def get_content_type(self):
-        return self.get_file().content_type
+        try:
+            return self.get_file().content_type
+        except:
+            return None
 
     def render_to_response(self, *args, **kwargs):
         """Returns a response with a file as attachment."""
