@@ -14,7 +14,7 @@ class DownloadResponse(HttpResponse):
 
     """
     def __init__(self, file_instance, attachment=True, basename=None,
-                 status=200, content_type=None, size=None):
+                 status=200, content_type=None):
         """Constructor.
 
         It differs a bit from HttpResponse constructor.
@@ -42,9 +42,6 @@ class DownloadResponse(HttpResponse):
           response (default implementation uses mimetypes, based on file name).
           Defaults is ``None``.
 
-        size:
-          Size of the file response
-
         """
         self.file = file_instance
         super(DownloadResponse, self).__init__(content=self.file,
@@ -52,8 +49,6 @@ class DownloadResponse(HttpResponse):
                                                content_type=content_type)
         self.basename = basename
         self.attachment = attachment
-        self.content_type = content_type
-        self.size = size
         if not content_type:
             del self['Content-Type']  # Will be set later.
         # Apply default headers.
@@ -74,7 +69,7 @@ class DownloadResponse(HttpResponse):
         except AttributeError:
             headers = {}
             headers['Content-Type'] = self.get_content_type()
-            headers['Content-Length'] = self.get_size()
+            headers['Content-Length'] = self.file.size
             if self.attachment:
                 headers['Content-Disposition'] = 'attachment; filename=%s' \
                                                  % self.get_basename()
@@ -100,15 +95,12 @@ class DownloadResponse(HttpResponse):
 
     def get_content_type(self):
         """Return a suitable "Content-Type" header for ``self.file``."""
-        if not self.content_type:
-            try:
-                return self.file.content_type
-            except AttributeError:
-                content_type_template = '%(mime_type)s; charset=%(charset)s'
-                return content_type_template % {
-                    'mime_type': self.get_mime_type(),
-                    'charset': self.get_charset()}
-        return self.content_type
+        try:
+            return self.file.content_type
+        except AttributeError:
+            content_type_template = '%(mime_type)s; charset=%(charset)s'
+            return content_type_template % {'mime_type': self.get_mime_type(),
+                                            'charset': self.get_charset()}
 
     def get_mime_type(self):
         """Return mime-type of the file."""
@@ -126,12 +118,6 @@ class DownloadResponse(HttpResponse):
     def get_charset(self):
         """Return the charset of the file to serve."""
         return settings.DEFAULT_CHARSET
-
-    def get_size(self):
-        """Return the size of the file to serve."""
-        if not self.size:
-            self.size = self.file.size
-        return self.size
 
 
 def is_download_response(response):

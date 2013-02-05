@@ -40,18 +40,6 @@ class DownloadMixin(object):
     def get_basename(self):
         return self.basename
 
-    def get_size(self):
-        return self.get_file().size
-
-    def get_modification_time(self):
-        return self.get_file().modified_time
-
-    def get_content_type(self):
-        try:
-            return self.get_file().content_type
-        except:
-            return None
-
     def render_to_response(self, *args, **kwargs):
         """Returns a response with a file as attachment."""
         # Respect the If-Modified-Since header.
@@ -59,18 +47,16 @@ class DownloadMixin(object):
         if_modified_since = self.request.META.get('HTTP_IF_MODIFIED_SINCE',
                                                   None)
         if if_modified_since is not None:
-            modification_time = self.get_modification_time()
-            size = self.get_size()
+            modification_time = file_instance.modified_time
+            size = file_instance.size
             if not was_modified_since(if_modified_since, modification_time,
                                       size):
-                content_type = self.get_content_type()
+                content_type = file_instance.content_type
                 return HttpResponseNotModified(content_type=content_type)
         # Return download response.
         response_kwargs = {'file_instance': file_instance,
                            'attachment': self.attachment,
-                           'basename': self.get_basename(),
-                           'size': self.get_size(),
-                           'content_type': self.get_content_type()}
+                           'basename': self.get_basename()}
         response_kwargs.update(kwargs)
         response = self.response_class(**response_kwargs)
         return response
