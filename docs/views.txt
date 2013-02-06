@@ -23,6 +23,17 @@ Two main use cases:
   override :py:meth:`django_downloadview.views.PathDownloadView:get_path`.
 
 
+*******************
+StorageDownloadView
+*******************
+
+The :py:class:`django_downloadview.views.StorageDownloadView` class-based view
+allows you to **serve files given a storage and a path**.
+
+Use this view when you manage files in a storage (which is a good practice),
+unrelated to a model.
+
+
 ******************
 ObjectDownloadView
 ******************

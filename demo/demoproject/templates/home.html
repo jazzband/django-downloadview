@@ -13,6 +13,9 @@
             <li><a href="{% url 'fixture_from_path' 'hello-world.txt' %}">
                 Download files using PathDownloadView and relative path in URL.
             </a></li>
+            <li><a href="{% url 'fixture_from_storage' 'hello-world.txt' %}">
+                Download files using StorageDownloadView and path in URL.
+            </a></li>
             <li><a href="{% url 'document' 'hello-world' %}">
                 ObjectDownloadView
             </a></li>

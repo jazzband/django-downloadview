@@ -2,7 +2,10 @@
 """Demo download views."""
 from os.path import abspath, dirname, join
 
-from django_downloadview.views import ObjectDownloadView, PathDownloadView
+from django.core.files.storage import FileSystemStorage
+
+from django_downloadview.views import (ObjectDownloadView, PathDownloadView,
+                                       StorageDownloadView)
 
 from demoproject.download.models import Document
 
@@ -17,6 +20,9 @@ fixtures_dir = join(app_dir, 'fixtures')
 
 hello_world_path = join(fixtures_dir, 'hello-world.txt')
 """Path to a text file that says 'Hello world!'."""
+
+fixtures_storage = FileSystemStorage(location=fixtures_dir)
+"""Storage for fixtures."""
 
 
 # Here are the views.
@@ -48,6 +54,11 @@ class CustomPathDownloadView(PathDownloadView):
 
 download_fixture_from_path = CustomPathDownloadView.as_view()
 """Pre-configured :py:class:`CustomPathDownloadView`."""
+
+
+download_fixture_from_storage = StorageDownloadView.as_view(
+    storage=fixtures_storage)
+"""Pre-configured view using a storage."""
 
 
 download_document = ObjectDownloadView.as_view(model=Document)

@@ -98,10 +98,27 @@ class PathDownloadView(BaseDownloadView):
         return File(open(self.get_path()))
 
 
-class StorageDownloadView():
+class StorageDownloadView(PathDownloadView):
     """Serve a file using storage and filename."""
     storage = DefaultStorage()
-    path = None
+    """Storage the file to serve belongs to."""
+
+    path = None  # Override docstring.
+    """Path to the file to serve relative to storage."""
+
+    def get_path(self):
+        """Return path of the file to serve, relative to storage.
+
+        Default implementation simply returns view's :py:attr:`path`.
+
+        Override this method if you want custom implementation.
+
+        """
+        return super(StorageDownloadView, self).get_path()
+
+    def get_file(self):
+        """Use path and storage to return wrapper around file to serve."""
+        return self.storage.open(self.get_path())
 
 
 class VirtualDownloadView():

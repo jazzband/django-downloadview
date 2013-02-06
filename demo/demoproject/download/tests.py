@@ -49,8 +49,18 @@ class PathDownloadViewTestCase(DownloadTestCase):
 class CustomPathDownloadViewTestCase(DownloadTestCase):
     """Test "fixture_from_path" view."""
     def test_download_hello_world(self):
-        """fixture_from_path view can return hello-world.txt as attachement."""
+        """fixture_from_path view returns hello-world.txt as attachement."""
         download_url = reverse('fixture_from_path', args=['hello-world.txt'])
+        response = self.client.get(download_url)
+        self.assertDownloadHelloWorld(response)
+
+
+class StorageDownloadViewTestCase(DownloadTestCase):
+    """Test "fixture_from_storage" view."""
+    def test_download_hello_world(self):
+        """fixture_from_storage view returns hello-world.txt as attachement."""
+        download_url = reverse('fixture_from_storage',
+                               args=['hello-world.txt'])
         response = self.client.get(download_url)
         self.assertDownloadHelloWorld(response)
 

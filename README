@@ -1,5 +1,5 @@
 ###################
-Django-DownloadView
+django-downloadview
 ###################
 
 Django-DownloadView provides (class-based) generic download views for Django.
@@ -22,8 +22,9 @@ Example, in some urls.py:
 
 Several views are provided to cover frequent use cases:
 
-* ``PathDownloadView`` when you have an absolute filename.
 * ``ObjectDownloadView`` when you have a model with a file field.
+* ``StorageDownloadView`` when you manage files in a storage.
+* ``PathDownloadView`` when you have an absolute filename on local filesystem.
 
 See :doc:`views` for details.
 
