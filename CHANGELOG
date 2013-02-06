@@ -4,7 +4,12 @@ Changelog
 1.1 (unreleased)
 ----------------
 
-- Nothing changed yet.
+**Backward incompatible changes.**
+
+- Download views and response now use file wrappers. Most logic around file
+  attributes, formerly in views, moved to wrappers.
+- Replaced DownloadView by PathDownloadView and StorageDownloadView. Use the
+  right one depending on the use case.
 
 
 1.0 (2012-12-04)

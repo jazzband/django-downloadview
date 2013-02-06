@@ -6,10 +6,19 @@ ROOT_DIR = $(shell pwd)
 DATA_DIR = $(ROOT_DIR)/var
 WGET = wget
 PYTHON = python
-BUILDOUT_BOOTSTRAP_URL = https://raw.github.com/buildout/buildout/1.6.3/bootstrap/bootstrap.py
+BUILDOUT_CFG = $(ROOT_DIR)/etc/buildout.cfg
+BUILDOUT_BOOTSTRAP_URL = https://raw.github.com/buildout/buildout/1.7.0/bootstrap/bootstrap.py
 BUILDOUT_BOOTSTRAP = $(ROOT_DIR)/lib/buildout/bootstrap.py
+BUILDOUT_BOOTSTRAP_ARGS = -c $(BUILDOUT_CFG) --distribute buildout:directory=$(ROOT_DIR)
 BUILDOUT = $(ROOT_DIR)/bin/buildout
-BUILDOUT_ARGS = -N
+BUILDOUT_ARGS = -N -c $(BUILDOUT_CFG) buildout:directory=$(ROOT_DIR)
+
+
+configure:
+	# Configuration is stored in etc/ folder.
+
+
+develop: buildout
 
 
 buildout:
@@ -20,16 +29,10 @@ buildout:
 	fi
 	# Bootstrap buildout.
 	if [ ! -f $(BUILDOUT) ]; then \
-	    $(PYTHON) $(BUILDOUT_BOOTSTRAP) --distribute; \
+	    $(PYTHON) $(BUILDOUT_BOOTSTRAP) $(BUILDOUT_BOOTSTRAP_ARGS); \
 	fi
 	# Run zc.buildout.
 	$(BUILDOUT) $(BUILDOUT_ARGS)
-
-
-develop: buildout
-
-
-update: develop
 
 
 clean:
@@ -47,8 +50,16 @@ maintainer-clean: distclean
 	rm -rf $(ROOT_DIR)/lib/
 
 
-test:
+test: test-demo test-documentation
+
+
+test-demo:
 	bin/demo test demo
+	mv $(ROOT_DIR)/.coverage $(ROOT_DIR)/var/test/demo.coverage
+
+
+test-documentation:
+	bin/nosetests -c $(ROOT_DIR)/etc/nose.cfg sphinxcontrib.testbuild.tests
 
 
 apidoc:

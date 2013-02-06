@@ -10,16 +10,8 @@ Contents
 
    demo
    install
+   views
    optimizations/index
    api/index
    about/index
    dev
-
-
-******************
-Indices and tables
-******************
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
