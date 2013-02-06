@@ -19,6 +19,15 @@ Example, in some urls.py:
    url_patterns = ('',
        url('^download/(?P<slug>[A-Za-z0-9_-]+)/$', download, name='download'),
    )
+
+Several views are provided to cover frequent use cases:
+
+* ``PathDownloadView`` when you have an absolute filename.
+* ``ObjectDownloadView`` when you have a model with a file field.
+
+See :doc:`views` for details.
+
+Then get increased performances with :doc:`optimizations/index`.
  
 
 **********

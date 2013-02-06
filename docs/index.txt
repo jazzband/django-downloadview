@@ -10,6 +10,7 @@ Contents
 
    demo
    install
+   views
    optimizations/index
    api/index
    about/index
