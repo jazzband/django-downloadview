@@ -70,16 +70,14 @@ class BaseDownloadView(DownloadMixin, View):
 
 class PathDownloadView(BaseDownloadView):
     """Serve a file using filename."""
+    #: Server-side name (including path) of the file to serve.
+    #:
+    #: Filename is supposed to be an absolute filename of a file located on the
+    #: local filesystem.
     path = None
-    """Server-side name (including path) of the file to serve.
 
-    Filename is supposed to be an absolute filename of a file located on the
-    local filesystem.
-
-    """
-
+    #: Name of the URL argument that contains path.
     path_url_kwarg = 'path'
-    """Name of the URL argument that contains path."""
 
     def get_path(self):
         """Return actual path of the file to serve.
@@ -100,11 +98,11 @@ class PathDownloadView(BaseDownloadView):
 
 class StorageDownloadView(PathDownloadView):
     """Serve a file using storage and filename."""
+    #: Storage the file to serve belongs to.
     storage = DefaultStorage()
-    """Storage the file to serve belongs to."""
 
+    #: Path to the file to serve relative to storage.
     path = None  # Override docstring.
-    """Path to the file to serve relative to storage."""
 
     def get_path(self):
         """Return path of the file to serve, relative to storage.

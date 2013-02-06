@@ -12,27 +12,26 @@ from demoproject.download.models import Document
 
 # Some initializations.
 
+#: Directory containing code of :py:module:`demoproject.download.views`.
 app_dir = dirname(abspath(__file__))
-"""Directory containing code of :py:module:`demoproject.download.views`."""
 
+#: Directory containing files fixtures.
 fixtures_dir = join(app_dir, 'fixtures')
-"""Directory containing files fixtures."""
 
+#: Path to a text file that says 'Hello world!'.
 hello_world_path = join(fixtures_dir, 'hello-world.txt')
-"""Path to a text file that says 'Hello world!'."""
 
+#: Storage for fixtures.
 fixtures_storage = FileSystemStorage(location=fixtures_dir)
-"""Storage for fixtures."""
 
 
 # Here are the views.
 
+
+#: Direct download of one file, based on an absolute path.
+#:
+#: You could use this example as a shortcut, inside other views.
 download_hello_world = PathDownloadView.as_view(path=hello_world_path)
-"""Direct download of one file, based on an absolute path.
-
-You could use this example as a shortcut, inside other views.
-
-"""
 
 
 class CustomPathDownloadView(PathDownloadView):
@@ -52,14 +51,14 @@ class CustomPathDownloadView(PathDownloadView):
         path = super(CustomPathDownloadView, self).get_path()
         return join(fixtures_dir, path)
 
+#: Pre-configured :py:class:`CustomPathDownloadView`.
 download_fixture_from_path = CustomPathDownloadView.as_view()
-"""Pre-configured :py:class:`CustomPathDownloadView`."""
 
 
+#: Pre-configured view using a storage.
 download_fixture_from_storage = StorageDownloadView.as_view(
     storage=fixtures_storage)
-"""Pre-configured view using a storage."""
 
 
+#: Pre-configured download view for :py:class:`Document` model.
 download_document = ObjectDownloadView.as_view(model=Document)
-"""Pre-configured download view for :py:class:`Document` model."""
