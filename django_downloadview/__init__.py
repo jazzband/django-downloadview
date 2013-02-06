@@ -1,5 +1,8 @@
 """django-downloadview provides generic download views for Django."""
-from django_downloadview.views import DownloadView, ObjectDownloadView
+# Shortcut import.
+from django_downloadview.views import (PathDownloadView,
+                                       ObjectDownloadView,
+                                       StorageDownloadView)
 
 
 pkg_resources = __import__('pkg_resources')

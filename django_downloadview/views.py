@@ -128,34 +128,6 @@ class VirtualDownloadView():
     file_obj = None
 
 
-class DownloadView(BaseDownloadView):
-    """Download a file from storage and filename."""
-    #: Server-side name (including path) of the file to serve.
-    #:
-    #: If ``storage`` is not None, then the filename will be passed to the
-    #: storage, else filename is supposed to be an absolute filename of a file
-    #: located on the local filesystem.
-    filename = None
-
-    #: Storage to use to fetch the file.
-    #:
-    #: Defaults to Django's DefaultStorage(), which itself defaults to a
-    #: FileSystemStorage relative to settings.MEDIA_ROOT.
-    #:
-    #: The ``storage`` can be set to None, but you should use one. As an
-    #: example, storage classes may encapsulate some security checks
-    #: (FileSystemStorage actually refuses to serve files outside its root
-    #: location).
-    storage = DefaultStorage()
-
-    def get_file(self):
-        """Use filename and storage to return file object to serve."""
-        if self.storage:
-            return StorageFile(self.storage, self.filename)
-        else:
-            return File(open(self.filename))
-
-
 class ObjectDownloadView(DownloadMixin, BaseDetailView):
     """Download view for models which contain a FileField.
 
