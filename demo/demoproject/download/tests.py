@@ -1,3 +1,4 @@
+# coding=utf8
 """Test suite for demoproject.download."""
 from os import listdir
 from os.path import abspath, dirname, join
@@ -28,9 +29,7 @@ class DownloadTestCase(TestCase):
 class DownloadViewTestCase(DownloadTestCase):
     """Test generic DownloadView."""
     def test_download_hello_world(self):
-        """'download_hello_world' view returns hello-world.txt as attachement.
-
-	"""
+        """download_hello_world view returns hello-world.txt as attachement."""
         download_url = reverse('download_hello_world')
         response = self.client.get(download_url)
         self.assertEquals(response.status_code, 200)
@@ -48,12 +47,10 @@ class ObjectDownloadViewTestCase(DownloadTestCase):
     @temporary_media_root()
     def test_download_hello_world(self):
         """'download_document' view returns hello-world.txt as attachement."""
-	slug = 'hello-world'
+        slug = 'hello-world'
         download_url = reverse('download_document', kwargs={'slug': slug})
-        document = Document.objects.create(
-            slug=slug,
-            file=File(open(self.files['hello-world.txt'])),
-        )
+        Document.objects.create(slug=slug,
+                                file=File(open(self.files['hello-world.txt'])))
         response = self.client.get(download_url)
         self.assertEquals(response.status_code, 200)
         self.assertEquals(response['Content-Type'],
