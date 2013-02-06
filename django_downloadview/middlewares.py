@@ -19,8 +19,7 @@ class BaseDownloadMiddleware(object):
         return is_download_response(response)
 
     def process_response(self, request, response):
-	"""Call :py:meth:`process_download_response` if ``response`` is
-	download."""
+        """Call :py:meth:`process_download_response` if ``response`` is download."""
         if self.is_download_response(response):
             return self.process_download_response(request, response)
         return response
