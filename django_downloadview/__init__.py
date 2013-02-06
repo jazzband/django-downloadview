@@ -2,7 +2,8 @@
 # Shortcut import.
 from django_downloadview.views import (PathDownloadView,
                                        ObjectDownloadView,
-                                       StorageDownloadView)
+                                       StorageDownloadView,
+                                       VirtualDownloadView)
 
 
 pkg_resources = __import__('pkg_resources')

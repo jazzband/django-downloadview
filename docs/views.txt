@@ -6,6 +6,31 @@ This section contains narrative overview about class-based views provided by
 django-downloadview.
 
 
+******************
+ObjectDownloadView
+******************
+
+The :py:class:`django_downloadview.views.ObjectDownloadView` class-based view
+allows you to **serve files given a model with some file fields** such as
+FileField or ImageField.
+
+Use this view anywhere you could use Django's builtin ObjectDetailView.
+
+Some options allow you to store file metadata (size, content-type, ...) in the
+model, as deserialized fields.
+
+
+*******************
+StorageDownloadView
+*******************
+
+The :py:class:`django_downloadview.views.StorageDownloadView` class-based view
+allows you to **serve files given a storage and a path**.
+
+Use this view when you manage files in a storage (which is a good practice),
+unrelated to a model.
+
+
 ****************
 PathDownloadView
 ****************
@@ -24,25 +49,11 @@ Two main use cases:
 
 
 *******************
-StorageDownloadView
+VirtualDownloadView
 *******************
 
-The :py:class:`django_downloadview.views.StorageDownloadView` class-based view
-allows you to **serve files given a storage and a path**.
+The :py:class:`django_downloadview.views.VirtualDownloadView` class-based view
+allows you to **serve files that don't live on disk**.
 
-Use this view when you manage files in a storage (which is a good practice),
-unrelated to a model.
-
-
-******************
-ObjectDownloadView
-******************
-
-The :py:class:`django_downloadview.views.ObjectDownloadView` class-based view
-allows you to **serve files given a model with some file fields** such as
-FileField or ImageField.
-
-Use this view anywhere you could use Django's builtin ObjectDetailView.
-
-Some options allow you to store file metadata (size, content-type, ...) in the
-model, as deserialized fields.
+Use it when you want to stream a file which content is dynamically generated
+or which lives in memory.

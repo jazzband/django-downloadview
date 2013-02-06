@@ -20,4 +20,8 @@ urlpatterns = patterns(
     url(r'^path/(?P<path>[a-zA-Z0-9_-]+\.[a-zA-Z0-9]{1,4})$',
         'download_fixture_from_path',
         name='fixture_from_path'),
+    # Generated downloads.
+    url(r'^generated/hello-world\.txt$',
+        'download_generated_hello_world',
+        name='generated_hello_world'),
 )

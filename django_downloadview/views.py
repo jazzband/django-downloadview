@@ -116,16 +116,20 @@ class StorageDownloadView(PathDownloadView):
 
     def get_file(self):
         """Use path and storage to return wrapper around file to serve."""
-        return self.storage.open(self.get_path())
+        return StorageFile(self.storage, self.get_path())
 
 
-class VirtualDownloadView():
+class VirtualDownloadView(BaseDownloadView):
     """Serve not-on-disk or generated-on-the-fly file.
 
     Use this class to serve :py:class:`StringIO` files.
 
+    Override the :py:meth:`get_file` method to customize file wrapper.
+
     """
-    file_obj = None
+    def get_file(self):
+        """Return wrapper."""
+        raise NotImplementedError()
 
 
 class ObjectDownloadView(DownloadMixin, BaseDetailView):

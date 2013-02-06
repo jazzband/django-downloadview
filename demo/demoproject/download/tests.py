@@ -76,3 +76,14 @@ class ObjectDownloadViewTestCase(DownloadTestCase):
                                 file=File(open(self.files['hello-world.txt'])))
         response = self.client.get(download_url)
         self.assertDownloadHelloWorld(response)
+
+
+class GeneratedDownloadViewTestCase(DownloadTestCase):
+    """Test "generated_hello_world" view."""
+    def test_download_hello_world(self):
+        """generated_hello_world view returns hello-world.txt as attachement.
+
+        """
+        download_url = reverse('generated_hello_world')
+        response = self.client.get(download_url)
+        self.assertDownloadHelloWorld(response)
