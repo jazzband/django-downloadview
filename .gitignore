@@ -1,10 +1,5 @@
-# Local binaries (they are generated).
+# Local binaries.
 /bin/
-
-# Python files.
-*.pyc
-*.pyo
-*.egg-info
 
 # Libraries.
 /lib/
@@ -12,8 +7,10 @@
 # Data files.
 /var/
 
-# Coverage output.
-/.coverage
+# Python files.
+*.pyc
+*.pyo
+*.egg-info
 
-# Editor(s) temporary files.
+# Editors' temporary buffers.
 .*.swp
