@@ -14,6 +14,16 @@
 import sys, os
 
 
+# Minimal Django settings. Required to use sphinx.ext.autodoc, because
+# django-downloadview depends on Django...
+from django.conf import settings
+
+
+settings.configure(
+    DATABASES={},  # Required to load ``django.views.generic``.
+)
+
+
 doc_dir = os.path.dirname(os.path.abspath(__file__))
 project_dir = os.path.dirname(doc_dir)
 version_filename = os.path.join(project_dir, 'VERSION')
