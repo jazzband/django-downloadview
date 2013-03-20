@@ -6,8 +6,14 @@ Changelog
 
 **Backward incompatible changes.**
 
+- Using StreamingHttpResponse introduced with Django 1.5. Makes Django 1.5 a
+  requirement!
+
+- Added ``django_downloadview.test.assert_download_response`` utility.
+
 - Download views and response now use file wrappers. Most logic around file
   attributes, formerly in views, moved to wrappers.
+
 - Replaced DownloadView by PathDownloadView and StorageDownloadView. Use the
   right one depending on the use case.
 

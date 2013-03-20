@@ -5,6 +5,8 @@ import tempfile
 from django.conf import settings
 from django.test.utils import override_settings
 
+from django_downloadview.response import is_download_response
+
 
 class temporary_media_root(override_settings):
     """Context manager or decorator to override settings.MEDIA_ROOT.
@@ -40,3 +42,69 @@ class temporary_media_root(override_settings):
         setting."""
         shutil.rmtree(settings.MEDIA_ROOT)
         super(temporary_media_root, self).disable()
+
+
+class DownloadResponseValidator(object):
+    """Utility class to validate DownloadResponse instances."""
+    def __call__(self, test_case, response, **assertions):
+        """Assert that ``response`` is a valid DownloadResponse instance.
+
+        Optional ``assertions`` dictionary can be used to check additional
+        items:
+
+        * ``basename``: the basename of the file in the response.
+
+        * ``content_type``: the value of "Content-Type" header.
+
+        * ``mime_type``: the MIME type part of "Content-Type" header (without
+          charset).
+
+        * ``content``: the contents of the file.
+
+        * ``attachment``: whether the file is returned as attachment or not.
+
+        """
+        self.assert_download_response(test_case, response)
+        for key, value in assertions.iteritems():
+            assert_func = getattr(self, 'assert_%s' % key)
+            assert_func(test_case, response, value)
+
+    def assert_download_response(self, test_case, response):
+        test_case.assertTrue(is_download_response(response))
+
+    def assert_basename(self, test_case, response, value):
+        test_case.assertEqual(response.basename, value)
+        test_case.assertTrue('filename={name}'.format(name=response.basename),
+                             value)
+
+    def assert_content_type(self, test_case, response, value):
+        test_case.assertEqual(response['Content-Type'], value)
+
+    def assert_mime_type(self, test_case, response, value):
+        test_case.assertTrue(response['Content-Type'].startswith(value))
+
+    def assert_content(self, test_case, response, value):
+        test_case.assertEqual(response.file.read(), value)
+        test_case.assertEqual(''.join(response.streaming_content), value)
+
+    def assert_attachment(self, test_case, response, value):
+        test_case.assertEqual('attachment;' in response['Content-Disposition'],
+                              value)
+
+
+def assert_download_response(test_case, response, **assertions):
+    """Make ``test_case`` assert that ``response`` is a DownloadResponse.
+
+    Optional ``assertions`` dictionary can be used to check additional items:
+
+    * ``basename``: the basename of the file in the response.
+
+    * ``content_type``: the value of "Content-Type" header.
+
+    * ``charset``: the value of ``X-Accel-Charset`` header.
+
+    * ``content``: the content of the file to be downloaded.
+
+    """
+    validator = DownloadResponseValidator()
+    return validator(test_case, response, **assertions)

@@ -34,7 +34,7 @@ class DownloadTestCase(TestCase):
         self.assertEquals(response['Content-Disposition'],
                           'attachment; filename=hello-world.txt')
         self.assertEqual(open(self.files['hello-world.txt']).read(),
-                         response.content)
+                         ''.join(response.streaming_content))
 
 
 class PathDownloadViewTestCase(DownloadTestCase):
