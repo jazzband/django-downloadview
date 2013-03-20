@@ -36,7 +36,8 @@ Then get increased performances with :doc:`optimizations/index`.
 Ressources
 **********
 
-* online documentation: http://django-downloadview.readthedocs.org
+* Documentation: http://django-downloadview.readthedocs.org
 * PyPI page: http://pypi.python.org/pypi/django-downloadview
-* code repository: https://github.com/benoitbryon/django-downloadview
-* bugtracker: https://github.com/benoitbryon/django-downloadview/issues
+* Code repository: https://github.com/benoitbryon/django-downloadview
+* Bugtracker: https://github.com/benoitbryon/django-downloadview/issues
+* Continuous integration: https://travis-ci.org/benoitbryon/django-downloadview
