@@ -23,6 +23,9 @@ DATABASES = {
 }
 
 
+# Required.
+SECRET_KEY = "This is a secret made public on project's repository."
+
 # Media and static files.
 MEDIA_ROOT = join(data_dir, 'media')
 MEDIA_URL = '/media/'
