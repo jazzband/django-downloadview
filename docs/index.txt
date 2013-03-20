@@ -12,6 +12,7 @@ Contents
    install
    views
    optimizations/index
+   testing
    api/index
    about/index
    dev

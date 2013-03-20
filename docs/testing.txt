@@ -1,0 +1,7 @@
+######################
+Testing download views
+######################
+
+This project includes shortcuts to simplify testing.
+
+See :py:mod:`django_downloadview.test` for details.
