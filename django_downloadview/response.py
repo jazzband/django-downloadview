@@ -3,10 +3,10 @@ import os
 import mimetypes
 
 from django.conf import settings
-from django.http import HttpResponse
+from django.http import StreamingHttpResponse
 
 
-class DownloadResponse(HttpResponse):
+class DownloadResponse(StreamingHttpResponse):
     """File download response.
 
     ``content`` attribute is supposed to be a file object wrapper, which makes
@@ -44,7 +44,7 @@ class DownloadResponse(HttpResponse):
 
         """
         self.file = file_instance
-        super(DownloadResponse, self).__init__(content=self.file,
+        super(DownloadResponse, self).__init__(streaming_content=self.file,
                                                status=status,
                                                content_type=content_type)
         self.basename = basename
@@ -88,7 +88,7 @@ class DownloadResponse(HttpResponse):
 
     def get_basename(self):
         """Return basename."""
-        if self.attachment and self.basename:
+        if self.basename:
             return self.basename
         else:
             return os.path.basename(self.file.name)
@@ -98,9 +98,9 @@ class DownloadResponse(HttpResponse):
         try:
             return self.file.content_type
         except AttributeError:
-            content_type_template = '%(mime_type)s; charset=%(charset)s'
-            return content_type_template % {'mime_type': self.get_mime_type(),
-                                            'charset': self.get_charset()}
+            content_type_template = '{mime_type}; charset={charset}'
+            return content_type_template.format(mime_type=self.get_mime_type(),
+                                                charset=self.get_charset())
 
     def get_mime_type(self):
         """Return mime-type of the file."""

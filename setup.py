@@ -15,7 +15,7 @@ NAME = 'django-downloadview'
 README = read_relative_file('README')
 VERSION = read_relative_file('VERSION')
 PACKAGES = ['django_downloadview']
-REQUIRES = ['setuptools', 'django>=1.4']
+REQUIRES = ['setuptools', 'django>=1.5']
 
 
 if __name__ == '__main__':  # Don't run setup() when we import this module.
