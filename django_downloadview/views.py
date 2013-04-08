@@ -6,7 +6,7 @@ from django.views.generic.base import View
 from django.views.generic.detail import BaseDetailView
 from django.views.static import was_modified_since
 
-from django_downloadview.files import StorageFile
+from django_downloadview import files
 from django_downloadview.response import DownloadResponse
 
 
@@ -116,7 +116,7 @@ class StorageDownloadView(PathDownloadView):
 
     def get_file(self):
         """Use path and storage to return wrapper around file to serve."""
-        return StorageFile(self.storage, self.get_path())
+        return files.StorageFile(self.storage, self.get_path())
 
 
 class VirtualDownloadView(BaseDownloadView):
@@ -130,6 +130,22 @@ class VirtualDownloadView(BaseDownloadView):
     def get_file(self):
         """Return wrapper."""
         raise NotImplementedError()
+
+
+class HTTPDownloadView(BaseDownloadView):
+    """Proxy files that live on remote servers."""
+    url = u''
+    request_kwargs = {}
+    name = u''
+
+    def get_url(self):
+        return self.url
+
+    def get_file(self):
+        """Return wrapper which has an ``url`` attribute."""
+        url = self.get_url()
+        request_kwargs = self.request_kwargs
+        return files.HTTPFile(name=self.name, url=url, **request_kwargs)
 
 
 class ObjectDownloadView(DownloadMixin, BaseDetailView):

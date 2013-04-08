@@ -87,3 +87,12 @@ class GeneratedDownloadViewTestCase(DownloadTestCase):
         download_url = reverse('generated_hello_world')
         response = self.client.get(download_url)
         self.assertDownloadHelloWorld(response)
+
+
+class ProxiedDownloadViewTestCase(DownloadTestCase):
+    """Test "http_hello_world" view."""
+    def test_download_readme(self):
+        """http_hello_world view proxies file from URL."""
+        download_url = reverse('http_hello_world')
+        response = self.client.get(download_url)
+        self.assertDownloadHelloWorld(response)
