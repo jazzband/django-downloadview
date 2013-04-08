@@ -6,6 +6,10 @@ Changelog
 
 **Backward incompatible changes.**
 
+- Added HTTPDownloadView to proxy to arbitrary URL.
+
+- Added VirtualDownloadView to support files living in memory.
+
 - Using StreamingHttpResponse introduced with Django 1.5. Makes Django 1.5 a
   requirement!
 

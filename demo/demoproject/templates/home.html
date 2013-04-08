@@ -5,23 +5,35 @@
 	</head>
 	<body>
         <h1>Welcome to django-downloadview demo!</h1>
-		<p>Here are some demo links. Browse the code to see how they are implemented</p>
+        <p>Here are some demo links. Browse the code to see how they are implemented</p>
+
+        <h2>Serving files with Django</h2>
+        <p>In the following views, Django streams the files, no optimization
+           has been setup.</p>
 		<ul>
-            <li><a href="{% url 'hello_world' %}">
-                Direct download to one file using PathDownloadView.
-            </a></li>
+            <li><a href="{% url 'hello_world' %}">PathDownloadView</a></li>
             <li><a href="{% url 'fixture_from_path' 'hello-world.txt' %}">
-                Download files using PathDownloadView and relative path in URL.
+                PathDownloadView + argument in URL
             </a></li>
             <li><a href="{% url 'fixture_from_storage' 'hello-world.txt' %}">
-                Download files using StorageDownloadView and path in URL.
+                StorageDownloadView + path in URL
             </a></li>
             <li><a href="{% url 'document' 'hello-world' %}">
                 ObjectDownloadView
             </a></li>
+            <li><a href="{% url 'http_hello_world' %}">
+                HTTPDownloadView</a>, a simple HTTP proxy</li>
+        </ul>
+
+        <h2>Optimized downloads</h2>
+        <p>In the following views, Django delegates actual streaming to another
+           server, for improved performances.</p>
+        <p>Since nginx and other servers aren't installed on the demo, you
+           will get raw "X-Sendfile" responses. Look at the headers!</p>
+        <ul>
             <li><a href="{% url 'download_document_nginx' 'hello-world' %}">
-                ObjectDownloadView decorated with nginx X-Accel-Redirect
-            </a> to be served behind Nginx</li>
+                ObjectDownloadView (nginx)
+            </a></li>
         </ul>
     </body>
 </html>

@@ -48,6 +48,24 @@ Two main use cases:
   override :py:meth:`django_downloadview.views.PathDownloadView:get_path`.
 
 
+****************
+HTTPDownloadView
+****************
+
+The :py:class:`django_downloadview.views.HTTPDownloadView` class-based view
+allows you to **serve files given an URL**. That URL is supposed to be
+downloadable from the Django server.
+
+Use it when you want to setup a proxy to remote files:
+
+* the Django view filters input and computes target URL.
+* if you setup optimizations, Django itself doesn't proxies the file,
+* but, as a fallback, Django uses `requests`_ to proxy the file.
+
+Extend :py:class:`django_downloadview.views.HTTPDownloadView` then
+override :py:meth:`django_downloadview.views.HTTPDownloadView:get_url`.
+
+
 *******************
 VirtualDownloadView
 *******************
@@ -57,3 +75,10 @@ allows you to **serve files that don't live on disk**.
 
 Use it when you want to stream a file which content is dynamically generated
 or which lives in memory.
+
+
+.. rubric:: References
+
+.. target-notes::
+
+.. _`requests`: https://pypi.python.org/pypi/requests

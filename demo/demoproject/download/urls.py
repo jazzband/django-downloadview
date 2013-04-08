@@ -20,6 +20,10 @@ urlpatterns = patterns(
     url(r'^path/(?P<path>[a-zA-Z0-9_-]+\.[a-zA-Z0-9]{1,4})$',
         'download_fixture_from_path',
         name='fixture_from_path'),
+    # URL-based downloads.
+    url(r'^http/readme\.txt$',
+        'download_http_hello_world',
+        name='http_hello_world'),
     # Generated downloads.
     url(r'^generated/hello-world\.txt$',
         'download_generated_hello_world',
