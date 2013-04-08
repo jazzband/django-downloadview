@@ -1,6 +1,8 @@
 """File wrappers for use as exchange data between views and responses."""
 from django.core.files import File
 
+import requests
+
 
 class StorageFile(File):
     """A file in a Django storage.
@@ -134,6 +136,7 @@ class StorageFile(File):
 
 
 class VirtualFile(File):
+    """Wrapper for files that live in memory."""
     def __init__(self, file=None, name=u'', url='', size=None):
         """Constructor.
 
@@ -166,3 +169,44 @@ class VirtualFile(File):
         return super(VirtualFile, self)._set_size(value)
 
     size = property(_get_size, _set_size)
+
+
+class HTTPFile(File):
+    """Wrapper for files that live on remote HTTP servers.
+
+    Acts as a proxy.
+
+    Uses https://pypi.python.org/pypi/requests.
+
+    Always sets "stream=True" in requests kwargs.
+
+    """
+    def __init__(self, request_factory=requests.get, url='', name=u'',
+                 **kwargs):
+        self.request_factory = request_factory
+        self.url = url
+        self.name = name
+        kwargs['stream'] = True
+        self.request_kwargs = kwargs
+
+    @property
+    def request(self):
+        try:
+            return self._request
+        except AttributeError:
+            self._request = self.request_factory(self.url,
+                                                 **self.request_kwargs)
+            return self._request
+
+    @property
+    def file(self):
+        return self.request.raw
+
+    @property
+    def size(self):
+        """Return the total size, in bytes, of the file.
+
+        Reads response's "content-length" header.
+
+        """
+        return self.request.headers['Content-Length']

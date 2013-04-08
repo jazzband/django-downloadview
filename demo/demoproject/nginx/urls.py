@@ -1,5 +1,5 @@
 """URL mapping."""
-from django.conf.urls import patterns, include, url
+from django.conf.urls import patterns, url
 
 
 urlpatterns = patterns('demoproject.nginx.views',
