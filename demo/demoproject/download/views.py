@@ -67,7 +67,7 @@ class StringIODownloadView(views.VirtualDownloadView):
     """Sample download view using StringIO object."""
     def get_file(self):
         """Return wrapper on StringIO object."""
-        file_obj = StringIO(u"Hello world!\n")
+        file_obj = StringIO(u"Hello world!\n".encode('utf-8'))
         return VirtualFile(file_obj, name='hello-world.txt')
 
 #: Pre-configured view that serves "Hello world!" via a StringIO.

@@ -141,7 +141,7 @@ class VirtualFile(File):
         """Constructor.
 
         file:
-          File object. Typically a StringIO.
+          File object. Typically an io.StringIO.
 
         name:
           File basename.
