@@ -6,6 +6,8 @@ from django.views.generic.base import View
 from django.views.generic.detail import BaseDetailView
 from django.views.static import was_modified_since
 
+import requests
+
 from django_downloadview import files
 from django_downloadview.response import DownloadResponse
 
@@ -134,18 +136,30 @@ class VirtualDownloadView(BaseDownloadView):
 
 class HTTPDownloadView(BaseDownloadView):
     """Proxy files that live on remote servers."""
+    #: URL to download (the one we are proxying).
     url = u''
+
+    #: Additional keyword arguments for request handler.
     request_kwargs = {}
-    name = u''
+
+    def get_request_factory(self):
+        """Return request factory to perform actual HTTP request."""
+        return requests.get
+
+    def get_request_kwargs(self):
+        """Return keyword arguments for use with request factory."""
+        return self.request_kwargs
 
     def get_url(self):
+        """Return remote file URL (the one we are proxying)."""
         return self.url
 
     def get_file(self):
         """Return wrapper which has an ``url`` attribute."""
-        url = self.get_url()
-        request_kwargs = self.request_kwargs
-        return files.HTTPFile(name=self.name, url=url, **request_kwargs)
+        return files.HTTPFile(request_factory=self.get_request_factory(),
+                              name=self.get_basename(),
+                              url=self.get_url(),
+                              **self.get_request_kwargs())
 
 
 class ObjectDownloadView(DownloadMixin, BaseDetailView):
