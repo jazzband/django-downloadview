@@ -2,7 +2,9 @@
 django-downloadview
 ###################
 
-Django-DownloadView provides (class-based) generic download views for Django.
+Django-DownloadView provides generic views to make Django serve files.
+It supports delegation to the actual streaming to reverse proxies, via
+mechanisms such as Nginx's X-Accel.
 
 Example, in some urls.py:
 
@@ -22,10 +24,12 @@ Example, in some urls.py:
 
 Several views are provided to cover frequent use cases:
 
-* ``ObjectDownloadView`` when you have a model with a file field.
-* ``StorageDownloadView`` when you manage files in a storage.
-* ``PathDownloadView`` when you have an absolute filename on local filesystem.
-* ``VirtualDownloadView`` when you the file is generated on the fly.
+* ``ObjectDownloadView`` to serve some file field of a model.
+* ``StorageDownloadView`` to serve files in a storage, without models.
+* ``PathDownloadView`` to serve files located on local filesystem, without
+  storage.
+* ``HTTPDownloadView`` to proxy some remote URL.
+* ``VirtualDownloadView`` to serve in-memory or generated files.
 
 See :doc:`views` for details.
 

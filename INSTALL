@@ -15,6 +15,11 @@ pip:
 
    pip install django-downloadview
 
+.. note::
+
+   Since version 1.1, django-downloadview requires Django>=1.5, which provides
+   StreamingHttpResponse.
+
 There is no need to register this application in your Django's
 ``INSTALLED_APPS`` setting.
 

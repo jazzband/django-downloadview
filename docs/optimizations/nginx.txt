@@ -183,9 +183,7 @@ configuration VS ``alias`` in nginx configuration: in a standard configuration,
 they should be equal.
 
 
-**********
-References
-**********
+.. rubric:: References
 
 .. target-notes::
 

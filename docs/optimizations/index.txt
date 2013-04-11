@@ -12,6 +12,7 @@ As a result, you get increased performance: reverse proxies are more efficient
 than Django at serving static files.
 
 .. toctree::
+   :maxdepth: 2
 
    nginx
 
@@ -38,9 +39,7 @@ replaces ``DownloadResponse`` intance by some
 :py:class:`django_downloadview.nginx.XAccelRedirectResponse`.
 
 
-**********
-References
-**********
+.. rubric:: References
 
 .. target-notes::
 
@@ -48,4 +47,4 @@ References
 .. _`contributions are welcome`:
    https://github.com/benoitbryon/django-downloadview/issues?labels=optimizations
 .. _`Django's TemplateResponse`:
-   https://docs.djangoproject.com/en/1.4/ref/template-response/
+   https://docs.djangoproject.com/en/1.5/ref/template-response/

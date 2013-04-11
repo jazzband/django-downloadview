@@ -5,6 +5,10 @@ Download views
 This section contains narrative overview about class-based views provided by
 django-downloadview.
 
+By default, all of those views would stream the file to the client.
+But keep in mind that you can setup :doc:`/optimizations/index` to delegate
+actual streaming to a reverse proxy.
+
 
 ******************
 ObjectDownloadView
