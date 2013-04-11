@@ -4,7 +4,8 @@ Changelog
 1.1 (unreleased)
 ----------------
 
-**Backward incompatible changes.**
+Various improvements.
+Contains **backward incompatible changes.**
 
 - Added HTTPDownloadView to proxy to arbitrary URL.
 
