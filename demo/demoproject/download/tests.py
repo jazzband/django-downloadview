@@ -31,19 +31,28 @@ class DownloadTestCase(TestCase):
         self.assertEquals(response['Content-Type'],
                           'text/plain; charset=utf-8')
         self.assertFalse('ContentEncoding' in response)
-        self.assertEquals(response['Content-Disposition'],
-                          'attachment; filename=hello-world.txt')
+        if is_attachment:
+            self.assertEquals(response['Content-Disposition'],
+                              'attachment; filename=hello-world.txt')
+        else:
+            self.assertFalse('Content-Disposition' in response)
         self.assertEqual(open(self.files['hello-world.txt']).read(),
                          ''.join(response.streaming_content))
 
 
 class PathDownloadViewTestCase(DownloadTestCase):
-    """Test "hello_world" view."""
+    """Test "hello_world" and "hello_world_inline" views."""
     def test_download_hello_world(self):
         """hello_world view returns hello-world.txt as attachement."""
         download_url = reverse('hello_world')
         response = self.client.get(download_url)
         self.assertDownloadHelloWorld(response)
+
+    def test_download_hello_world_inline(self):
+        """hello_world view returns hello-world.txt as attachement."""
+        download_url = reverse('hello_world_inline')
+        response = self.client.get(download_url)
+        self.assertDownloadHelloWorld(response, is_attachment=False)
 
 
 class CustomPathDownloadViewTestCase(DownloadTestCase):
