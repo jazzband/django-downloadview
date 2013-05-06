@@ -31,6 +31,11 @@ fixtures_storage = FileSystemStorage(location=fixtures_dir)
 download_document = views.ObjectDownloadView.as_view(model=Document)
 
 
+#: Same as download_document, but streamed inline, i.e. not as attachments.
+download_document_inline = views.ObjectDownloadView.as_view(model=Document,
+                                                            attachment=False)
+
+
 #: Pre-configured view using a storage.
 download_fixture_from_storage = views.StorageDownloadView.as_view(
     storage=fixtures_storage)
@@ -40,6 +45,12 @@ download_fixture_from_storage = views.StorageDownloadView.as_view(
 #:
 #: You could use this example as a shortcut, inside other views.
 download_hello_world = views.PathDownloadView.as_view(path=hello_world_path)
+
+
+#: Direct download of one file, based on an absolute path, not as attachment.
+download_hello_world_inline = views.PathDownloadView.as_view(
+    path=hello_world_path,
+    attachment=False)
 
 
 class CustomPathDownloadView(views.PathDownloadView):

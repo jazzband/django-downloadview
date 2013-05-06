@@ -103,11 +103,13 @@ if not hasattr(settings, 'NGINX_DOWNLOAD_MIDDLEWARE_DESTINATION_URL'):
 class XAccelRedirectResponse(HttpResponse):
     """Http response that delegates serving file to Nginx."""
     def __init__(self, redirect_url, content_type, basename=None, expires=None,
-                 with_buffering=None, limit_rate=None):
+                 with_buffering=None, limit_rate=None, attachment=True):
         """Return a HttpResponse with headers for Nginx X-Accel-Redirect."""
         super(XAccelRedirectResponse, self).__init__(content_type=content_type)
-        self.basename = basename or redirect_url.split('/')[-1]
-        self['Content-Disposition'] = 'attachment; filename=%s' % self.basename
+        if attachment:
+            self.basename = basename or redirect_url.split('/')[-1]
+            self['Content-Disposition'] = 'attachment; filename={name}'.format(
+                name=self.basename)
         self['X-Accel-Redirect'] = redirect_url
         self['X-Accel-Charset'] = content_type_to_charset(content_type)
         if with_buffering is not None:
@@ -202,6 +204,13 @@ class XAccelRedirectValidator(object):
             test_case.assertEqual(header, 'off')
         else:
             test_case.assertEqual(header, value)
+
+    def assert_attachment(self, test_case, response, value):
+        header = 'Content-Disposition'
+        if value:
+            test_case.assertTrue(response[header].startswith('attachment'))
+        else:
+            test_case.assertFalse(header in response)
 
 
 def assert_x_accel_redirect(test_case, response, **assertions):
@@ -345,7 +354,8 @@ class BaseXAccelRedirectMiddleware(BaseDownloadMiddleware):
                                       basename=response.basename,
                                       expires=expires,
                                       with_buffering=self.with_buffering,
-                                      limit_rate=self.limit_rate)
+                                      limit_rate=self.limit_rate,
+                                      attachment=response.attachment)
 
 
 class XAccelRedirectMiddleware(BaseXAccelRedirectMiddleware):

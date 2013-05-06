@@ -37,3 +37,26 @@ class XAccelRedirectDecoratorTestCase(DownloadTestCase):
         self.assertFalse('ContentEncoding' in response)
         self.assertEquals(response['Content-Disposition'],
                           'attachment; filename=hello-world.txt')
+
+
+class InlineXAccelRedirectTestCase(DownloadTestCase):
+    @temporary_media_root()
+    def test_response(self):
+        """X-Accel optimization respects ``attachment`` attribute."""
+        document = Document.objects.create(
+            slug='hello-world',
+            file=File(open(self.files['hello-world.txt'])),
+        )
+        download_url = reverse('download_document_nginx_inline',
+                               kwargs={'slug': 'hello-world'})
+        response = self.client.get(download_url)
+        assert_x_accel_redirect(
+            self,
+            response,
+            content_type="text/plain; charset=utf-8",
+            charset="utf-8",
+            attachment=False,
+            redirect_url="/download-optimized/document/hello-world.txt",
+            expires=None,
+            with_buffering=None,
+            limit_rate=None)
