@@ -47,7 +47,12 @@ maintainer-clean: distclean
 	rm -rf $(ROOT_DIR)/lib/
 
 
-test: test-demo test-documentation
+test: test-app test-demo test-documentation
+
+
+test-app:
+	$(NOSE) -c $(ROOT_DIR)/etc/nose.cfg --with-coverage --cover-package=django_downloadview django_downloadview tests
+	mv $(ROOT_DIR)/.coverage $(ROOT_DIR)/var/test/app.coverage
 
 
 test-demo:
