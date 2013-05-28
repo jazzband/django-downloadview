@@ -10,6 +10,31 @@ But keep in mind that you can setup :doc:`/optimizations/index` to delegate
 actual streaming to a reverse proxy.
 
 
+*************
+DownloadMixin
+*************
+
+The :py:class:`django_downloadview.views.DownloadMixin` class is not a view. It
+is a base class which you can inherit of to create custom download views.
+
+``DownloadMixin`` is a base of `BaseDownloadView`_, which itself is a base of
+all other django_downloadview's builtin views.
+
+
+****************
+BaseDownloadView
+****************
+
+The :py:class:`django_downloadview.views.BaseDownloadView` class is a base
+class to create download views. It inherits `DownloadMixin`_ and
+:py:class:`django.views.generic.base.View`.
+
+The only thing it does is to implement
+:py:meth:`get <django_downloadview.views.BaseDownloadView.get>`: it triggers
+:py:meth:`DownloadMixin's render_to_response
+<django_downloadview.views.DownloadMixin.render_to_response>`.
+
+
 ******************
 ObjectDownloadView
 ******************

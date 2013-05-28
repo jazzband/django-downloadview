@@ -39,16 +39,17 @@ Views
 
 Several views are provided to cover frequent use cases:
 
-* ``ObjectDownloadView`` to serve some file field of a model.
-* ``StorageDownloadView`` to serve files in a storage, without models.
-* ``PathDownloadView`` to serve files located on local filesystem, without
-  storage.
-* ``HTTPDownloadView`` to proxy some arbitrary URL.
-* ``VirtualDownloadView`` to serve in-memory or generated files.
+* ``ObjectDownloadView`` when you have a model with a file field.
+* ``StorageDownloadView`` when you manage files in a storage.
+* ``PathDownloadView`` when you have an absolute filename on local filesystem.
+* ``HTTPDownloadView`` when you have an URL (the resource is proxied).
+* ``VirtualDownloadView`` when you the file is generated on the fly.
 
-See :doc:`views` for details.
+See `views <https://django-downloadview.readthedocs.org/en/latest/views.html>`_
+for details.
 
-Then get increased performances with :doc:`optimizations/index`.
+Then `setup optimizations to get increased performances
+<https://django-downloadview.readthedocs.org/en/latest/optimizations/index.html>`_.
  
 
 **********
