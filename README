@@ -15,7 +15,7 @@ proxy, via mechanisms such as Nginx's X-Accel.
 Example
 *******
 
-In some :file:`urls.py`, serve files managed in a model:
+In some ``urls.py``, serve files managed in a model:
 
 .. code-block:: python
 
@@ -30,7 +30,7 @@ In some :file:`urls.py`, serve files managed in a model:
        url('^download/(?P<slug>[A-Za-z0-9_-]+)/$', download, name='download'),
    )
 
-More examples in the "demo" section!
+More examples in the "demo" documentation!
 
 
 *****
@@ -45,10 +45,10 @@ Several views are provided to cover frequent use cases:
 * ``HTTPDownloadView`` when you have an URL (the resource is proxied).
 * ``VirtualDownloadView`` when you the file is generated on the fly.
 
-See "views" section for details.
+See "views" documentation for details.
 
-See also "optimizations" section to get increased performances.
- 
+See also "optimizations" documentation to get increased performances.
+
 
 **********
 Ressources
