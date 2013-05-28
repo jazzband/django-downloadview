@@ -16,18 +16,19 @@ from django_downloadview.response import DownloadResponse
 class DownloadMixin(object):
     """Placeholders and base implementation to create file download views.
 
-    The get_file() method is a placeholder, which raises NotImplementedError
-    in base implementation.
+    .. note::
 
-    The other methods provide an implementation that use the file object
-    returned by get_file(), supposing the file is hosted on the local
-    filesystem.
+       This class does not inherit from
+       :py:class:`django.views.generic.base.View`.
 
-    You may override one or several methods to adapt the implementation to your
-    use case.
+    The :py:meth:`get_file` method is a placeholder subclasses must implement.
+    Base implementation raises ``NotImplementedError``.
+
+    Other methods provide a base implementation that use the file wrapper
+    returned by :py:meth:`get_file`.
 
     """
-    #: Response class to be used in render_to_response().
+    #: Response class, to be used in :py:meth:`render_to_response`.
     response_class = DownloadResponse
 
     #: Whether to return the response as attachment or not.
