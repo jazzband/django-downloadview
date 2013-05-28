@@ -30,7 +30,7 @@ In some :file:`urls.py`, serve files managed in a model:
        url('^download/(?P<slug>[A-Za-z0-9_-]+)/$', download, name='download'),
    )
 
-More examples in the :doc:`demo project <demo>`!
+More examples in the "demo" section!
 
 
 *****
@@ -45,11 +45,9 @@ Several views are provided to cover frequent use cases:
 * ``HTTPDownloadView`` when you have an URL (the resource is proxied).
 * ``VirtualDownloadView`` when you the file is generated on the fly.
 
-See `views <https://django-downloadview.readthedocs.org/en/latest/views.html>`_
-for details.
+See "views" section for details.
 
-Then `setup optimizations to get increased performances
-<https://django-downloadview.readthedocs.org/en/latest/optimizations/index.html>`_.
+See also "optimizations" section to get increased performances.
  
 
 **********
