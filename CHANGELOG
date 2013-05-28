@@ -6,6 +6,8 @@ Changelog
 
 Bugfixes and documentation improvements.
 
+- Bug #26 - Prevented computation of virtual file's size, unless the file
+  wrapper implements was_modified_since() method.
 - Bug #34 - Improved support of files that do not implement modification time.
 - Bug #35 - Fixed README conversion from reStructuredText to HTML (PyPI).
 
