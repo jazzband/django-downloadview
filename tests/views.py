@@ -63,7 +63,7 @@ class VirtualDownloadViewTestCase(unittest.TestCase):
         view = views.VirtualDownloadView()
         since = mock.sentinel.since
         return_value = view.was_modified_since(file_wrapper, since)
-        self.assertIs(return_value, mock.sentinel.from_file_wrapper)
+        self.assertTrue(return_value is mock.sentinel.from_file_wrapper)
         file_wrapper.was_modified_since.assert_called_once_with(since)
 
     def test_was_modified_since_not_implemented(self):
@@ -78,6 +78,6 @@ class VirtualDownloadViewTestCase(unittest.TestCase):
         view = views.VirtualDownloadView()
         since = mock.sentinel.since
         result = view.was_modified_since(file_wrapper, since)
-        self.assertIs(result, True)
+        self.assertTrue(result is True)
         self.assertFalse(modified_time.called)
         self.assertFalse(size.called)
