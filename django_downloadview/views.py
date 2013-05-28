@@ -48,7 +48,8 @@ class DownloadMixin(object):
         file_instance = self.get_file()
         if_modified_since = self.request.META.get('HTTP_IF_MODIFIED_SINCE',
                                                   None)
-        if if_modified_since is not None:
+        if if_modified_since is not None and \
+                hasattr(file_instance, 'modified_time'):
             modification_time = file_instance.modified_time
             size = file_instance.size
             if not was_modified_since(if_modified_since, modification_time,
