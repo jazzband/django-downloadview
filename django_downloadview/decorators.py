@@ -11,7 +11,7 @@ class DownloadDecorator(object):
 
     Middleware instance is built from ``middleware_factory`` with ``*args`` and
     ``**kwargs``. Middleware factory is typically a class, such as some
-    :py:class:`django_downloadview.middlewares.XAccelMiddleware` subclass.
+    :py:class:`django_downloadview.BaseDownloadMiddleware` subclass.
 
     Response is built from view, then the middleware's ``process_response``
     method is applied on response.

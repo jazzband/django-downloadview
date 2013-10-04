@@ -1,13 +1,19 @@
 """django-downloadview provides generic download views for Django."""
-# Shortcut import.
-from django_downloadview.views import (PathDownloadView,
-                                       ObjectDownloadView,
-                                       StorageDownloadView,
-                                       VirtualDownloadView)
+import pkg_resources
 
-
-pkg_resources = __import__('pkg_resources')
-distribution = pkg_resources.get_distribution('django-downloadview')
 
 #: Module version, as defined in PEP-0396.
-__version__ = distribution.version
+__version__ = pkg_resources.get_distribution(__package__.replace('-', '_')) \
+                           .version
+
+
+# API shortcuts.
+from django_downloadview.response import DownloadResponse  # NoQA
+from django_downloadview.middlewares import (  # NoQA
+    BaseDownloadMiddleware,
+    DownloadDispatcherMiddleware)
+from django_downloadview.nginx import XAccelRedirectMiddleware  # NoQA
+from django_downloadview.views import (PathDownloadView,  # NoQA
+                                       ObjectDownloadView,  # NoQA
+                                       StorageDownloadView,  # NoQA
+                                       VirtualDownloadView)  # NoQA

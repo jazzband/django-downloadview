@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Django settings for Django-DownloadView demo project."""
 from os.path import abspath, dirname, join
 
@@ -63,9 +64,12 @@ MIDDLEWARE_CLASSES = [
 
 
 # Uncomment the following lines to enable global Nginx optimizations.
-#MIDDLEWARE_CLASSES.append('django_downloadview.nginx.XAccelRedirectMiddleware')
-#NGINX_DOWNLOAD_MIDDLEWARE_MEDIA_ROOT = MEDIA_ROOT
-#NGINX_DOWNLOAD_MIDDLEWARE_MEDIA_URL = "/proxied-download"
+#MIDDLEWARE_CLASSES.append('django_downloadview.DownloadDispatcherMiddleware')
+DOWNLOADVIEW_MIDDLEWARES = (
+    ('default', 'django_downloadview.nginx.XAccelRedirectMiddleware',
+                {'source_dir': MEDIA_ROOT,
+                 'destination_url': '/proxied-download'}),
+)
 
 
 # Development configuration.

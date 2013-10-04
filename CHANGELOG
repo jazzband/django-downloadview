@@ -4,8 +4,15 @@ Changelog
 1.3 (unreleased)
 ----------------
 
-- Nothing changed yet.
+Big refactoring around Nginx middleware.
 
+- Feature #?? - Introduced DownloadDispatcherMiddleware that iterates over a
+  list of configurable download middlewares. Allows to plug several download
+  middlewares with different configurations. Deprecates the settings related
+  to previous single-and-global middleware.
+- Refactoring #?? - Splitted nginx module in a package.
+- Refactoring #?? - Expose most Python API directly in `django_downloadview`
+  package. Simplifies imports in client applications.
 
 1.2 (2013-05-28)
 ----------------

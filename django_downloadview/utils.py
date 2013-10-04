@@ -1,4 +1,5 @@
-"""Utility functions."""
+# -*- coding: utf-8 -*-
+"""Utility functions that may be implemented in external packages."""
 import re
 
 
@@ -16,3 +17,17 @@ def content_type_to_charset(content_type):
     match = re.search(charset_pattern, content_type)
     if match:
         return match.group('charset')
+
+
+def url_basename(url, content_type):
+    """Return best-guess basename from URL and content-type.
+
+    >>> from django_downloadview.utils import url_basename
+
+    If URL contains extension, it is kept as-is.
+
+    >>> url_basename(u'/path/to/somefile.rst', 'text/plain')
+    u'somefile.rst'
+
+    """
+    return url.split('/')[-1]

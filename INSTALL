@@ -2,16 +2,22 @@
 Installation
 ############
 
-This project is open-source, published under BSD license.
+`django-downloadview` project is open-source, published under BSD license.
 See :doc:`/about/license` for details.
 
-If you want to install a development environment, you should go to :doc:`/dev`
-documentation.
+.. note::
+
+   If you want to install a development environment, please see :doc:`/dev`
+   documentation.
+
+System requirements:
+
+* Python 2.7
 
 Install the package with your favorite Python installer. As an example, with
 pip:
 
-.. code-block:: sh
+.. code:: sh
 
    pip install django-downloadview
 
@@ -28,3 +34,11 @@ Next, you'll have to setup some download view(s). See :doc:`demo project
 
 Optionally, you may setup additional :doc:`server optimizations
 <optimizations/index>`.
+
+
+.. rubric:: Notes & references
+
+.. seealso::
+
+   * :doc:`/settings`
+   * :doc:`/about/changelog`

@@ -11,6 +11,7 @@ Contents
 
    demo
    install
+   settings
    views
    optimizations/index
    testing

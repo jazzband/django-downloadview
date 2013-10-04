@@ -5,7 +5,7 @@ import tempfile
 from django.conf import settings
 from django.test.utils import override_settings
 
-from django_downloadview.response import is_download_response
+from django_downloadview.middlewares import is_download_response
 
 
 class temporary_media_root(override_settings):

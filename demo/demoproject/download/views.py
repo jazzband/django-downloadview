@@ -86,5 +86,5 @@ download_generated_hello_world = StringIODownloadView.as_view()
 
 
 download_http_hello_world = views.HTTPDownloadView.as_view(
-    url=u'https://raw.github.com/benoitbryon/django-downloadview/master/demo/demoproject/download/fixtures/hello-world.txt',
+        url=u'http://localhost:8000/download/hello-world.txt',
     basename=u'hello-world.txt')

@@ -26,17 +26,44 @@ How does it work?
 
 The feature is inspired by `Django's TemplateResponse`_: the download views
 return some :py:class:`django_downloadview.response.DownloadResponse` instance.
-Such a response doesn't contain file data.
+Such a response does not contain file data.
 
-By default, at the end of Django's request/response handling, Django is to
-iterate over the ``content`` attribute of the response. In a
-``DownloadResponse``, this ``content`` attribute is a file wrapper.
+By default, at the end of Django's request/response handling, Django iterates
+over the ``content`` attribute of the response. In a `DownloadResponse``,
+this ``content`` attribute is a file wrapper.
 
 It means that decorators and middlewares are given an opportunity to capture
 the ``DownloadResponse`` before the content of the file is loaded into memory
 As an example, :py:class:`django_downloadview.nginx.XAccelRedirectMiddleware`
 replaces ``DownloadResponse`` intance by some
 :py:class:`django_downloadview.nginx.XAccelRedirectResponse`.
+
+
+*********
+Configure
+*********
+
+Add `django_downloadview.DownloadDispatcherMiddleware` to `MIDDLEWARE_CLASSES`
+in your Django settings.
+
+Then register as many download middlewares as you wish in
+`DOWNLOADVIEW_MIDDLEWARES`.
+
+.. code:: python
+
+   DOWNLOADVIEW_MIDDLEWARES = (
+       ('default',
+        'django_downloadview.nginx.XAccelRedirectMiddleware',
+        {'source_dir': MEDIA_ROOT, 'destination_url': '/proxied-download'}),
+   )
+
+The first item is an identifier.
+
+The second item is the import path of some download middleware factory
+(typically a class).
+
+The third item is a dictionary of keyword arguments passed to the middleware
+factory.
 
 
 .. rubric:: References

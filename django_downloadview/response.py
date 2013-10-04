@@ -3,7 +3,7 @@ import os
 import mimetypes
 
 from django.conf import settings
-from django.http import StreamingHttpResponse
+from django.http import HttpResponse, StreamingHttpResponse
 
 
 class DownloadResponse(StreamingHttpResponse):
@@ -11,6 +11,8 @@ class DownloadResponse(StreamingHttpResponse):
 
     ``content`` attribute is supposed to be a file object wrapper, which makes
     this response "lazy".
+
+    This is a specialization of Django's :py:class:`StreamingHttpResponse`.
 
     """
     def __init__(self, file_instance, attachment=True, basename=None,
@@ -120,11 +122,10 @@ class DownloadResponse(StreamingHttpResponse):
         return settings.DEFAULT_CHARSET
 
 
-def is_download_response(response):
-    """Return ``True`` if ``response`` is a download response.
+class ProxiedDownloadResponse(HttpResponse):
+    """Base class for internal redirect download responses.
 
-    Current implementation returns True if ``response`` is an instance of
-    :py:class:`django_downloadview.response.DownloadResponse`.
+    This base class makes it possible to identify several types of specific
+    responses such as :py:class:`django_downloadview.XAccelRedirectResponse`.
 
     """
-    return isinstance(response, DownloadResponse)

@@ -1,0 +1,39 @@
+########
+Settings
+########
+
+Here is the list of settings used by `django-downloadview`.
+
+
+******************
+MIDDLEWARE_CLASSES
+******************
+
+Add `django_downloadview.DownloadDispatcherMiddleware` to `MIDDLEWARE_CLASSES`.
+This is a response middleware. Move it after middlewares that compute the
+response content such as gzip middleware.
+
+
+************************
+DOWNLOADVIEW_MIDDLEWARES
+************************
+
+:default: []
+
+A list of `(id, path, options)` where:
+
+* `id` is an identifier
+* `path` is the import path of some download middleware factory (typically a
+  class).
+* `options` is a dictionary of keyword arguments passed to the middleware
+  factory.
+
+Example:
+
+.. code:: python
+
+   DOWNLOADVIEW_MIDDLEWARES = (
+       ('default',
+        'django_downloadview.nginx.XAccelMiddleware',
+        {'source_dir': MEDIA_ROOT, 'destination_url': '/proxied-download'}),
+   )

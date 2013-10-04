@@ -2,10 +2,10 @@
 django-downloadview
 ###################
 
-Django-DownloadView provides generic views to make Django serve files.
+`django-downloadview` makes it easy to serve files with Django.
 
-It can serve files from models, storages, local filesystem, arbitrary URL...
-and even generated files.
+It provides generic views to serve files from models, storages, local
+filesystem, arbitrary URL... and even generated files.
 
 For increased performances, it can delegate the actual streaming to a reverse
 proxy, via mechanisms such as Nginx's X-Accel.
