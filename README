@@ -2,22 +2,26 @@
 django-downloadview
 ###################
 
-`django-downloadview` makes it easy to serve files with Django.
+``django-downloadview`` makes it easy to serve files with Django:
 
-It provides generic views to serve files from models, storages, local
-filesystem, arbitrary URL... and even generated files.
+* you manage files with Django (permissions, search, generation, ...);
 
-For increased performances, it can delegate the actual streaming to a reverse
-proxy, via mechanisms such as Nginx's X-Accel.
+* files are stored somewhere or generated somehow (local filesystem, remote
+  storage, memory...);
+
+* ``django-downloadview`` helps you stream the files with very little code;
+
+* ``django-downloadview`` helps you improve performances with reverse proxies,
+  via mechanisms such as Nginx's X-Accel.
 
 
 *******
 Example
 *******
 
-In some ``urls.py``, serve files managed in a model:
+Let's serve a file stored in a FileField of some model:
 
-.. code-block:: python
+.. code:: python
 
    from django.conf.urls import url, url_patterns
    from django_downloadview import ObjectDownloadView
@@ -30,25 +34,6 @@ In some ``urls.py``, serve files managed in a model:
        url('^download/(?P<slug>[A-Za-z0-9_-]+)/$', download, name='download'),
    )
 
-More examples in the "demo" documentation!
-
-
-*****
-Views
-*****
-
-Several views are provided to cover frequent use cases:
-
-* ``ObjectDownloadView`` when you have a model with a file field.
-* ``StorageDownloadView`` when you manage files in a storage.
-* ``PathDownloadView`` when you have an absolute filename on local filesystem.
-* ``HTTPDownloadView`` when you have an URL (the resource is proxied).
-* ``VirtualDownloadView`` when you the file is generated on the fly.
-
-See "views" documentation for details.
-
-See also "optimizations" documentation to get increased performances.
-
 
 **********
 Ressources
@@ -59,3 +44,4 @@ Ressources
 * Code repository: https://github.com/benoitbryon/django-downloadview
 * Bugtracker: https://github.com/benoitbryon/django-downloadview/issues
 * Continuous integration: https://travis-ci.org/benoitbryon/django-downloadview
+* Roadmap: https://github.com/benoitbryon/django-downloadview/issues/milestones
