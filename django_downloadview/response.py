@@ -1,4 +1,5 @@
-"""HttpResponse subclasses."""
+# -*- coding: utf-8 -*-
+""":py:class:`django.http.HttpResponse` subclasses."""
 import os
 import mimetypes
 
@@ -9,10 +10,10 @@ from django.http import HttpResponse, StreamingHttpResponse
 class DownloadResponse(StreamingHttpResponse):
     """File download response.
 
-    ``content`` attribute is supposed to be a file object wrapper, which makes
-    this response "lazy".
+    :py:attr:`content` attribute is supposed to be a file object wrapper, which
+    makes this response lazy.
 
-    This is a specialization of Django's :py:class:`StreamingHttpResponse`.
+    This is a specialization of :py:class:`django.http.StreamingHttpResponse`.
 
     """
     def __init__(self, file_instance, attachment=True, basename=None,
@@ -71,7 +72,10 @@ class DownloadResponse(StreamingHttpResponse):
         except AttributeError:
             headers = {}
             headers['Content-Type'] = self.get_content_type()
-            headers['Content-Length'] = self.file.size
+            try:
+                headers['Content-Length'] = self.file.size
+            except (AttributeError, NotImplementedError):
+                pass  # Generated files.
             if self.attachment:
                 headers['Content-Disposition'] = 'attachment; filename=%s' \
                                                  % self.get_basename()
@@ -126,6 +130,7 @@ class ProxiedDownloadResponse(HttpResponse):
     """Base class for internal redirect download responses.
 
     This base class makes it possible to identify several types of specific
-    responses such as :py:class:`django_downloadview.XAccelRedirectResponse`.
+    responses such as
+    :py:class:`~django_downloadview.nginx.response.XAccelRedirectResponse`.
 
     """

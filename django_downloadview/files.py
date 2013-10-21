@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """File wrappers for use as exchange data between views and responses."""
 from django.core.files import File
 
