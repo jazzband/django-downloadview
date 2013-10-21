@@ -30,30 +30,45 @@ django-sendfile
 `django-sendfile`_ is a wrapper around web-server specific methods for sending
 files to web clients.
 
-API is made of a single ``sendfile()`` function, which returns a download
-response. The download response type depends on the chosen backend, which could
-be Django, Lighttpd's X-Sendfile, Nginx's X-Accel...
+``django-senfile``'s main focus is simplicity: API is made of a single
+``sendfile()`` function you call inside your views:
 
-It seems that django-senfile main focus is simplicity: you call the
-``sendfile()`` method inside your views.
+.. code:: python
 
-Django-downloadview main focus is reusability: you configure (or override)
-class-based views depending on the use case.
+   from sendfile import sendfile
+
+   def hello_world(request):
+	"""Send 'hello-world.pdf' file as a response."""
+    	return sendfile(request, '/path/to/hello-world.pdf')
+
+The download response type depends on the chosen backend, which could
+be Django, Lighttpd's X-Sendfile, Nginx's X-Accel... depending your settings:
+
+.. code:: python
+
+   SENDFILE_BACKEND = 'sendfile.backends.nginx'  # sendfile() will return
+                                                 # X-Accel responses.
+   # Additional settings for sendfile's nginx backend.
+   SENDFILE_ROOT = '/path/to'
+   SENDFILE_URL = '/proxied-download'
+
+Here are main differences between the two projects:
+
+* ``django-sendfile`` supports only files that live on local filesystem (i.e.
+  where ``os.path.exists`` returns ``True``). Whereas ``django-downloadview``
+  allows you to serve or proxy files stored in various locations, including
+  remote ones.
+
+* ``django-sendfile`` uses a single global configuration (i.e.
+  ``settings.SENDFILE_ROOT``), thus optimizations are limited to a single
+  root folder. Whereas ``django-downloadview``'s
+  ``DownloadDispatcherMiddleware`` supports multiple configurations.
 
 As of 2012-04-11, ``django-sendfile`` (version 0.3.2) seems quite popular and
-may be a good alternative **provided you serve files that live in local
-filesystem**, because the ``sendfile()`` method only accepts filenames relative
-to local filesystem (i.e. using ``os.path.exists``).
+may be a good alternative **provided you serve files that live in a single
+directory of local filesystem**.
 
-Django-downloadview (since version 1.1) handles file wrappers, and thus allows
-you to serve files from more locations:
-
-* models,
-* storages,
-* local filesystem,
-* remote URL (using `requests`_),
-* in-memory (or generated) files (such as StringIO),
-* ... and your custom ones with little efforts.
+:func:`django_downloadview.sendfile` is a port of django-sendfile's main function.
 
 
 ********************
