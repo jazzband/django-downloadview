@@ -1,17 +1,39 @@
-########
-Settings
-########
+#########
+Configure
+#########
 
 Here is the list of settings used by `django-downloadview`.
+
+
+**************
+INSTALLED_APPS
+**************
+
+There is no need to register this application in your Django's
+``INSTALLED_APPS`` setting.
 
 
 ******************
 MIDDLEWARE_CLASSES
 ******************
 
-Add `django_downloadview.DownloadDispatcherMiddleware` to `MIDDLEWARE_CLASSES`.
-This is a response middleware. Move it after middlewares that compute the
+If you plan to setup reverse-proxy optimizations, add
+``django_downloadview.DownloadDispatcherMiddleware`` to ``MIDDLEWARE_CLASSES``.
+It is a response middleware. Move it after middlewares that compute the
 response content such as gzip middleware.
+
+Example:
+
+.. code:: python
+
+   MIDDLEWARE_CLASSES = [
+       'django.middleware.common.CommonMiddleware',
+       'django.contrib.sessions.middleware.SessionMiddleware',
+       'django.middleware.csrf.CsrfViewMiddleware',
+       'django.contrib.auth.middleware.AuthenticationMiddleware',
+       'django.contrib.messages.middleware.MessageMiddleware',
+       'django_downloadview.DownloadDispatcherMiddleware',
+   ]
 
 
 ************************
@@ -20,12 +42,19 @@ DOWNLOADVIEW_MIDDLEWARES
 
 :default: []
 
-A list of `(id, path, options)` where:
+If you plan to setup reverse-proxy :doc:`optimizations </optimizations/index>`,
+setup ``DOWNLOADVIEW_MIDDLEWARES`` value. This setting is used by
+:py:class:`~django_downloadview.middlewares.DownloadDispatcherMiddleware`.
+It is the list of handlers that will be given the opportunity to capture
+download responses and convert them to internal redirects for use with
+reverse-proxies.
 
-* `id` is an identifier
-* `path` is the import path of some download middleware factory (typically a
+The list expects items ``(id, path, options)`` such as:
+
+* ``id`` is an identifier
+* ``path`` is the import path of some download middleware factory (typically a
   class).
-* `options` is a dictionary of keyword arguments passed to the middleware
+* ``options`` is a dictionary of keyword arguments passed to the middleware
   factory.
 
 Example:
@@ -37,3 +66,6 @@ Example:
         'django_downloadview.nginx.XAccelMiddleware',
         {'source_dir': MEDIA_ROOT, 'destination_url': '/proxied-download'}),
    )
+
+See :doc:`/optimizations/index` for details about middlewares and their
+options.
