@@ -1,6 +1,6 @@
-#############
-Optimizations
-#############
+##################
+Optimize streaming
+##################
 
 Some reverse proxies allow applications to delegate actual download to the
 proxy:

@@ -1,0 +1,104 @@
+################
+PathDownloadView
+################
+
+.. py:module:: django_downloadview.views.path
+
+:class:`PathDownloadView` **serves file given a path on local filesystem**.
+
+Use this view whenever you just have a path, outside storage or model.
+
+.. warning::
+
+   Take care of path validation, especially if you compute paths from user
+   input: an attacker may be able to download files from arbitrary locations.
+   In most cases, you should consider managing files in storages, because they
+   implement default security mechanisms.
+
+
+**************
+Simple example
+**************
+
+Setup a view to stream files given path:
+
+.. code:: python
+
+   from django_downloadview import PathDownloadView
+
+   download = PathDownloadView.as_view()
+
+The view accepts a ``path`` argument you can setup either in ``as_view`` or
+via URLconfs:
+
+.. code:: python
+
+   from django.conf.urls import patterns, url
+
+   urlpatterns = patterns(
+       '',
+       url(r'^(?P<path>[a-zA-Z0-9_-]+\.[a-zA-Z0-9]{1,4})$', download),
+   )
+
+
+************************************
+A convenient shortcut in other views
+************************************
+
+:class:`PathDownloadView` is straight to call, so you can use it to simplify
+code in more complex views, provided you have an absolute path to a local file:
+
+.. code:: python
+
+   from django_downloadview import PathDownloadView
+
+   def some_complex_view(request, *args, **kwargs):
+       """Does many things, then stream a file."""
+       local_path = do_many_things()
+       return PathDownloadView.as_view(path=local_path)(request)
+
+.. note::
+
+   `django-sendfile`_ users may like something such as
+   ``sendfile = lambda request, path: PathDownloadView.as_view(path=path)(request)``
+
+
+**************************
+Computing path dynamically
+**************************
+
+Override the :meth:`PathDownloadView.get_path` method to adapt path
+resolution to your needs:
+
+.. code:: python
+
+   import glob
+   import os
+   import random
+   from django.conf import settings
+   from django_downloadview import PathDownloadView
+
+   class RandomImageView(PathDownloadView):
+       """Stream a random image in ``MEDIA_ROOT``."""
+       def get_path(self):
+           """Return the path of a random JPG image in ``MEDIA_ROOT``."""
+           image_list = glob.glob(os.path.join(settings.MEDIA_ROOT, '*.jpg'))
+           return random.choice(image_list)
+
+
+*************
+API reference
+*************
+
+.. autoclass:: PathDownloadView
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource
+
+
+.. rubric:: Notes & references
+
+.. target-notes::
+
+.. _`django-sendfile`: https://pypi.python.org/pypi/django-sendfile

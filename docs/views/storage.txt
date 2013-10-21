@@ -1,0 +1,62 @@
+###################
+StorageDownloadView
+###################
+
+.. py:module:: django_downloadview.views.storage
+
+:class:`StorageDownloadView` **serves files given a storage and a path**.
+
+Use this view when you manage files in a storage (which is a good practice),
+unrelated to a model.
+
+
+**************
+Simple example
+**************
+
+Given a storage:
+
+.. code:: python
+
+   from django.core.files.storage import FileSystemStorage
+
+   storage = FileSystemStorage(location='/somewhere')
+
+Setup a view to stream files in storage:
+
+.. code:: python
+
+   from django_downloadview import StorageDownloadView
+
+   download = StorageDownloadView.as_view(storage=storage)
+
+The view accepts a ``path`` argument you can setup either in ``as_view`` or
+via URLconfs:
+
+.. code:: python
+
+   from django.conf.urls import patterns, url
+
+   urlpatterns = patterns(
+       '',
+       url(r'^(?P<path>[a-zA-Z0-9_-]+\.[a-zA-Z0-9]{1,4})$', download),
+   )
+
+
+**************************
+Computing path dynamically
+**************************
+
+Override the :meth:`StorageDownloadView.get_path` method to adapt path
+resolution to your needs.
+
+
+*************
+API reference
+*************
+
+.. autoclass:: StorageDownloadView
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource

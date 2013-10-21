@@ -1,0 +1,43 @@
+################
+HTTPDownloadView
+################
+
+.. py:module:: django_downloadview.views.http
+
+:class:`HTTPDownloadView` **serves a file given an URL.**, i.e. it acts like
+a proxy.
+
+This view is particularly handy when:
+
+* the client does not have access to the file resource, while your Django
+  server does.
+
+* the client does trust your server, your server trusts a third-party, you do
+  not want to bother the client with the third-party.
+
+
+**************
+Simple example
+**************
+
+Setup a view to stream files given URL:
+
+.. code:: python
+
+   from django_downloadview import HTTPDownloadView
+
+   class TravisStatusView(HTTPDownloadView):
+       def get_url(self):
+           """Return URL of django-downloadview's build status."""
+           return u'https://travis-ci.org/benoitbryon/django-downloadview.png'
+
+
+*************
+API reference
+*************
+
+.. autoclass:: HTTPDownloadView
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource

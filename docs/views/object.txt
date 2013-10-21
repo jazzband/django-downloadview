@@ -1,0 +1,98 @@
+##################
+ObjectDownloadView
+##################
+
+.. py:module:: django_downloadview.views.object
+
+:class:`ObjectDownloadView` **serves files managed in models with file fields**
+such as :class:`~django.db.models.FileField` or
+:class:`~django.db.models.ImageField`.
+
+Use this view like Django's builtin
+:class:`~django.views.generic.detail.DetailView`.
+
+Additional options allow you to store file metadata (size, content-type, ...)
+in the model, as deserialized fields.
+
+
+**************
+Simple example
+**************
+
+Given a model with a :class:`~django.db.models.FileField`:
+
+.. code:: python
+
+   from django.db import models
+
+   class Document(models.Model):
+       file = models.FileField(upload_to='document')
+
+Setup a view to stream the ``file`` attribute:
+
+.. code:: python
+
+   from django_downloadview import ObjectDownloadView
+
+   download = ObjectDownloadView.as_view(model=Document)
+
+.. note::
+
+   If the file field you want to serve is not named "file", pass the right
+   name as "file_field" argument, i.e. adapt
+   ``ObjectDownloadView.as_view(model=Document, file_field='file')``.
+
+:class:`~django_downloadview.views.object.ObjectDownloadView` inherits from
+:class:`~django.views.generic.detail.BaseDetailView`, i.e. it expects either
+``slug`` or ``pk``:
+
+.. code:: python
+
+   from django.conf.urls import url, url_patterns
+
+   url_patterns = ('',
+       url('^download/(?P<slug>[A-Za-z0-9_-]+)/$', download, name='download'),
+   )
+
+
+**********************************
+Mapping file attributes to model's
+**********************************
+
+Sometimes, you use Django model to store file's metadata. Some of this metadata
+can be used when you serve the file.
+
+As an example, let's consider the client-side basename lives in model and not
+in storage:
+
+.. code:: python
+
+   from django.db import models
+
+   class Document(models.Model):
+       file = models.FileField(upload_to='document')
+       basename = models.CharField(max_length=100)
+
+Then you can configure the :attr:`ObjectDownloadView.basename_field` option:
+
+.. code:: python
+
+   from django_downloadview import ObjectDownloadView
+
+   download = ObjectDownloadView.as_view(model=Document,
+                                         basename_field='basename')
+
+.. note:: ``basename`` could have been a property instead of a database field.
+
+See details below for a full list of options.
+
+
+*************
+API reference
+*************
+
+.. autoclass:: ObjectDownloadView
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource

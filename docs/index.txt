@@ -9,12 +9,15 @@ Contents
    :maxdepth: 2
    :titlesonly:
 
-   demo
+   overview
    install
    settings
-   views
+   views/index
    optimizations/index
    testing
-   api/index
+   healthchecks
+   files
+   responses
+   demo
    about/index
    dev

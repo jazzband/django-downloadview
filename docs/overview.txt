@@ -1,0 +1,91 @@
+##################
+Overview, concepts
+##################
+
+Given:
+
+* you manage files with Django (permissions, search, generation, ...)
+
+* files are stored somewhere or generated somehow (local filesystem, remote
+  storage, memory...)
+
+As a developer, you want to serve files quick and efficiently.
+
+Here is an overview of ``django-downloadview``'s answer...
+
+
+************************************
+Generic views cover commons patterns
+************************************
+
+* :doc:`/views/object` when you have a model with a file field;
+* :doc:`/views/storage` when you manage files in a storage;
+* :doc:`/views/path` when you have an absolute filename on local filesystem;
+* :doc:`/views/http` when you have an URL (the resource is proxied);
+* :doc:`/views/virtual` when you generate a file dynamically.
+
+
+*************************************************
+Generic views and mixins allow easy customization
+*************************************************
+
+If your use case is a bit specific, you can easily extend the views above or
+:doc:`create your own based on mixins </views/custom>`.
+
+
+*****************************
+Views return DownloadResponse
+*****************************
+
+Views return :py:class:`~django_downloadview.response.DownloadResponse`. It is
+a special :py:class:`django.http.StreamingHttpResponse` where content is
+encapsulated in a file wrapper. If the response is sent to the client, the file
+content content is loaded.
+
+.. note::
+
+   Middlewares and decorators are given the opportunity to optimize the
+   streaming before file content loading.
+
+Learn more in :doc:`responses`.
+
+
+***********************************
+DownloadResponse carry file wrapper
+***********************************
+
+A download view instanciates a :doc:`file wrapper </files>` and use it to
+initialize :py:class:`~django_downloadview.response.DownloadResponse`.
+
+File wrappers describe files. They carry files properties, but not file
+content. They implement loading and iterating over file content.
+
+Learn more about available file wrappers in :doc:`files`.
+
+   
+*****************************************************************
+Middlewares convert DownloadResponse into ProxiedDownloadResponse
+*****************************************************************
+
+Decorators and middlewares may capture
+:py:class:`~django_downloadview.response.DownloadResponse` instances in order
+to optimize the streaming. A good optimization is to delegate streaming to
+reverse proxies such as Nginx via X-Accel redirections or Apache via
+X-Sendfile.
+
+Learn more in :doc:`optimizations/index`.
+
+
+***************
+Testing matters
+***************
+
+``django-downloadview`` also helps you :doc:`test the views you customized
+<testing>`.
+
+
+************
+What's next?
+************
+
+Convinced? Let's :doc:`install django-downloadview <install>`.

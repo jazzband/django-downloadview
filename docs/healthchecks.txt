@@ -1,0 +1,106 @@
+##################
+Write healthchecks
+##################
+
+In the previous :doc:`testing </testing>` topic, you made sure the views and
+middlewares work as expected... within a test environment.
+
+One common issue when deploying in production is that the reverse-proxy's
+configuration does not fit. You cannot check that within test environment.
+
+**Healthchecks are made to diagnose issues in live (production) environments**.
+
+
+************************
+Introducing healthchecks
+************************
+
+Healthchecks (sometimes called "smoke tests" or "diagnosis") are assertions you
+run on a live (typically production) service, as opposed to fake/mock service
+used during tests (unit, integration, functional).
+
+See `hospital`_ and `django-doctor`_ projects about writing healthchecks for
+Python and Django.
+
+
+********************
+Typical healthchecks
+********************
+
+Here is a typical healthcheck setup for download views with reverse-proxy
+optimizations.
+
+When you run this healthcheck suite, you get a good overview if a problem
+occurs: you can compare expected results and learn which part (Django,
+reverse-proxy or remote storage) is guilty.
+
+.. note::
+
+   In the examples below, we use "localhost" and ports "80" (reverse-proxy) or
+   "8000" (Django). Adapt them to your configuration.
+
+Check storage
+=============
+
+Put a dummy file on the storage Django uses.
+
+The write a healthcheck that asserts you can read the dummy file from storage.
+
+**On success, you know remote storage is ok.**
+
+Issues may involve permissions or communications (remote storage).
+
+.. note::
+
+   This healthcheck may be outside Django.
+
+Check Django VS storage
+=======================
+
+Implement a download view dedicated to healthchecks. It is typically a public
+(but not referenced) view that streams a dummy file from real storage.
+Let's say you register it as ``/healthcheck-utils/download/`` URL.
+
+Write a healthcheck that asserts ``GET
+http://localhost:8000/healtcheck-utils/download/`` (notice the `8000` port:
+local Django server) returns the expected reverse-proxy response (X-Accel,
+X-Sendfile...).
+
+**On success, you know there is no configuration issue on the Django side.**
+
+Check reverse proxy VS storage
+==============================
+
+Write a location in your reverse-proxy's configuration that proxy-pass to a
+dummy file on storage.
+
+Write a healthcheck that asserts this location returns the expected dummy file.
+
+**On success, you know the reverse proxy can serve files from storage.**
+
+Check them all together
+=======================
+
+We just checked all parts separately, so let's make sure they can work
+together.
+Configure the reverse-proxy so that `/healthcheck-utils/download/` is proxied
+to Django. Then write a healthcheck that asserts ``GET
+http://localhost:80/healthcheck-utils/download`` (notice the `80` port:
+reverse-proxy server) returns the expected dummy file.
+
+**On success, you know everything is ok.**
+
+On failure, there is an issue in the X-Accel/X-Sendfile configuration.
+
+.. note::
+
+   This last healthcheck should be the first one to run, i.e. if it passes,
+   others should pass too. The others are useful when this one fails.
+
+
+.. rubric:: Notes & references
+
+.. target-notes::
+
+.. _`hospital`: https://pypi.python.org/pypi/hospital
+.. _`django-doctor`: https://pypi.python.org/pypi/django-doctor

@@ -1,0 +1,134 @@
+###################
+VirtualDownloadView
+###################
+
+.. py:module:: django_downloadview.views.virtual
+
+:class:`VirtualDownloadView` **serves files that do not live on disk**.
+Use it when you want to stream a file which content is dynamically generated
+or which lives in memory.
+
+It is all about overriding :meth:`VirtualDownloadView.get_file` method so that
+it returns a suitable file wrapper...
+
+.. note::
+
+   Current implementation does not support reverse-proxy optimizations,
+   because there is no place reverse-proxy can load files from after Django
+   exited.
+
+
+***************************************
+Serve text (string or unicode) or bytes
+***************************************
+
+Let's consider you build text dynamically, as a bytes or string or unicode
+object. Serve it with Django's builtin
+:class:`~django.core.files.base.ContentFile` wrapper:
+
+.. code:: python
+
+   from django.core.files.base import ContentFile
+   from django_downloadview import VirtualDownloadView
+
+   class TextDownloadView(VirtualDownloadView):
+       def get_file(self):
+           """Return :class:`django.core.files.base.ContentFile` object."""
+           return ContentFile(u"Hello world!", name='hello-world.txt')
+
+
+**************
+Serve StringIO
+**************
+
+:class:`~StringIO.StringIO` object lives in memory. Let's wrap it in some
+download view via :class:`~django_downloadview.files.VirtualFile`:
+
+.. code:: python
+
+   from StringIO import StringIO
+   from django_downloadview import VirtualDownloadView, VirtualFile
+
+   class StringIODownloadView(VirtualDownloadView):
+       def get_file(self):
+           """Return wrapper on ``StringIO`` object."""
+           file_obj = StringIO(u"Hello world!\n".encode('utf-8'))
+           return VirtualFile(file_obj, name='hello-world.txt')
+
+
+************************
+Stream generated content
+************************
+
+Let's consider you have a generator function (``yield``) or an iterator object
+(``__iter__()``):
+
+.. code:: python
+
+   def generate_hello():
+       yield u'Hello '
+       yield u'world!'
+
+Stream generated content using :class:`VirtualDownloadView`,
+:class:`~django_downloadview.files.VirtualFile` and
+:class:`~django_downloadview.file.StringIteratorIO`:
+
+.. code:: python
+
+   from django_downloadview import (VirtualDownloadView,
+                                    VirtualFile,
+                                    StringIteratorIO)
+
+   class GeneratedDownloadView(VirtualDownloadView):
+       def get_file(self):
+           """Return wrapper on ``StringIteratorIO`` object."""
+           file_obj = StringIteratorIO(generate_hello())
+           return VirtualFile(file_obj, name='hello-world.txt')
+
+
+************************************
+Handling http not modified responses
+************************************
+
+Sometimes, you know the latest date and time the content was generated at, and
+you know a new request would generate exactly the same content. In such a case,
+you should implement :py:meth:`~VirtualDownloadView.was_modified_since` in your
+view.
+
+.. note::
+
+   Default :py:meth:`~VirtualDownloadView.was_modified_since` implementation
+   trusts file wrapper's ``was_modified_since`` if any. Else (if calling
+   ``was_modified_since()`` raises ``NotImplementedError`` or
+   ``AttributeError``) it returns ``True``, i.e. it assumes the file was
+   modified.
+
+As an example, the download views above always generate "Hello world!"... so,
+if the client already downloaded it, we can safely return some HTTP "304 Not
+Modified" response:
+
+.. code:: python
+
+   from django.core.files.base import ContentFile
+   from django_downloadview import VirtualDownloadView
+
+   class TextDownloadView(VirtualDownloadView):
+       def get_file(self):
+           """Return :class:`django.core.files.base.ContentFile` object."""
+           return ContentFile(u"Hello world!", name='hello-world.txt')
+
+       def was_modified_since(self, file_instance, since):
+           return False  # Never modified, always u"Hello world!".
+
+
+
+
+*************
+API reference
+*************
+
+.. autoclass:: VirtualDownloadView
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource
