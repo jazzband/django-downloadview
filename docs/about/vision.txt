@@ -1,0 +1,26 @@
+######
+Vision
+######
+
+`django-downloadview` tries to simplify the development of "download" views
+using `Django`_ framework. It provides generic views that cover most common
+patterns.
+
+Django is not the best solution to serve files: reverse proxies are far more
+efficient. `django-downloadview` makes it easy to implement this best-practice.
+
+Tests matter: `django-downloadview` provides tools to test download views and
+optimizations.
+
+
+.. rubric:: Notes & references
+
+.. seealso::
+
+   * :doc:`/about/alternatives`
+   * `roadmap
+     <https://github.com/benoitbryon/django-downloadview/issues/milestones>`_
+
+.. target-notes::
+
+.. _`Django`: https://django-project.com

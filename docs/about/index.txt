@@ -4,6 +4,7 @@ About django-downloadview
 
 .. toctree::
 
+   vision
    alternatives
    license
    authors
