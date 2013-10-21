@@ -1,9 +1,0 @@
-###
-API
-###
-
-Here is API documentation, generated from code.
-
-.. toctree::
-
-   modules

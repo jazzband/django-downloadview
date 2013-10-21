@@ -1,7 +1,0 @@
-django_downloadview
-===================
-
-.. toctree::
-   :maxdepth: 4
-
-   django_downloadview

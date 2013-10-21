@@ -64,18 +64,11 @@ test-documentation:
 	$(NOSE) -c $(ROOT_DIR)/etc/nose.cfg sphinxcontrib.testbuild.tests
 
 
-apidoc:
-	cp docs/api/index.txt docs/api-backup.txt
-	rm -rf docs/api/*
-	mv docs/api-backup.txt docs/api/index.txt
-	$(BIN_DIR)/sphinx-apidoc --suffix txt --output-dir $(ROOT_DIR)/docs/api django_downloadview
-
-
 sphinx:
 	make --directory=docs clean html doctest
 
 
-documentation: apidoc sphinx
+documentation: sphinx
 
 
 demo: develop
