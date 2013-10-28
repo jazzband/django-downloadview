@@ -10,7 +10,7 @@ Demo project
 Documentation includes code from the demo
 *****************************************
 
-Almost every example in this documentation comes from the demo:
+Almost every example in the documentation comes from the demo:
 
 * discover examples in the documentation;
 * browse related code and tests in demo project.
