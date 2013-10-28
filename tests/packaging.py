@@ -59,7 +59,7 @@ class ReadMeTestCase(unittest.TestCase):
         # Run build.
         import docutils.core
         import docutils.io
-        source = open(os.path.join(project_dir, 'README')).read()
+        source = open(os.path.join(project_dir, 'README.rst')).read()
         writer_name = 'html'
         import sys
         from StringIO import StringIO
