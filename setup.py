@@ -21,7 +21,7 @@ REQUIRES = ['setuptools', 'django>=1.5', 'requests']
 if __name__ == '__main__':  # Don't run setup() when we import this module.
     setup(name=NAME,
           version=VERSION,
-          description='Generic download views for Django.',
+          description='Serve files with Django and reverse-proxies.',
           long_description=README,
           classifiers=['Development Status :: 4 - Beta',
                        'License :: OSI Approved :: BSD License',
@@ -29,8 +29,9 @@ if __name__ == '__main__':  # Don't run setup() when we import this module.
                        'Programming Language :: Python :: 2.6',
                        'Framework :: Django',
                        ],
-          keywords='class-based view, generic view, download, file, '
-                   'FileField, ImageField, nginx, x-accel, x-sendfile',
+          keywords='file stream download FileField ImageField x-accel '
+                   'x-accel-redirect x-sendfile sendfile mod_xsendfile '
+                   'offload',
           author='Benoît Bryon',
           author_email='benoit@marmelune.net',
           url='https://github.com/benoitbryon/%s' % NAME,
