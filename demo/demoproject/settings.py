@@ -45,30 +45,34 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     # The actual django-downloadview demo.
     'demoproject',
-    'demoproject.download',  # Sample standard download views.
-    'demoproject.nginx',  # Sample optimizations for Nginx.
+    'demoproject.object',  # Demo around ObjectDownloadView
+    'demoproject.storage',  # Demo around StorageDownloadView
+    'demoproject.path',  # Demo around PathDownloadView
+    'demoproject.http',  # Demo around HTTPDownloadView
+    'demoproject.virtual',  # Demo around VirtualDownloadView
+    'demoproject.nginx',  # Sample optimizations for Nginx X-Accel.
     # For test purposes. The demo project is part of django-downloadview
     # test suite.
     'django_nose',
 )
 
 
-# Default middlewares. You may alter the list later.
+# Middlewares.
 MIDDLEWARE_CLASSES = [
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'django_downloadview.DownloadDispatcherMiddleware'
 ]
 
 
 # Uncomment the following lines to enable global Nginx optimizations.
-#MIDDLEWARE_CLASSES.append('django_downloadview.DownloadDispatcherMiddleware')
 DOWNLOADVIEW_MIDDLEWARES = (
     ('default', 'django_downloadview.nginx.XAccelRedirectMiddleware',
-                {'source_dir': MEDIA_ROOT,
-                 'destination_url': '/proxied-download'}),
+                {'source_url': '/media/nginx/',
+                 'destination_url': '/nginx-optimized-by-middleware/'}),
 )
 
 

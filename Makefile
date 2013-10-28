@@ -72,10 +72,15 @@ documentation: sphinx
 
 
 demo: develop
-	mkdir -p var/media/document
 	$(BIN_DIR)/demo syncdb --noinput
-	cp $(ROOT_DIR)/demo/demoproject/download/fixtures/hello-world.txt var/media/document/
-	$(BIN_DIR)/demo loaddata $(ROOT_DIR)/demo/demoproject/download/fixtures/demo.json
+	# Install fixtures.
+	mkdir -p var/media
+	cp -r $(ROOT_DIR)/demo/demoproject/fixtures var/media/object
+	cp -r $(ROOT_DIR)/demo/demoproject/fixtures var/media/object-other
+	cp -r $(ROOT_DIR)/demo/demoproject/fixtures var/media/nginx
+	$(BIN_DIR)/demo loaddata demo.json
+
+runserver: demo
 	$(BIN_DIR)/demo runserver
 
 

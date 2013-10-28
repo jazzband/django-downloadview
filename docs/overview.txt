@@ -18,11 +18,14 @@ Here is an overview of ``django-downloadview``'s answer...
 Generic views cover commons patterns
 ************************************
 
-* :doc:`/views/object` when you have a model with a file field;
-* :doc:`/views/storage` when you manage files in a storage;
-* :doc:`/views/path` when you have an absolute filename on local filesystem;
-* :doc:`/views/http` when you have an URL (the resource is proxied);
-* :doc:`/views/virtual` when you generate a file dynamically.
+Choose the generic view depending on the file you want to serve:
+
+* :doc:`/views/object`: file field in a model;
+* :doc:`/views/storage`: file in a storage;
+* :doc:`/views/path`: absolute filename on local filesystem;
+* :doc:`/views/http`: URL (the resource is proxied);
+* :doc:`/views/virtual`: bytes, text, :class:`~StringIO.StringIO`, generated
+  file...
 
 
 *************************************************
@@ -39,13 +42,7 @@ Views return DownloadResponse
 
 Views return :py:class:`~django_downloadview.response.DownloadResponse`. It is
 a special :py:class:`django.http.StreamingHttpResponse` where content is
-encapsulated in a file wrapper. If the response is sent to the client, the file
-content content is loaded.
-
-.. note::
-
-   Middlewares and decorators are given the opportunity to optimize the
-   streaming before file content loading.
+encapsulated in a file wrapper.
 
 Learn more in :doc:`responses`.
 
@@ -54,11 +51,14 @@ Learn more in :doc:`responses`.
 DownloadResponse carry file wrapper
 ***********************************
 
-A download view instanciates a :doc:`file wrapper </files>` and use it to
-initialize :py:class:`~django_downloadview.response.DownloadResponse`.
+Views instanciate a :doc:`file wrapper </files>` and use it to initialize
+responses.
 
-File wrappers describe files. They carry files properties, but not file
-content. They implement loading and iterating over file content.
+**File wrappers describe files**: they carry files properties such as name,
+size, encoding...
+
+**File wrappers implement loading and iterating over file content**. Whenever
+possible, file wrappers do not embed file data, in order to save memory.
 
 Learn more about available file wrappers in :doc:`files`.
 
@@ -67,11 +67,18 @@ Learn more about available file wrappers in :doc:`files`.
 Middlewares convert DownloadResponse into ProxiedDownloadResponse
 *****************************************************************
 
-Decorators and middlewares may capture
-:py:class:`~django_downloadview.response.DownloadResponse` instances in order
-to optimize the streaming. A good optimization is to delegate streaming to
-reverse proxies such as Nginx via X-Accel redirections or Apache via
-X-Sendfile.
+Before WSGI application use file wrapper to load file contents, middlewares
+(or decorators) are given the opportunity to capture
+:class:`~django_downloadview.response.DownloadResponse` instances.
+
+Let's take this opportunity to optimize file loading and streaming!
+
+A good optimization it to delegate streaming to a reverse proxy, such as
+`nginx`_ via `X-Accel`_ internal redirects.
+
+`django_downloadview` provides middlewares that convert
+:class:`~django_downloadview.response.DownloadResponse` into
+:class:`~django_downloadview.response.ProxiedDownloadResponse`.
 
 Learn more in :doc:`optimizations/index`.
 
@@ -80,12 +87,23 @@ Learn more in :doc:`optimizations/index`.
 Testing matters
 ***************
 
-``django-downloadview`` also helps you :doc:`test the views you customized
+`django-downloadview` also helps you :doc:`test the views you customized
 <testing>`.
+
+You may also :doc:`write healthchecks </healthchecks>` to make sure everything
+goes fine in live environments.
 
 
 ************
 What's next?
 ************
 
-Convinced? Let's :doc:`install django-downloadview <install>`.
+Let's :doc:`install django-downloadview <install>`.
+
+
+.. rubric:: Notes & references
+
+.. target-notes::
+
+.. _`nginx`: http://nginx.org
+.. _`X-Accel`: http://wiki.nginx.org/X-accel

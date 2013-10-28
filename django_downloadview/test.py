@@ -9,7 +9,11 @@ from django_downloadview.middlewares import is_download_response
 
 
 class temporary_media_root(override_settings):
-    """Context manager or decorator to override settings.MEDIA_ROOT.
+    """Temporarily override settings.MEDIA_ROOT with a temporary directory.
+
+    The temporary directory is automatically created and destroyed.
+
+    Use this function as a context manager:
 
     >>> from django_downloadview.test import temporary_media_root
     >>> from django.conf import settings
@@ -19,6 +23,8 @@ class temporary_media_root(override_settings):
     False
     >>> global_media_root == settings.MEDIA_ROOT
     True
+
+    Or as a decorator:
 
     >>> @temporary_media_root()
     ... def use_temporary_media_root():
@@ -73,9 +79,10 @@ class DownloadResponseValidator(object):
         test_case.assertTrue(is_download_response(response))
 
     def assert_basename(self, test_case, response, value):
-        test_case.assertEqual(response.basename, value)
-        test_case.assertTrue('filename={name}'.format(name=response.basename),
-                             value)
+        """Implies ``attachement is True``."""
+        test_case.assertTrue(
+            response['Content-Disposition'].endswith(
+                'filename={name}'.format(name=value)))
 
     def assert_content_type(self, test_case, response, value):
         test_case.assertEqual(response['Content-Type'], value)
@@ -84,7 +91,6 @@ class DownloadResponseValidator(object):
         test_case.assertTrue(response['Content-Type'].startswith(value))
 
     def assert_content(self, test_case, response, value):
-        test_case.assertEqual(response.file.read(), value)
         test_case.assertEqual(''.join(response.streaming_content), value)
 
     def assert_attachment(self, test_case, response, value):
@@ -93,7 +99,7 @@ class DownloadResponseValidator(object):
 
 
 def assert_download_response(test_case, response, **assertions):
-    """Make ``test_case`` assert that ``response`` is a DownloadResponse.
+    """Make ``test_case`` assert that ``response`` meets ``assertions``.
 
     Optional ``assertions`` dictionary can be used to check additional items:
 
@@ -101,9 +107,12 @@ def assert_download_response(test_case, response, **assertions):
 
     * ``content_type``: the value of "Content-Type" header.
 
-    * ``charset``: the value of ``X-Accel-Charset`` header.
+    * ``mime_type``: the MIME type part of "Content-Type" header (without
+      charset).
 
-    * ``content``: the content of the file to be downloaded.
+    * ``content``: the contents of the file.
+
+    * ``attachment``: whether the file is returned as attachment or not.
 
     """
     validator = DownloadResponseValidator()

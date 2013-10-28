@@ -3,7 +3,8 @@ import warnings
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 
-from django_downloadview.middlewares import ProxiedDownloadMiddleware
+from django_downloadview.middlewares import (ProxiedDownloadMiddleware,
+                                             NoRedirectionMatch)
 from django_downloadview.nginx.response import XAccelRedirectResponse
 
 
@@ -50,7 +51,10 @@ class XAccelRedirectMiddleware(ProxiedDownloadMiddleware):
 
     def process_download_response(self, request, response):
         """Replace DownloadResponse instances by NginxDownloadResponse ones."""
-        redirect_url = self.get_redirect_url(response)
+        try:
+            redirect_url = self.get_redirect_url(response)
+        except NoRedirectionMatch:
+            return response
         if self.expires:
             expires = self.expires
         else:

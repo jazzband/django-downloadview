@@ -7,10 +7,30 @@ home = TemplateView.as_view(template_name='home.html')
 
 urlpatterns = patterns(
     '',
-    # Standard download views.
-    url(r'^download/', include('demoproject.download.urls')),
+    # ObjectDownloadView.
+    url(r'^object/', include('demoproject.object.urls',
+                             app_name='object',
+                             namespace='object')),
+    # StorageDownloadView.
+    url(r'^storage/', include('demoproject.storage.urls',
+                              app_name='storage',
+                              namespace='storage')),
+    # PathDownloadView.
+    url(r'^path/', include('demoproject.path.urls',
+                           app_name='path',
+                           namespace='path')),
+    # HTTPDownloadView.
+    url(r'^http/', include('demoproject.http.urls',
+                           app_name='http',
+                           namespace='http')),
+    # VirtualDownloadView.
+    url(r'^virtual/', include('demoproject.virtual.urls',
+                              app_name='virtual',
+                              namespace='virtual')),
     # Nginx optimizations.
-    url(r'^nginx/', include('demoproject.nginx.urls')),
+    url(r'^nginx/', include('demoproject.nginx.urls',
+                            app_name='nginx',
+                            namespace='nginx')),
     # An informative homepage.
     url(r'', home, name='home')
 )

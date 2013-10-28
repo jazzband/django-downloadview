@@ -22,14 +22,8 @@ Simple example
 
 Setup a view to stream files given URL:
 
-.. code:: python
-
-   from django_downloadview import HTTPDownloadView
-
-   class TravisStatusView(HTTPDownloadView):
-       def get_url(self):
-           """Return URL of django-downloadview's build status."""
-           return u'https://travis-ci.org/benoitbryon/django-downloadview.png'
+.. literalinclude:: /../demo/demoproject/http/views.py
+   :language: python
 
 
 *************

@@ -197,6 +197,7 @@ intersphinx_mapping = {
     'python': ('http://docs.python.org/2.7', None),
     'django': ('http://docs.djangoproject.com/en/1.5/',
                'http://docs.djangoproject.com/en/1.5/_objects/'),
+    'requests': ('http://docs.python-requests.org/en/latest/', None),
 }
 
 # -- Options for LaTeX output --------------------------------------------------

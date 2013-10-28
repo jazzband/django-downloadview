@@ -102,6 +102,10 @@ class DownloadDispatcherMiddleware(BaseDownloadMiddleware):
         return response
 
 
+class NoRedirectionMatch(Exception):
+    """Response object does not match redirection rules."""
+
+
 class ProxiedDownloadMiddleware(RealDownloadMiddleware):
     """Base class for middlewares that use optimizations of reverse proxies."""
     def __init__(self, source_dir=None, source_url=None, destination_url=None):
@@ -114,7 +118,7 @@ class ProxiedDownloadMiddleware(RealDownloadMiddleware):
         """Return redirect URL for file wrapped into response."""
         url = None
         file_url = ''
-        if self.source_url is not None:
+        if self.source_url:
             try:
                 file_url = response.file.url
             except AttributeError:
@@ -122,9 +126,9 @@ class ProxiedDownloadMiddleware(RealDownloadMiddleware):
             else:
                 if file_url.startswith(self.source_url):
                     file_url = file_url[len(self.source_url):]
-                url = file_url
+                    url = file_url
         file_name = ''
-        if url is None and self.source_dir is not None:
+        if url is None and self.source_dir:
             try:
                 file_name = response.file.name
             except AttributeError:
@@ -132,7 +136,7 @@ class ProxiedDownloadMiddleware(RealDownloadMiddleware):
             else:
                 if file_name.startswith(self.source_dir):
                     file_name = os.path.relpath(file_name, self.source_dir)
-                url = file_name.replace(os.path.sep, '/')
+                    url = file_name.replace(os.path.sep, '/')
         if url is None:
             message = ("""Couldn't capture/convert file attributes into a """
                        """redirection. """
@@ -144,5 +148,5 @@ class ProxiedDownloadMiddleware(RealDownloadMiddleware):
                           'file_url': file_url,
                           'source_dir': self.source_dir,
                           'file_name': file_name})
-            raise Exception(message)
+            raise NoRedirectionMatch(message)
         return '/'.join((self.destination_url.rstrip('/'), url.lstrip('/')))

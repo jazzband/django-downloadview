@@ -21,39 +21,45 @@ Simple example
 
 Given a model with a :class:`~django.db.models.FileField`:
 
-.. code:: python
+.. literalinclude:: /../demo/demoproject/object/models.py
+   :language: python
+   :lines: 1-6
 
-   from django.db import models
-
-   class Document(models.Model):
-       file = models.FileField(upload_to='document')
 
 Setup a view to stream the ``file`` attribute:
 
-.. code:: python
-
-   from django_downloadview import ObjectDownloadView
-
-   download = ObjectDownloadView.as_view(model=Document)
-
-.. note::
-
-   If the file field you want to serve is not named "file", pass the right
-   name as "file_field" argument, i.e. adapt
-   ``ObjectDownloadView.as_view(model=Document, file_field='file')``.
+.. literalinclude:: /../demo/demoproject/object/views.py
+   :language: python
+   :lines: 1-5, 7
 
 :class:`~django_downloadview.views.object.ObjectDownloadView` inherits from
 :class:`~django.views.generic.detail.BaseDetailView`, i.e. it expects either
 ``slug`` or ``pk``:
 
-.. code:: python
+.. literalinclude:: /../demo/demoproject/object/urls.py
+   :language: python
+   :lines: 1-7, 8-10, 17
 
-   from django.conf.urls import url, url_patterns
 
-   url_patterns = ('',
-       url('^download/(?P<slug>[A-Za-z0-9_-]+)/$', download, name='download'),
-   )
+***************************
+Serving specific file field
+***************************
 
+If your model holds several file fields, or if the file field name is not
+"file", you can use :attr:`ObjectDownloadView.file_field` to specify the field
+to use.
+
+Here is a model where there are two file fields:
+
+.. literalinclude:: /../demo/demoproject/object/models.py
+   :language: python
+   :lines: 1-6, 7
+
+Then here is the code to serve "another_file" instead of the default "file":
+
+.. literalinclude:: /../demo/demoproject/object/views.py
+   :language: python
+   :lines: 1-5, 10-12
 
 **********************************
 Mapping file attributes to model's
@@ -65,24 +71,19 @@ can be used when you serve the file.
 As an example, let's consider the client-side basename lives in model and not
 in storage:
 
-.. code:: python
-
-   from django.db import models
-
-   class Document(models.Model):
-       file = models.FileField(upload_to='document')
-       basename = models.CharField(max_length=100)
+.. literalinclude:: /../demo/demoproject/object/models.py
+   :language: python
+   :lines: 1-6, 8
 
 Then you can configure the :attr:`ObjectDownloadView.basename_field` option:
 
-.. code:: python
+.. literalinclude:: /../demo/demoproject/object/views.py
+   :language: python
+   :lines: 1-5, 16-18
 
-   from django_downloadview import ObjectDownloadView
+.. note::
 
-   download = ObjectDownloadView.as_view(model=Document,
-                                         basename_field='basename')
-
-.. note:: ``basename`` could have been a property instead of a database field.
+   ``basename`` could have been a model's property instead of a ``CharField``.
 
 See details below for a full list of options.
 

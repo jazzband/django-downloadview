@@ -16,31 +16,22 @@ Simple example
 
 Given a storage:
 
-.. code:: python
-
-   from django.core.files.storage import FileSystemStorage
-
-   storage = FileSystemStorage(location='/somewhere')
+.. literalinclude:: /../demo/demoproject/storage/views.py
+   :language: python
+   :lines: 1, 4-6
 
 Setup a view to stream files in storage:
 
-.. code:: python
-
-   from django_downloadview import StorageDownloadView
-
-   download = StorageDownloadView.as_view(storage=storage)
+.. literalinclude:: /../demo/demoproject/storage/views.py
+   :language: python
+   :lines: 3-5, 10
 
 The view accepts a ``path`` argument you can setup either in ``as_view`` or
 via URLconfs:
 
-.. code:: python
-
-   from django.conf.urls import patterns, url
-
-   urlpatterns = patterns(
-       '',
-       url(r'^(?P<path>[a-zA-Z0-9_-]+\.[a-zA-Z0-9]{1,4})$', download),
-   )
+.. literalinclude:: /../demo/demoproject/storage/urls.py
+   :language: python
+   :lines: 1-7, 8-10, 14
 
 
 **************************
@@ -49,6 +40,13 @@ Computing path dynamically
 
 Override the :meth:`StorageDownloadView.get_path` method to adapt path
 resolution to your needs.
+
+As an example, here is the same view as above, but the path is converted to
+uppercase:
+
+.. literalinclude:: /../demo/demoproject/storage/views.py
+   :language: python
+   :lines: 3-5, 13-20
 
 
 *************

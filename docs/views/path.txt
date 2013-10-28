@@ -22,45 +22,10 @@ Simple example
 
 Setup a view to stream files given path:
 
-.. code:: python
-
-   from django_downloadview import PathDownloadView
-
-   download = PathDownloadView.as_view()
-
-The view accepts a ``path`` argument you can setup either in ``as_view`` or
-via URLconfs:
-
-.. code:: python
-
-   from django.conf.urls import patterns, url
-
-   urlpatterns = patterns(
-       '',
-       url(r'^(?P<path>[a-zA-Z0-9_-]+\.[a-zA-Z0-9]{1,4})$', download),
-   )
-
-
-************************************
-A convenient shortcut in other views
-************************************
-
-:class:`PathDownloadView` is straight to call, so you can use it to simplify
-code in more complex views, provided you have an absolute path to a local file:
-
-.. code:: python
-
-   from django_downloadview import PathDownloadView
-
-   def some_complex_view(request, *args, **kwargs):
-       """Does many things, then stream a file."""
-       local_path = do_many_things()
-       return PathDownloadView.as_view(path=local_path)(request)
-
-.. note::
-
-   `django-sendfile`_ users may like something such as
-   ``sendfile = lambda request, path: PathDownloadView.as_view(path=path)(request)``
+.. literalinclude:: /../demo/demoproject/path/views.py
+   :language: python
+   :lines: 1-14
+   :emphasize-lines: 14
 
 
 **************************
@@ -70,20 +35,16 @@ Computing path dynamically
 Override the :meth:`PathDownloadView.get_path` method to adapt path
 resolution to your needs:
 
-.. code:: python
+.. literalinclude:: /../demo/demoproject/path/views.py
+   :language: python
+   :lines: 1-9, 15-
 
-   import glob
-   import os
-   import random
-   from django.conf import settings
-   from django_downloadview import PathDownloadView
+The view accepts a ``path`` argument you can setup either in ``as_view`` or
+via URLconfs:
 
-   class RandomImageView(PathDownloadView):
-       """Stream a random image in ``MEDIA_ROOT``."""
-       def get_path(self):
-           """Return the path of a random JPG image in ``MEDIA_ROOT``."""
-           image_list = glob.glob(os.path.join(settings.MEDIA_ROOT, '*.jpg'))
-           return random.choice(image_list)
+.. literalinclude:: /../demo/demoproject/path/urls.py
+   :language: python
+   :lines: 1-7, 11-13, 14
 
 
 *************
@@ -95,10 +56,3 @@ API reference
    :undoc-members:
    :show-inheritance:
    :member-order: bysource
-
-
-.. rubric:: Notes & references
-
-.. target-notes::
-
-.. _`django-sendfile`: https://pypi.python.org/pypi/django-sendfile

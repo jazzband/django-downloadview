@@ -2,8 +2,8 @@
 Nginx
 #####
 
-If you serve Django behind Nginx, then you can delegate the file download
-service to Nginx and get increased performance:
+If you serve Django behind Nginx, then you can delegate the file streaming
+to Nginx and get increased performance:
 
 * lower resources used by Python/Django workers ;
 * faster download.
@@ -11,103 +11,94 @@ service to Nginx and get increased performance:
 See `Nginx X-accel documentation`_ for details.
 
 
-****************************
-Configure some download view
-****************************
+************
+Given a view
+************
 
-Let's start in the situation described in the :doc:`demo application </demo>`:
+Let's consider the following view:
 
-* a project "demoproject"
-* an application "demoproject.download"
-* a :py:class:`django_downloadview.views.ObjectDownloadView` view serves files
-  of a "Document" model.
+.. literalinclude:: /../demo/demoproject/nginx/views.py
+   :language: python
+   :lines: 1-6, 8-16
 
-We are to make it more efficient with Nginx.
+What is important here is that the files will have an ``url`` property
+implemented by storage. Let's setup an optimization rule based on that URL.
 
 .. note::
 
-   Examples below are taken from the :doc:`demo project </demo>`.
+   It is generally easier to setup rules based on URL rather than based on
+   name in filesystem. This is because path is generally relative to storage,
+   whereas URL usually contains some storage identifier, i.e. it is easier to
+   target a specific location by URL rather than by filesystem name.
 
 
-***********
-Write tests
-***********
+********************************
+Setup XAccelRedirect middlewares
+********************************
 
-Use :py:func:`django_downloadview.nginx.assert_x_accel_redirect` function as
-a shortcut in your tests.
+Make sure ``django_downloadview.DownloadDispatcherMiddleware`` is in
+``MIDDLEWARE_CLASSES`` of your `Django` settings.
 
-:file:`demo/demoproject/nginx/tests.py`:
+Example:
 
-.. literalinclude:: ../../demo/demoproject/nginx/tests.py
+.. literalinclude:: /../demo/demoproject/settings.py
    :language: python
-   :emphasize-lines: 5, 25-34
+   :lines: 61-68
 
-Right now, this test should fail, since you haven't implemented the view yet.
+Then register as many
+:class:`~django_downloadview.nginx.middlewares.XAccelRedirectMiddleware`
+instances as you wish in ``DOWNLOADVIEW_MIDDLEWARES``.
+
+.. literalinclude:: /../demo/demoproject/settings.py
+   :language: python
+   :lines: 72-76
+
+The first item is an identifier.
+
+The second item is the import path of
+:class:`~django_downloadview.nginx.middlewares.XAccelRedirectMiddleware` class.
+
+The third item is a dictionary of keyword arguments passed to the middleware
+factory. In the example above, we capture responses by ``source_url`` and
+convert them to internal redirects to ``destination_url``.
+
+.. autoclass:: django_downloadview.nginx.middlewares.XAccelRedirectMiddleware
+   :members:
+   :inherited-members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource
 
 
-************
-Setup Django
-************
+**********************************************
+Per-view setup with x_accel_redirect decorator
+**********************************************
 
-At the end of this setup, the test should pass, but you still have to `setup
-Nginx`_!
+Middlewares should be enough for most use cases, but you may want per-view
+configuration. For `nginx`, there is ``x_accel_redirect``:
 
-You have two options: global setup with a middleware, or per-view setup with
-decorators. 
+.. autofunction:: django_downloadview.nginx.decorators.x_accel_redirect
 
-Global delegation, with XAccelRedirectMiddleware
-================================================
+As an example:
 
-If you want to delegate all file downloads to Nginx, then use
-:py:class:`django_downloadview.nginx.XAccelRedirectMiddleware`.
+.. literalinclude:: /../demo/demoproject/nginx/views.py
+   :language: python
+   :lines: 1-7, 17-
 
-Register it in your settings:
 
-.. code-block:: python
+*******************************************
+Test responses with assert_x_accel_redirect
+*******************************************
 
-   MIDDLEWARE_CLASSES = (
-       # ...
-       'django_downloadview.nginx.XAccelRedirectMiddleware',
-       # ...
-   )
+Use :func:`~django_downloadview.nginx.decorators.assert_x_accel_redirect`
+function as a shortcut in your tests.
 
-Setup the middleware:
-
-.. code-block:: python
-
-   NGINX_DOWNLOAD_MIDDLEWARE_MEDIA_ROOT = MEDIA_ROOT  # Could be elsewhere.
-   NGINX_DOWNLOAD_MIDDLEWARE_MEDIA_URL = '/proxied-download'
-
-Optionally fine-tune the middleware. Default values are ``None``, which means
-"use Nginx's defaults".
-
-.. code-block:: python
-
-   NGINX_DOWNLOAD_MIDDLEWARE_EXPIRES = False  # Force no expiration.
-   NGINX_DOWNLOAD_MIDDLEWARE_WITH_BUFFERING = False  # Force buffering off.
-   NGINX_DOWNLOAD_MIDDLEWARE_LIMIT_RATE = False  # Force limit rate off.
-
-Local delegation, with x_accel_redirect decorator
-=================================================
-
-If you want to delegate file downloads to Nginx on a per-view basis, then use
-:py:func:`django_downloadview.nginx.x_accel_redirect` decorator.
-
-:file:`demo/demoproject/nginx/views.py`:
-
-.. literalinclude:: ../../demo/demoproject/nginx/views.py
+.. literalinclude:: /../demo/demoproject/nginx/tests.py
    :language: python
 
-And use it in som URL conf, as an example in
-:file:`demo/demoproject/nginx/urls.py`:
+.. autofunction:: django_downloadview.nginx.tests.assert_x_accel_redirect
 
-.. literalinclude:: ../../demo/demoproject/nginx/urls.py
-   :language: python
-
-.. note::
-
-   In real life, you'd certainly want to replace the "download_document" view
-   instead of registering a new view.
+The tests above assert the `Django` part is OK. Now let's configure `nginx`.
 
 
 ***********
@@ -136,11 +127,11 @@ Here is what you could have in :file:`/etc/nginx/sites-available/default`:
        # like /optimized-download/myfile.tar.gz
        #
        # See http://wiki.nginx.org/X-accel
-       # and https://github.com/benoitbryon/django-downloadview
+       # and https://django-downloadview.readthedocs.org
+       #
        location /proxied-download {
            internal;
            # Location to files on disk.
-           # See Django's settings.NGINX_DOWNLOAD_MIDDLEWARE_MEDIA_ROOT
            alias /var/www/files/;
        } 
 
@@ -158,12 +149,17 @@ section.
 
 .. note::
 
-   ``/proxied-download`` is not available for the client, i.e. users
-   won't be able to download files via ``/optimized-download/<filename>``.
+   ``/proxied-download`` has the ``internal`` flag, so this location is not
+   available for the client, i.e. users are not able to download files via
+   ``/optimized-download/<filename>``.
 
-.. warning::
 
-   Make sure Nginx can read the files to download! Check permissions.
+*********************************************
+Assert everything goes fine with healthchecks
+*********************************************
+
+:doc:`Healthchecks </healthchecks>` are the best way to check the complete
+setup.
 
 
 *************

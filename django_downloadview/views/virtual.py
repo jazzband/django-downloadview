@@ -6,8 +6,6 @@ from django_downloadview.views.base import BaseDownloadView
 class VirtualDownloadView(BaseDownloadView):
     """Serve not-on-disk or generated-on-the-fly file.
 
-    Use this class to serve :py:class:`StringIO` files.
-
     Override the :py:meth:`get_file` method to customize file wrapper.
 
     """

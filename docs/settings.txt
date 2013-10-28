@@ -24,16 +24,9 @@ response content such as gzip middleware.
 
 Example:
 
-.. code:: python
-
-   MIDDLEWARE_CLASSES = [
-       'django.middleware.common.CommonMiddleware',
-       'django.contrib.sessions.middleware.SessionMiddleware',
-       'django.middleware.csrf.CsrfViewMiddleware',
-       'django.contrib.auth.middleware.AuthenticationMiddleware',
-       'django.contrib.messages.middleware.MessageMiddleware',
-       'django_downloadview.DownloadDispatcherMiddleware',
-   ]
+.. literalinclude:: /../demo/demoproject/settings.py
+   :language: python
+   :lines: 61-68
 
 
 ************************
@@ -59,13 +52,14 @@ The list expects items ``(id, path, options)`` such as:
 
 Example:
 
-.. code:: python
-
-   DOWNLOADVIEW_MIDDLEWARES = (
-       ('default',
-        'django_downloadview.nginx.XAccelMiddleware',
-        {'source_dir': MEDIA_ROOT, 'destination_url': '/proxied-download'}),
-   )
+.. literalinclude:: /../demo/demoproject/settings.py
+   :language: python
+   :lines: 72-76
 
 See :doc:`/optimizations/index` for details about middlewares and their
 options.
+
+.. note::
+
+   You can register several middlewares. It allows you to setup several
+   conversion rules with distinct source/destination patterns.

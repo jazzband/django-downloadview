@@ -8,44 +8,64 @@ from django.http import HttpResponse, StreamingHttpResponse
 
 
 class DownloadResponse(StreamingHttpResponse):
-    """File download response.
+    """File download response (Django serves file, client downloads it).
 
-    :py:attr:`content` attribute is supposed to be a file object wrapper, which
-    makes this response lazy.
+    This is a specialization of :class:`django.http.StreamingHttpResponse`
+    where :attr:`~django.http.StreamingHttpResponse.streaming_content` is a
+    file wrapper.
 
-    This is a specialization of :py:class:`django.http.StreamingHttpResponse`.
+    Constructor differs a bit from :class:`~django.http.response.HttpResponse`:
+
+    ``file_instance``
+        A :doc:`file wrapper instance </files>`, such as
+        :class:`~django.core.files.base.File`.
+
+    ``attachement``
+        Boolean. Whether to return the file as attachment or not.
+        Affects ``Content-Disposition`` header.
+
+    ``basename``
+        Unicode. Client-side name of the file to stream.
+        Only used if ``attachment`` is ``True``.
+        Affects ``Content-Disposition`` header.
+
+    ``status``
+        HTTP status code.
+
+    ``content_type``
+        Value for ``Content-Type`` header.
+        If ``None``, then mime-type and encoding will be populated by the
+        response (default implementation uses mimetypes, based on file
+        name).
+
+
+    Here are some highlights to understand internal mechanisms and motivations:
+
+    * Let's start by quoting :pep:`3333` (WSGI specification):
+
+          For large files, or for specialized uses of HTTP streaming,
+          applications will usually return an iterator (often a
+          generator-iterator) that produces the output in a block-by-block
+          fashion.
+
+    * `Django WSGI handler (application implementation) return response object
+      <https://github.com/django/django/blob/fd1279a44df3b9a837453cd79fd0fbcf81bae39d/django/core/handlers/wsgi.py#L268>`_.
+
+    * :class:`django.http.HttpResponse` and subclasses are iterators.
+
+    * In :class:`~django.http.StreamingHttpResponse`, the
+      :meth:`~container.__iter__` implementation proxies to
+      :attr:`~django.http.StreamingHttpResponse.streaming_content`.
+
+    * In :class:`DownloadResponse` and subclasses, :attr:`streaming_content`
+      is a :doc:`file wrapper </files>`. File wrapper is itself an iterator
+      over actual file content, and it also encapsulates access to file
+      attributes (size, name, ...).
 
     """
     def __init__(self, file_instance, attachment=True, basename=None,
                  status=200, content_type=None):
-        """Constructor.
-
-        It differs a bit from HttpResponse constructor.
-
-        file_instance:
-          A file wrapper object. Could be a FieldFile.
-
-        attachement:
-          Boolean, whether to return the file as attachment or not. Affects
-          "Content-Disposition" header.
-          Defaults to ``True``.
-
-        basename:
-          Unicode. Only used if ``attachment`` is ``True``. Client-side name
-          of the file to stream. Affects "Content-Disposition" header.
-          Defaults to basename(``file_instance.name``).
-
-        status:
-          HTTP status code.
-          Defaults to 200.
-
-        content_type:
-          Value for "Content-Type" header.
-          If ``None``, then mime-type and encoding will be populated by the
-          response (default implementation uses mimetypes, based on file name).
-          Defaults is ``None``.
-
-        """
+        """Constructor."""
         self.file = file_instance
         super(DownloadResponse, self).__init__(streaming_content=self.file,
                                                status=status,
