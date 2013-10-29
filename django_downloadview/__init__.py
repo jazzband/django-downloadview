@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""django-downloadview provides generic download views for Django."""
+"""Serve files with Django and reverse proxies."""
 import pkg_resources
 
 

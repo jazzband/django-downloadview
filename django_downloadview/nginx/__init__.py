@@ -11,5 +11,4 @@ from django_downloadview.nginx.decorators import x_accel_redirect  # NoQA
 from django_downloadview.nginx.response import XAccelRedirectResponse  # NoQA
 from django_downloadview.nginx.tests import assert_x_accel_redirect  # NoQA
 from django_downloadview.nginx.middlewares import (  # NoQA
-    XAccelRedirectMiddleware,
-    SingleXAccelRedirectMiddleware)
+    XAccelRedirectMiddleware)
