@@ -66,22 +66,20 @@ class DownloadMixin(object):
             else:
                 return was_modified_since(since, modification_time, size)
 
-    def not_modified_response(self, *args, **kwargs):
-        """Return :py:class:`django.http.HttpResponseNotModified` instance."""
-        content_type = self.file_instance.content_type
-        return HttpResponseNotModified(content_type=content_type)
+    def not_modified_response(self, **response_kwargs):
+        """Return :class:`django.http.HttpResponseNotModified` instance."""
+        return HttpResponseNotModified(**response_kwargs)
 
-    def download_response(self, *args, **kwargs):
-        """Return :py:class:`DownloadResponse` instance."""
-        response_kwargs = {'file_instance': self.file_instance,
-                           'attachment': self.attachment,
-                           'basename': self.get_basename()}
-        response_kwargs.update(kwargs)
+    def download_response(self, **response_kwargs):
+        """Return :class:`~django_downloadview.response.DownloadResponse`."""
+        response_kwargs.setdefault('file_instance', self.file_instance)
+        response_kwargs.setdefault('attachment', self.attachment)
+        response_kwargs.setdefault('basename', self.get_basename())
         response = self.response_class(**response_kwargs)
         return response
 
-    def render_to_response(self, *args, **kwargs):
-        """Return a download response.
+    def render_to_response(self, **response_kwargs):
+        """Return "download" response.
 
         Respects the "HTTP_IF_MODIFIED_SINCE" header if any. In that case, uses
         :py:meth:`was_modified_since` and :py:meth:`not_modified_response`.
@@ -94,9 +92,9 @@ class DownloadMixin(object):
         since = self.request.META.get('HTTP_IF_MODIFIED_SINCE', None)
         if since is not None:
             if not self.was_modified_since(self.file_instance, since):
-                return self.not_modified_response(*args, **kwargs)
+                return self.not_modified_response(**response_kwargs)
         # Return download response.
-        return self.download_response(*args, **kwargs)
+        return self.download_response(**response_kwargs)
 
 
 class BaseDownloadView(DownloadMixin, View):
