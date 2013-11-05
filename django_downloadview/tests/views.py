@@ -9,7 +9,7 @@ except ImportError:
 from django.http.response import HttpResponseNotModified
 import django.test
 
-from django_downloadview.tests import setup_view
+from django_downloadview.test import setup_view
 from django_downloadview.views import base
 
 

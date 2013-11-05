@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """Stream files that live in models."""
-from django.views.generic.detail import BaseDetailView
+from django.views.generic.detail import SingleObjectMixin
 
-from django_downloadview.views.base import DownloadMixin
+from django_downloadview.views.base import BaseDownloadView
 
 
-class ObjectDownloadView(DownloadMixin, BaseDetailView):
+class ObjectDownloadView(SingleObjectMixin, BaseDownloadView):
     """Serve file fields from models.
 
     This class extends BaseDetailView, so you can use its arguments to target
@@ -76,3 +76,7 @@ class ObjectDownloadView(DownloadMixin, BaseDetailView):
             if model_field:
                 basename = getattr(self.object, model_field)
         return basename
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super(ObjectDownloadView, self).get(request, *args, **kwargs)

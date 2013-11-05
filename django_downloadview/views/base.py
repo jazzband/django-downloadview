@@ -66,19 +66,19 @@ class DownloadMixin(object):
             else:
                 return was_modified_since(since, modification_time, size)
 
-    def not_modified_response(self, **response_kwargs):
+    def not_modified_response(self, *response_args, **response_kwargs):
         """Return :class:`django.http.HttpResponseNotModified` instance."""
-        return HttpResponseNotModified(**response_kwargs)
+        return HttpResponseNotModified(*response_args, **response_kwargs)
 
-    def download_response(self, **response_kwargs):
+    def download_response(self, *response_args, **response_kwargs):
         """Return :class:`~django_downloadview.response.DownloadResponse`."""
         response_kwargs.setdefault('file_instance', self.file_instance)
         response_kwargs.setdefault('attachment', self.attachment)
         response_kwargs.setdefault('basename', self.get_basename())
-        response = self.response_class(**response_kwargs)
+        response = self.response_class(*response_args, **response_kwargs)
         return response
 
-    def render_to_response(self, **response_kwargs):
+    def render_to_response(self, *response_args, **response_kwargs):
         """Return "download" response.
 
         Respects the "HTTP_IF_MODIFIED_SINCE" header if any. In that case, uses
@@ -94,7 +94,7 @@ class DownloadMixin(object):
             if not self.was_modified_since(self.file_instance, since):
                 return self.not_modified_response(**response_kwargs)
         # Return download response.
-        return self.download_response(**response_kwargs)
+        return self.download_response(*response_args, **response_kwargs)
 
 
 class BaseDownloadView(DownloadMixin, View):

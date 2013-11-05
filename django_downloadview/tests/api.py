@@ -54,6 +54,7 @@ class APITestCase(unittest.TestCase):
             'DownloadDispatcherMiddleware',
             # Testing:
             'assert_download_response',
+            'setup_view',
             'temporary_media_root',
             # Utilities:
             'StringIteratorIO',

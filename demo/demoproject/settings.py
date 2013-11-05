@@ -8,6 +8,7 @@ demoproject_dir = dirname(abspath(__file__))
 demo_dir = dirname(demoproject_dir)
 root_dir = dirname(demo_dir)
 data_dir = join(root_dir, 'var')
+cfg_dir = join(root_dir, 'etc')
 
 
 # Mandatory settings.
@@ -76,21 +77,10 @@ DOWNLOADVIEW_MIDDLEWARES = (
 )
 
 
-# Development configuration.
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-NOSE_ARGS = ['--verbose',
-             '--nocapture',
-             '--rednose',
-             '--with-id',  # allows --failed which only reruns failed tests
-             '--id-file=%s' % join(data_dir, 'test', 'noseids'),
-             '--with-doctest',
-             '--with-xunit',
-             '--xunit-file=%s' % join(data_dir, 'test', 'nosetests.xml'),
-             '--with-coverage',
-             '--cover-erase',
-             '--cover-package=django_downloadview',
-             '--no-path-adjustment',
-             '--all-modules',
-             ]
+nose_cfg_dir = join(cfg_dir, 'nose')
+NOSE_ARGS = ['--config={etc}/base.cfg'.format(etc=nose_cfg_dir),
+             '--config={etc}/{package}.cfg'.format(etc=nose_cfg_dir,
+                                                   package=__package__)]

@@ -7,6 +7,7 @@ DATA_DIR = $(ROOT_DIR)/var
 WGET = wget
 PYTHON = $(shell which python)
 PROJECT = $(shell $(PYTHON) -c "import setup; print setup.NAME")
+PACKAGE = $(shell $(PYTHON) -c "import setup; print setup.PACKAGES[0]")
 BUILDOUT_CFG = $(ROOT_DIR)/etc/buildout.cfg
 BUILDOUT_DIR = $(ROOT_DIR)/lib/buildout
 BUILDOUT_VERSION = 1.7.0
@@ -51,17 +52,17 @@ test: test-app test-demo test-documentation
 
 
 test-app:
-	$(NOSE) -c $(ROOT_DIR)/etc/nose.cfg --with-coverage --cover-package=django_downloadview django_downloadview tests
+	$(NOSE) -c $(ROOT_DIR)/etc/nose/base.cfg -c $(ROOT_DIR)/etc/nose/$(PACKAGE).cfg
 	mv $(ROOT_DIR)/.coverage $(ROOT_DIR)/var/test/app.coverage
 
 
 test-demo:
-	$(BIN_DIR)/demo test demo
+	$(BIN_DIR)/demo test --nose-verbosity=2
 	mv $(ROOT_DIR)/.coverage $(ROOT_DIR)/var/test/demo.coverage
 
 
 test-documentation:
-	$(NOSE) -c $(ROOT_DIR)/etc/nose.cfg sphinxcontrib.testbuild.tests
+	$(NOSE) -c $(ROOT_DIR)/etc/nose/base.cfg sphinxcontrib.testbuild.tests
 
 
 sphinx:
