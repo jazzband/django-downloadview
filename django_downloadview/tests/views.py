@@ -162,3 +162,18 @@ class DownloadMixinTestCase(unittest.TestCase):
         mixin.get_file.assert_called_once_with()
         self.assertEqual(mixin.was_modified_since.call_count, 0)
         mixin.download_response.assert_called_once_with()
+
+
+class BaseDownloadViewTestCase(unittest.TestCase):
+    "Tests around :class:`django_downloadviews.views.base.BaseDownloadView`."
+    def test_get(self):
+        """BaseDownloadView.get() calls render_to_response()."""
+        request = django.test.RequestFactory().get('/dummy-url')
+        args = ['dummy-arg']
+        kwargs = {'dummy': 'kwarg'}
+        view = setup_view(base.BaseDownloadView(), request, *args, **kwargs)
+        view.render_to_response = mock.Mock(
+            return_value=mock.sentinel.response)
+        response = view.get(request, *args, **kwargs)
+        self.assertIs(response, mock.sentinel.response)
+        view.render_to_response.assert_called_once_with()
