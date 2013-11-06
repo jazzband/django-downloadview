@@ -5,11 +5,19 @@ Download middlewares capture :py:class:`django_downloadview.DownloadResponse`
 responses and may replace them with optimized download responses.
 
 """
+import collections
 import os
 
 from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
 
 from django_downloadview.response import DownloadResponse
+from django_downloadview.utils import import_member
+
+
+#: Sentinel value to detect whether configuration is to be loaded from Django
+#: settings or not.
+AUTO_CONFIGURE = object()
 
 
 def is_download_response(response):
@@ -70,28 +78,20 @@ class RealDownloadMiddleware(BaseDownloadMiddleware):
 
 
 class DownloadDispatcherMiddleware(BaseDownloadMiddleware):
-    """Download middleware that dispatches job to several middlewares.
-
-    The list of Children middlewares is read in `DOWNLOADVIEW_MIDDLEWARES`
-    setting.
-
-    """
-    def __init__(self):
+    "Download middleware that dispatches job to several middleware instances."
+    def __init__(self, middlewares=AUTO_CONFIGURE):
         #: List of children middlewares.
-        self.middlewares = []
-        self.load_middlewares_from_settings()
+        self.middlewares = middlewares
+        if self.middlewares is AUTO_CONFIGURE:
+            self.auto_configure_middlewares()
 
-    def load_middlewares_from_settings(self):
+    def auto_configure_middlewares(self):
+        """Populate :attr:`middlewares` from
+        ``settings.DOWNLOADVIEW_MIDDLEWARES``."""
         for (key, import_string, kwargs) in getattr(settings,
                                                     'DOWNLOADVIEW_MIDDLEWARES',
                                                     []):
-            if ':' in import_string:
-                module_string, attr_string = import_string.split(':', 1)
-            else:
-                module_string, attr_string = import_string.rsplit('.', 1)
-            module = __import__(module_string, globals(), locals(),
-                                [attr_string], -1)
-            factory = getattr(module, attr_string)
+            factory = import_member(import_string)
             middleware = factory(**kwargs)
             self.middlewares.append((key, middleware))
 
@@ -100,6 +100,57 @@ class DownloadDispatcherMiddleware(BaseDownloadMiddleware):
         for (key, middleware) in self.middlewares:
             response = middleware.process_response(request, response)
         return response
+
+
+class SmartDownloadMiddleware(BaseDownloadMiddleware):
+    """Easy to configure download middleware."""
+    def __init__(self,
+                 backend_factory=AUTO_CONFIGURE,
+                 backend_options=AUTO_CONFIGURE):
+        """Constructor."""
+        #: :class:`DownloadDispatcher` instance that can hold multiple
+        #: backend instances.
+        self.dispatcher = DownloadDispatcherMiddleware(middlewares=[])
+        #: Callable (typically a class) to instanciate backend (typically a
+        #: :class:`DownloadMiddleware` subclass).
+        self.backend_factory = backend_factory
+        if self.backend_factory is AUTO_CONFIGURE:
+            self.auto_configure_backend_factory()
+        #: List of positional or keyword arguments to instanciate backend
+        #: instances.
+        self.backend_options = backend_options
+        if self.backend_options is AUTO_CONFIGURE:
+            self.auto_configure_backend_options()
+
+    def auto_configure_backend_factory(self):
+        "Assign :attr:`backend_factory` from ``settings.DOWNLOADVIEW_BACKEND``"
+        try:
+            self.backend_factory = import_member(settings.DOWNLOADVIEW_BACKEND)
+        except AttributeError:
+            raise ImproperlyConfigured('SmartDownloadMiddleware requires '
+                                       'settings.DOWNLOADVIEW_BACKEND')
+
+    def auto_configure_backend_options(self):
+        """Populate :attr:`dispatcher` using :attr:`factory` and
+        ``settings.DOWNLOADVIEW_RULES``."""
+        try:
+            options_list = settings.DOWNLOADVIEW_RULES
+        except AttributeError:
+            raise ImproperlyConfigured('SmartDownloadMiddleware requires '
+                                       'settings.DOWNLOADVIEW_RULES')
+        for key, options in enumerate(options_list):
+            args = []
+            kwargs = {}
+            if isinstance(options, collections.Mapping):  # Using kwargs.
+                kwargs = options
+            else:
+                args = options
+            middleware_instance = self.backend_factory(*args, **kwargs)
+            self.dispatcher.middlewares.append((key, middleware_instance))
+
+    def process_download_response(self, request, response):
+        """Use :attr:`dispatcher` to process download response."""
+        return self.dispatcher.process_download_response(request, response)
 
 
 class NoRedirectionMatch(Exception):

@@ -8,7 +8,8 @@ from django_downloadview.files import (StorageFile,  # NoQA
 from django_downloadview.response import (DownloadResponse,  # NoQA
                                           ProxiedDownloadResponse)
 from django_downloadview.middlewares import (BaseDownloadMiddleware,  # NoQA
-                                             DownloadDispatcherMiddleware)
+                                             DownloadDispatcherMiddleware,
+                                             SmartDownloadMiddleware)
 from django_downloadview.views import (PathDownloadView,  # NoQA
                                        ObjectDownloadView,
                                        StorageDownloadView,

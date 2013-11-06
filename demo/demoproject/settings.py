@@ -65,18 +65,19 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django_downloadview.DownloadDispatcherMiddleware'
+    'django_downloadview.SmartDownloadMiddleware'
 ]
 
 
-# Uncomment the following lines to enable global Nginx optimizations.
-DOWNLOADVIEW_MIDDLEWARES = (
-    ('default', 'django_downloadview.nginx.XAccelRedirectMiddleware',
-                {'source_url': '/media/nginx/',
-                 'destination_url': '/nginx-optimized-by-middleware/'}),
-)
+# Specific configuration for django_downloadview.SmartDownloadMiddleware.
+DOWNLOADVIEW_BACKEND = 'django_downloadview.nginx.XAccelRedirectMiddleware'
+DOWNLOADVIEW_RULES = [
+    {'source_url': '/media/nginx/',
+     'destination_url': '/nginx-optimized-by-middleware/'},
+]
 
 
+# Test/development settings.
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'

@@ -36,31 +36,31 @@ implemented by storage. Let's setup an optimization rule based on that URL.
 Setup XAccelRedirect middlewares
 ********************************
 
-Make sure ``django_downloadview.DownloadDispatcherMiddleware`` is in
+Make sure ``django_downloadview.SmartDownloadMiddleware`` is in
 ``MIDDLEWARE_CLASSES`` of your `Django` settings.
 
 Example:
 
 .. literalinclude:: /../demo/demoproject/settings.py
    :language: python
-   :lines: 61-68
+   :lines: 62-69
 
-Then register as many
-:class:`~django_downloadview.nginx.middlewares.XAccelRedirectMiddleware`
-instances as you wish in ``DOWNLOADVIEW_MIDDLEWARES``.
+Then set ``django_downloadview.nginx.XAccelRedirectMiddleware`` as
+``DOWNLOADVIEW_BACKEND``:
 
 .. literalinclude:: /../demo/demoproject/settings.py
    :language: python
-   :lines: 72-76
+   :lines: 73
 
-The first item is an identifier.
+Then register as many ``DOWNLOADVIEW_RULES`` as you wish:
 
-The second item is the import path of
-:class:`~django_downloadview.nginx.middlewares.XAccelRedirectMiddleware` class.
+.. literalinclude:: /../demo/demoproject/settings.py
+   :language: python
+   :lines: 74-77
 
-The third item is a dictionary of keyword arguments passed to the middleware
-factory. In the example above, we capture responses by ``source_url`` and
-convert them to internal redirects to ``destination_url``.
+Each item in ``DOWNLOADVIEW_RULES`` is a dictionary of keyword arguments passed
+to the middleware factory. In the example above, we capture responses by
+``source_url`` and convert them to internal redirects to ``destination_url``.
 
 .. autoclass:: django_downloadview.nginx.middlewares.XAccelRedirectMiddleware
    :members:

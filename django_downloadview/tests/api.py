@@ -52,6 +52,7 @@ class APITestCase(unittest.TestCase):
             # Middlewares:
             'BaseDownloadMiddleware',
             'DownloadDispatcherMiddleware',
+            'SmartDownloadMiddleware',
             # Testing:
             'assert_download_response',
             'setup_view',

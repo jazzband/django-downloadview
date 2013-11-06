@@ -18,7 +18,7 @@ MIDDLEWARE_CLASSES
 ******************
 
 If you plan to setup reverse-proxy optimizations, add
-``django_downloadview.DownloadDispatcherMiddleware`` to ``MIDDLEWARE_CLASSES``.
+``django_downloadview.SmartDownloadMiddleware`` to ``MIDDLEWARE_CLASSES``.
 It is a response middleware. Move it after middlewares that compute the
 response content such as gzip middleware.
 
@@ -26,40 +26,54 @@ Example:
 
 .. literalinclude:: /../demo/demoproject/settings.py
    :language: python
-   :lines: 61-68
+   :lines: 62-69
 
 
-************************
-DOWNLOADVIEW_MIDDLEWARES
-************************
+********************
+DOWNLOADVIEW_BACKEND
+********************
 
-:default: []
-
-If you plan to setup reverse-proxy :doc:`optimizations </optimizations/index>`,
-setup ``DOWNLOADVIEW_MIDDLEWARES`` value. This setting is used by
-:py:class:`~django_downloadview.middlewares.DownloadDispatcherMiddleware`.
-It is the list of handlers that will be given the opportunity to capture
-download responses and convert them to internal redirects for use with
-reverse-proxies.
-
-The list expects items ``(id, path, options)`` such as:
-
-* ``id`` is an identifier
-* ``path`` is the import path of some download middleware factory (typically a
-  class).
-* ``options`` is a dictionary of keyword arguments passed to the middleware
-  factory.
+This setting is used by
+:class:`~django_downloadview.middlewares.SmartDownloadMiddleware`.
+It is the import string of a callable (typically a class) of an optimization
+backend (typically a :class:`~django_downloadview.BaseDownloadMiddleware`
+subclass).
 
 Example:
 
 .. literalinclude:: /../demo/demoproject/settings.py
    :language: python
-   :lines: 72-76
+   :lines: 73
 
-See :doc:`/optimizations/index` for details about middlewares and their
-options.
+See :doc:`/optimizations/index` for a list of available backends (middlewares).
 
-.. note::
+When ``django_downloadview.SmartDownloadMiddleware`` is in your
+``MIDDLEWARE_CLASSES``, this setting must be explicitely configured (no default
+value). Else, you can ignore this setting.
 
-   You can register several middlewares. It allows you to setup several
-   conversion rules with distinct source/destination patterns.
+
+******************
+DOWNLOADVIEW_RULES
+******************
+
+This setting is used by
+:class:`~django_downloadview.middlewares.SmartDownloadMiddleware`.
+It is a list of positional arguments or keyword arguments that will be used to
+instanciate class mentioned as ``DOWNLOADVIEW_BACKEND``.
+
+Each item in the list can be either a list of positional arguments, or a
+dictionary of keyword arguments. One item cannot contain both positional and
+keyword arguments.
+
+Here is an example containing one rule using keyword arguments:
+
+.. literalinclude:: /../demo/demoproject/settings.py
+   :language: python
+   :lines: 74-77
+
+See :doc:`/optimizations/index` for details about builtin backends
+(middlewares) and their options.
+
+When ``django_downloadview.SmartDownloadMiddleware`` is in your
+``MIDDLEWARE_CLASSES``, this setting must be explicitely configured (no default
+value). Else, you can ignore this setting.
