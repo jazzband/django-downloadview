@@ -1,6 +1,10 @@
 Changelog
 =========
 
+This document describes changes between past releases. For information about
+future releases, check `milestones`_ and :doc:`/about/vision`.
+
+
 1.3 (unreleased)
 ----------------
 
@@ -11,39 +15,47 @@ documentation.
   ``django.core.files.base.File.__iter__()`` implementation.
   See https://code.djangoproject.com/ticket/21321
 
-- Bugfix #?? - Fixed ``basename`` assertion in
-  :func:`~django_downloadview.test.assert_download_response`: always use
-  ``Content-Disposition`` header.
+- Bugfix #48 - Fixed ``basename`` assertion in ``assert_download_response``:
+  checks ``Content-Disposition`` header.
 
-- Bugfix #?? - Fixed ``content`` assertion in 
-  :func:`~django_downloadview.test.assert_download_response`: use only
-  ``streaming_content`` attribute, whatever the file wrapper.
+- Bugfix #49 - Fixed ``content`` assertion in ``assert_download_response``:
+  checks only response's ``streaming_content`` attribute.
 
-- Feature #?? - Introduced
+- Feature #50 - Introduced
   :class:`~django_downloadview.middlewares.DownloadDispatcherMiddleware` that
   iterates over a list of configurable download middlewares. Allows to plug
-  several download middlewares with different configurations. Deprecates the
-  settings related to previous single-and-global middleware.
+  several download middlewares with different configurations.
 
-- Refactoring #?? - Dropped support of Python 2.6
+  Deprecates the following settings related to previous single-and-global
+  middleware:
 
-- Refactoring #?? - ObjectDownloadView now inherits from SingleObjectMixin and
+  * ``NGINX_DOWNLOAD_MIDDLEWARE_MEDIA_ROOT``
+  * ``NGINX_DOWNLOAD_MIDDLEWARE_MEDIA_URL``
+  * ``NGINX_DOWNLOAD_MIDDLEWARE_EXPIRES``
+  * ``NGINX_DOWNLOAD_MIDDLEWARE_WITH_BUFFERING``
+  * ``NGINX_DOWNLOAD_MIDDLEWARE_LIMIT_RATE``
+
+- Feature #42 - Documentation shows how to stream generated content (yield).
+  Introduced ``django_downloadview.StringIteratorIO``.
+
+- Refactoring #51 - Dropped support of Python 2.6
+
+- Refactoring #52 - ObjectDownloadView now inherits from SingleObjectMixin and
   BaseDownloadView (was DownloadMixin and BaseDetailView).
+  Simplified DownloadMixin.render_to_response() signature.
 
-- Refactoring #?? - Documentation includes examples from demo project.
+- Refactoring #40 - Documentation includes examples from demo project.
 
-- Refactoring #?? - Documentation focuses on usage, rather than API.
+- Refactoring #39 - Documentation focuses on usage, rather than API. Improved
+  narrative documentation.
 
-- Refactoring #?? - Added base classes in
-  :mod:`django_downloadview.middlewares`, such as
-  :class:`~django_downloadview.middlewares.ProxiedDownloadMiddleware`.
+- Refactoring #53 - Added base classes in ``django_downloadview.middlewares``,
+  such as ``ProxiedDownloadMiddleware``.
 
-- Refactoring #?? - Splitted nginx module in a package.
 
-- Refactoring #?? - Expose most Python API directly in `django_downloadview`
+- Refactoring #54 - Expose most Python API directly in `django_downloadview`
   package. Simplifies ``import`` statements in client applications.
-
-- Refactoring #?? - Simplified DownloadMixin.render_to_response() signature.
+  Splitted nginx module in a package.
 
 - Added unit tests, improved code coverage.
 
@@ -90,3 +102,10 @@ Contains **backward incompatible changes.**
 - Introduced optimizations for Nginx X-Accel: a middleware and a decorator
 - Introduced generic views: DownloadView and ObjectDownloadView
 - Initialized project
+
+
+.. rubric:: Notes & references
+
+.. target-notes::
+
+.. _`milestones`: https://github.com/benoitbryon/django-downloadview/issues/milestones
