@@ -4,7 +4,7 @@
 .. warning::
 
    These settings are deprecated since version 1.3. You can now provide custom
-   configuration via `DOWNLOADVIEW_MIDDLEWARES` setting. See :doc:`/settings`
+   configuration via `DOWNLOADVIEW_BACKEND` setting. See :doc:`/settings`
    for details.
 
 """
@@ -22,7 +22,12 @@ if middleware in settings.MIDDLEWARE_CLASSES:
         '{middleware} middleware has been renamed as of django-downloadview '
         'version 1.3. You may use '
         '"django_downloadview.nginx.SingleXAccelRedirectMiddleware" instead, '
-        'or upgrade to "django_downloadview.DownloadDispatcherMiddleware". ')
+        'or upgrade to "django_downloadview.SmartDownloadDispatcher". ')
+
+
+deprecated_msg = 'settings.{deprecated} is deprecated. You should combine ' \
+                 '"django_downloadview.SmartDownloadDispatcher" with ' \
+                 'with DOWNLOADVIEW_BACKEND and DOWNLOADVIEW_RULES instead.'
 
 
 #: Default value for X-Accel-Buffering header.
@@ -39,10 +44,7 @@ if middleware in settings.MIDDLEWARE_CLASSES:
 DEFAULT_WITH_BUFFERING = None
 setting_name = 'NGINX_DOWNLOAD_MIDDLEWARE_WITH_BUFFERING'
 if hasattr(settings, setting_name):
-    warnings.warn('settings.{deprecated} is deprecated. You should combine '
-                  '"django_downloadview.DownloadDispatcherMiddleware" with '
-                  'with DOWNLOADVIEW_MIDDLEWARES instead.'.format(
-                      deprecated=setting_name),
+    warnings.warn(deprecated_msg.format(deprecated=setting_name),
                   DeprecationWarning)
 if not hasattr(settings, setting_name):
     setattr(settings, setting_name, DEFAULT_WITH_BUFFERING)
@@ -61,10 +63,7 @@ if not hasattr(settings, setting_name):
 DEFAULT_LIMIT_RATE = None
 setting_name = 'NGINX_DOWNLOAD_MIDDLEWARE_LIMIT_RATE'
 if hasattr(settings, setting_name):
-    warnings.warn('settings.{deprecated} is deprecated. You should combine '
-                  '"django_downloadview.DownloadDispatcherMiddleware" with '
-                  'with DOWNLOADVIEW_MIDDLEWARES instead.'.format(
-                      deprecated=setting_name),
+    warnings.warn(deprecated_msg.format(deprecated=setting_name),
                   DeprecationWarning)
 if not hasattr(settings, setting_name):
     setattr(settings, setting_name, DEFAULT_LIMIT_RATE)
@@ -83,10 +82,7 @@ if not hasattr(settings, setting_name):
 DEFAULT_EXPIRES = None
 setting_name = 'NGINX_DOWNLOAD_MIDDLEWARE_EXPIRES'
 if hasattr(settings, setting_name):
-    warnings.warn('settings.{deprecated} is deprecated. You should combine '
-                  '"django_downloadview.DownloadDispatcherMiddleware" with '
-                  'with DOWNLOADVIEW_MIDDLEWARES instead.'.format(
-                      deprecated=setting_name),
+    warnings.warn(deprecated_msg.format(deprecated=setting_name),
                   DeprecationWarning)
 if not hasattr(settings, setting_name):
     setattr(settings, setting_name, DEFAULT_EXPIRES)
@@ -96,18 +92,12 @@ if not hasattr(settings, setting_name):
 DEFAULT_SOURCE_DIR = settings.MEDIA_ROOT
 setting_name = 'NGINX_DOWNLOAD_MIDDLEWARE_MEDIA_ROOT'
 if hasattr(settings, setting_name):
-    warnings.warn('settings.{deprecated} is deprecated. You should combine '
-                  '"django_downloadview.DownloadDispatcherMiddleware" with '
-                  'with DOWNLOADVIEW_MIDDLEWARES instead.'.format(
-                      deprecated=setting_name),
+    warnings.warn(deprecated_msg.format(deprecated=setting_name),
                   DeprecationWarning)
     DEFAULT_SOURCE_DIR = settings.NGINX_DOWNLOAD_MIDDLEWARE_MEDIA_ROOT
 setting_name = 'NGINX_DOWNLOAD_MIDDLEWARE_SOURCE_DIR'
 if hasattr(settings, setting_name):
-    warnings.warn('settings.{deprecated} is deprecated. You should combine '
-                  '"django_downloadview.DownloadDispatcherMiddleware" with '
-                  'with DOWNLOADVIEW_MIDDLEWARES instead.'.format(
-                      deprecated=setting_name),
+    warnings.warn(deprecated_msg.format(deprecated=setting_name),
                   DeprecationWarning)
 if not hasattr(settings, setting_name):
     setattr(settings, setting_name, DEFAULT_SOURCE_DIR)
@@ -117,10 +107,7 @@ if not hasattr(settings, setting_name):
 DEFAULT_SOURCE_URL = settings.MEDIA_URL
 setting_name = 'NGINX_DOWNLOAD_MIDDLEWARE_SOURCE_URL'
 if hasattr(settings, setting_name):
-    warnings.warn('settings.{deprecated} is deprecated. You should combine '
-                  '"django_downloadview.DownloadDispatcherMiddleware" with '
-                  'with DOWNLOADVIEW_MIDDLEWARES instead.'.format(
-                      deprecated=setting_name),
+    warnings.warn(deprecated_msg.format(deprecated=setting_name),
                   DeprecationWarning)
 if not hasattr(settings, setting_name):
     setattr(settings, setting_name, DEFAULT_SOURCE_URL)
@@ -130,18 +117,12 @@ if not hasattr(settings, setting_name):
 DEFAULT_DESTINATION_URL = None
 setting_name = 'NGINX_DOWNLOAD_MIDDLEWARE_MEDIA_URL'
 if hasattr(settings, setting_name):
-    warnings.warn('settings.{deprecated} is deprecated. You should combine '
-                  '"django_downloadview.DownloadDispatcherMiddleware" with '
-                  'with DOWNLOADVIEW_MIDDLEWARES instead.'.format(
-                      deprecated=setting_name),
+    warnings.warn(deprecated_msg.format(deprecated=setting_name),
                   DeprecationWarning)
     DEFAULT_SOURCE_DIR = settings.NGINX_DOWNLOAD_MIDDLEWARE_MEDIA_URL
 setting_name = 'NGINX_DOWNLOAD_MIDDLEWARE_DESTINATION_URL'
 if hasattr(settings, setting_name):
-    warnings.warn('settings.{deprecated} is deprecated. You should combine '
-                  '"django_downloadview.DownloadDispatcherMiddleware" with '
-                  'with DOWNLOADVIEW_MIDDLEWARES instead.'.format(
-                      deprecated=setting_name),
+    warnings.warn(deprecated_msg.format(deprecated=setting_name),
                   DeprecationWarning)
 if not hasattr(settings, setting_name):
     setattr(settings, setting_name, DEFAULT_DESTINATION_URL)

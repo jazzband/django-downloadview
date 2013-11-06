@@ -21,10 +21,20 @@ documentation.
 - Bugfix #49 - Fixed ``content`` assertion in ``assert_download_response``:
   checks only response's ``streaming_content`` attribute.
 
-- Feature #50 - Introduced
-  :class:`~django_downloadview.middlewares.DownloadDispatcherMiddleware` that
-  iterates over a list of configurable download middlewares. Allows to plug
-  several download middlewares with different configurations.
+- Feature #50 - Introduced ``django_downloadview.DownloadDispatcherMiddleware``
+  that iterates over a list of configurable download middlewares. Allows to
+  plug several download middlewares with different configurations.
+
+  This middleware is mostly dedicated to internal usage. It is used by
+  ``SmartDownloadMiddleware`` described below.
+
+- Feature #42 - Documentation shows how to stream generated content (yield).
+  Introduced ``django_downloadview.StringIteratorIO``.
+
+- Refactoring #51 - Dropped support of Python 2.6
+
+- Refactoring #25 - Introduced ``django_downloadview.SmartDownloadMiddleware``
+  which allows to setup multiple optimization rules for one backend.
 
   Deprecates the following settings related to previous single-and-global
   middleware:
@@ -34,11 +44,6 @@ documentation.
   * ``NGINX_DOWNLOAD_MIDDLEWARE_EXPIRES``
   * ``NGINX_DOWNLOAD_MIDDLEWARE_WITH_BUFFERING``
   * ``NGINX_DOWNLOAD_MIDDLEWARE_LIMIT_RATE``
-
-- Feature #42 - Documentation shows how to stream generated content (yield).
-  Introduced ``django_downloadview.StringIteratorIO``.
-
-- Refactoring #51 - Dropped support of Python 2.6
 
 - Refactoring #52 - ObjectDownloadView now inherits from SingleObjectMixin and
   BaseDownloadView (was DownloadMixin and BaseDetailView).
