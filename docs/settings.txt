@@ -1,0 +1,65 @@
+#########
+Configure
+#########
+
+Here is the list of settings used by `django-downloadview`.
+
+
+**************
+INSTALLED_APPS
+**************
+
+There is no need to register this application in your Django's
+``INSTALLED_APPS`` setting.
+
+
+******************
+MIDDLEWARE_CLASSES
+******************
+
+If you plan to setup reverse-proxy optimizations, add
+``django_downloadview.DownloadDispatcherMiddleware`` to ``MIDDLEWARE_CLASSES``.
+It is a response middleware. Move it after middlewares that compute the
+response content such as gzip middleware.
+
+Example:
+
+.. literalinclude:: /../demo/demoproject/settings.py
+   :language: python
+   :lines: 61-68
+
+
+************************
+DOWNLOADVIEW_MIDDLEWARES
+************************
+
+:default: []
+
+If you plan to setup reverse-proxy :doc:`optimizations </optimizations/index>`,
+setup ``DOWNLOADVIEW_MIDDLEWARES`` value. This setting is used by
+:py:class:`~django_downloadview.middlewares.DownloadDispatcherMiddleware`.
+It is the list of handlers that will be given the opportunity to capture
+download responses and convert them to internal redirects for use with
+reverse-proxies.
+
+The list expects items ``(id, path, options)`` such as:
+
+* ``id`` is an identifier
+* ``path`` is the import path of some download middleware factory (typically a
+  class).
+* ``options`` is a dictionary of keyword arguments passed to the middleware
+  factory.
+
+Example:
+
+.. literalinclude:: /../demo/demoproject/settings.py
+   :language: python
+   :lines: 72-76
+
+See :doc:`/optimizations/index` for details about middlewares and their
+options.
+
+.. note::
+
+   You can register several middlewares. It allows you to setup several
+   conversion rules with distinct source/destination patterns.

@@ -1,0 +1,10 @@
+[
+    {
+        "pk": 1, 
+        "model": "object.document", 
+        "fields": {
+            "slug": "hello-world", 
+            "file": "document/hello-world.txt"
+        }
+    }
+]

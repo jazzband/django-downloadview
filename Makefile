@@ -7,6 +7,7 @@ DATA_DIR = $(ROOT_DIR)/var
 WGET = wget
 PYTHON = $(shell which python)
 PROJECT = $(shell $(PYTHON) -c "import setup; print setup.NAME")
+PACKAGE = $(shell $(PYTHON) -c "import setup; print setup.PACKAGES[0]")
 BUILDOUT_CFG = $(ROOT_DIR)/etc/buildout.cfg
 BUILDOUT_DIR = $(ROOT_DIR)/lib/buildout
 BUILDOUT_VERSION = 1.7.0
@@ -51,38 +52,36 @@ test: test-app test-demo test-documentation
 
 
 test-app:
-	$(NOSE) -c $(ROOT_DIR)/etc/nose.cfg --with-coverage --cover-package=django_downloadview django_downloadview tests
+	$(NOSE) -c $(ROOT_DIR)/etc/nose/base.cfg -c $(ROOT_DIR)/etc/nose/$(PACKAGE).cfg
 	mv $(ROOT_DIR)/.coverage $(ROOT_DIR)/var/test/app.coverage
 
 
 test-demo:
-	$(BIN_DIR)/demo test demo
+	$(BIN_DIR)/demo test --nose-verbosity=2
 	mv $(ROOT_DIR)/.coverage $(ROOT_DIR)/var/test/demo.coverage
 
 
 test-documentation:
-	$(NOSE) -c $(ROOT_DIR)/etc/nose.cfg sphinxcontrib.testbuild.tests
-
-
-apidoc:
-	cp docs/api/index.txt docs/api-backup.txt
-	rm -rf docs/api/*
-	mv docs/api-backup.txt docs/api/index.txt
-	$(BIN_DIR)/sphinx-apidoc --suffix txt --output-dir $(ROOT_DIR)/docs/api django_downloadview
+	$(NOSE) -c $(ROOT_DIR)/etc/nose/base.cfg sphinxcontrib.testbuild.tests
 
 
 sphinx:
 	make --directory=docs clean html doctest
 
 
-documentation: apidoc sphinx
+documentation: sphinx
 
 
 demo: develop
-	mkdir -p var/media/document
 	$(BIN_DIR)/demo syncdb --noinput
-	cp $(ROOT_DIR)/demo/demoproject/download/fixtures/hello-world.txt var/media/document/
-	$(BIN_DIR)/demo loaddata $(ROOT_DIR)/demo/demoproject/download/fixtures/demo.json
+	# Install fixtures.
+	mkdir -p var/media
+	cp -r $(ROOT_DIR)/demo/demoproject/fixtures var/media/object
+	cp -r $(ROOT_DIR)/demo/demoproject/fixtures var/media/object-other
+	cp -r $(ROOT_DIR)/demo/demoproject/fixtures var/media/nginx
+	$(BIN_DIR)/demo loaddata demo.json
+
+runserver: demo
 	$(BIN_DIR)/demo runserver
 
 

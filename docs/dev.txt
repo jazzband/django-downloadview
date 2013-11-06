@@ -44,7 +44,7 @@ Setup a development environment
 
 System requirements:
 
-* `Python`_ version 2.6 or 2.7, available as ``python`` command.
+* `Python`_ version 2.7, available as ``python`` command.
   
   .. note::
 
@@ -78,21 +78,6 @@ A :file:`Makefile` is provided to ease development. Use it to:
 
 The :file:`Makefile` is intended to be a live reference for the development
 environment.
-
-
-*************
-Documentation
-*************
-
-Follow `style guide for Sphinx-based documentations`_ when editing the
-documentation.
-
-
-**************
-Test and build
-**************
-
-Use `the Makefile`_.
 
 
 *********************

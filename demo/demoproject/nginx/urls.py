@@ -4,9 +4,10 @@ from django.conf.urls import patterns, url
 
 urlpatterns = patterns(
     'demoproject.nginx.views',
-    url(r'^document-nginx/(?P<slug>[a-zA-Z0-9_-]+)/$',
-        'download_document_nginx', name='download_document_nginx'),
-    url(r'^document-nginx-inline/(?P<slug>[a-zA-Z0-9_-]+)/$',
-        'download_document_nginx_inline',
-        name='download_document_nginx_inline'),
+    url(r'^optimized-by-middleware/$',
+        'optimized_by_middleware',
+        name='optimized_by_middleware'),
+    url(r'^optimized-by-decorator/$',
+        'optimized_by_decorator',
+        name='optimized_by_decorator'),
 )

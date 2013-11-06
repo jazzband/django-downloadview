@@ -1,4 +1,4 @@
-.. include:: ../README
+.. include:: ../README.rst
 
 
 ********
@@ -9,11 +9,15 @@ Contents
    :maxdepth: 2
    :titlesonly:
 
-   demo
+   overview
    install
-   views
+   settings
+   views/index
    optimizations/index
    testing
-   api/index
+   healthchecks
+   files
+   responses
+   demo
    about/index
    dev

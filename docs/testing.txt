@@ -1,7 +1,44 @@
-######################
-Testing download views
-######################
+###########
+Write tests
+###########
 
-This project includes shortcuts to simplify testing.
+`django_downloadview` embeds test utilities:
 
-See :py:mod:`django_downloadview.test` for details.
+* :func:`~django_downloadview.test.temporary_media_root`
+* :func:`~django_downloadview.test.assert_download_response`
+* :func:`~django_downloadview.test.setup_view`
+* :func:`~django_downloadview.nginx.tests.assert_x_accel_redirect`
+
+
+********************
+temporary_media_root
+********************
+
+.. autofunction:: django_downloadview.test.temporary_media_root
+
+
+************************
+assert_download_response
+************************
+
+.. autofunction:: django_downloadview.test.assert_download_response
+
+Examples, related to :doc:`StorageDownloadView demo </views/storage>`:
+
+.. literalinclude:: /../demo/demoproject/storage/tests.py
+   :language: python
+   :lines: 3-7, 9-57
+
+
+**********
+setup_view
+**********
+
+.. autofunction:: django_downloadview.test.setup_view
+
+Example, related to :doc:`StorageDownloadView demo </views/storage>`:
+
+.. literalinclude:: /../demo/demoproject/storage/tests.py
+   :language: python
+   :lines: 1-2, 8-12, 59-
+

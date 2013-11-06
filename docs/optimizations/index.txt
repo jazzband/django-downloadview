@@ -1,6 +1,6 @@
-#############
-Optimizations
-#############
+##################
+Optimize streaming
+##################
 
 Some reverse proxies allow applications to delegate actual download to the
 proxy:
@@ -11,40 +11,41 @@ proxy:
 As a result, you get increased performance: reverse proxies are more efficient
 than Django at serving static files.
 
+The setup depends on the reverse proxy:
+
 .. toctree::
-   :maxdepth: 2
+   :titlesonly:
 
    nginx
 
-Currently, only `nginx's X-Accel`_ is supported, but `contributions are
-welcome`_!
+.. note::
+
+   Currently, only `nginx's X-Accel`_ is supported, but `contributions are
+   welcome`_!
 
 
 *****************
 How does it work?
 *****************
 
-The feature is inspired by `Django's TemplateResponse`_: the download views
-return some :py:class:`django_downloadview.response.DownloadResponse` instance.
-Such a response doesn't contain file data.
+View return some :class:`~django_downloadview.response.DownloadResponse`
+instance, which itself carries a :doc:`file wrapper </files>`.
 
-By default, at the end of Django's request/response handling, Django is to
-iterate over the ``content`` attribute of the response. In a
-``DownloadResponse``, this ``content`` attribute is a file wrapper.
+`django-downloadview` provides response middlewares and decorators that are
+able to capture :class:`~django_downloadview.response.DownloadResponse`
+instances and convert them to
+:class:`~django_downloadview.response.ProxiedDownloadResponse`.
 
-It means that decorators and middlewares are given an opportunity to capture
-the ``DownloadResponse`` before the content of the file is loaded into memory
-As an example, :py:class:`django_downloadview.nginx.XAccelRedirectMiddleware`
-replaces ``DownloadResponse`` intance by some
-:py:class:`django_downloadview.nginx.XAccelRedirectResponse`.
+.. note::
+
+   The feature is inspired by :mod:`Django's TemplateResponse
+   <django.template.response>`
 
 
-.. rubric:: References
+.. rubric:: Notes & references
 
 .. target-notes::
 
 .. _`nginx's X-Accel`: http://wiki.nginx.org/X-accel
 .. _`contributions are welcome`:
    https://github.com/benoitbryon/django-downloadview/issues?labels=optimizations
-.. _`Django's TemplateResponse`:
-   https://docs.djangoproject.com/en/1.5/ref/template-response/

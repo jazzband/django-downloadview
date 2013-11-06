@@ -10,19 +10,7 @@
         <h2>Serving files with Django</h2>
         <p>In the following views, Django streams the files, no optimization
            has been setup.</p>
-		<ul>
-            <li><a href="{% url 'hello_world' %}">PathDownloadView</a></li>
-            <li><a href="{% url 'fixture_from_path' 'hello-world.txt' %}">
-                PathDownloadView + argument in URL
-            </a></li>
-            <li><a href="{% url 'fixture_from_storage' 'hello-world.txt' %}">
-                StorageDownloadView + path in URL
-            </a></li>
-            <li><a href="{% url 'document' 'hello-world' %}">
-                ObjectDownloadView
-            </a></li>
-            <li><a href="{% url 'http_hello_world' %}">
-                HTTPDownloadView</a>, a simple HTTP proxy</li>
+        <ul>
         </ul>
 
         <h2>Optimized downloads</h2>
@@ -31,9 +19,6 @@
         <p>Since nginx and other servers aren't installed on the demo, you
            will get raw "X-Sendfile" responses. Look at the headers!</p>
         <ul>
-            <li><a href="{% url 'download_document_nginx' 'hello-world' %}">
-                ObjectDownloadView (nginx)
-            </a></li>
         </ul>
     </body>
 </html>

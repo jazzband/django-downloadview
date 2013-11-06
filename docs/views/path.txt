@@ -1,0 +1,58 @@
+################
+PathDownloadView
+################
+
+.. py:module:: django_downloadview.views.path
+
+:class:`PathDownloadView` **serves file given a path on local filesystem**.
+
+Use this view whenever you just have a path, outside storage or model.
+
+.. warning::
+
+   Take care of path validation, especially if you compute paths from user
+   input: an attacker may be able to download files from arbitrary locations.
+   In most cases, you should consider managing files in storages, because they
+   implement default security mechanisms.
+
+
+**************
+Simple example
+**************
+
+Setup a view to stream files given path:
+
+.. literalinclude:: /../demo/demoproject/path/views.py
+   :language: python
+   :lines: 1-14
+   :emphasize-lines: 14
+
+
+**************************
+Computing path dynamically
+**************************
+
+Override the :meth:`PathDownloadView.get_path` method to adapt path
+resolution to your needs:
+
+.. literalinclude:: /../demo/demoproject/path/views.py
+   :language: python
+   :lines: 1-9, 15-
+
+The view accepts a ``path`` argument you can setup either in ``as_view`` or
+via URLconfs:
+
+.. literalinclude:: /../demo/demoproject/path/urls.py
+   :language: python
+   :lines: 1-7, 11-13, 14
+
+
+*************
+API reference
+*************
+
+.. autoclass:: PathDownloadView
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource

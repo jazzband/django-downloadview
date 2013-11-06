@@ -1,0 +1,22 @@
+###########
+Setup views
+###########
+
+Setup views depending on your needs:
+
+* :doc:`/views/object` when you have a model with a file field;
+* :doc:`/views/storage` when you manage files in a storage;
+* :doc:`/views/path` when you have an absolute filename on local filesystem;
+* :doc:`/views/http` when you have an URL (the resource is proxied);
+* :doc:`/views/virtual` when you generate a file dynamically;
+* :doc:`bases and mixins </views/custom>` to make your own.
+
+.. toctree::
+   :hidden:
+
+   object
+   storage
+   path
+   http
+   virtual
+   custom

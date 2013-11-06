@@ -10,8 +10,7 @@
 #
 # All configuration values have a default; values that are commented out
 # serve to show the default.
-
-import sys, os
+import os
 
 
 # Minimal Django settings. Required to use sphinx.ext.autodoc, because
@@ -41,8 +40,11 @@ version_filename = os.path.join(project_dir, 'VERSION')
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.autosummary',
-              'sphinx.ext.doctest', 'sphinx.ext.coverage']
+extensions = ['sphinx.ext.autodoc',
+              'sphinx.ext.autosummary',
+              'sphinx.ext.doctest',
+              'sphinx.ext.coverage',
+              'sphinx.ext.intersphinx']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -188,6 +190,15 @@ html_sidebars = {
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'django-downloadviewdoc'
 
+
+# -- Options for sphinx.ext.intersphinx ---------------------------------------
+
+intersphinx_mapping = {
+    'python': ('http://docs.python.org/2.7', None),
+    'django': ('http://docs.djangoproject.com/en/1.5/',
+               'http://docs.djangoproject.com/en/1.5/_objects/'),
+    'requests': ('http://docs.python-requests.org/en/latest/', None),
+}
 
 # -- Options for LaTeX output --------------------------------------------------
 

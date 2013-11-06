@@ -1,30 +1,32 @@
-############
-Installation
-############
+#######
+Install
+#######
 
-This project is open-source, published under BSD license.
-See :doc:`/about/license` for details.
+.. note::
 
-If you want to install a development environment, you should go to :doc:`/dev`
-documentation.
+   If you want to install a development environment, please see :doc:`/dev`.
+
+System requirements:
+
+* Python 2.7
 
 Install the package with your favorite Python installer. As an example, with
 pip:
 
-.. code-block:: sh
+.. code:: sh
 
    pip install django-downloadview
 
 .. note::
 
    Since version 1.1, django-downloadview requires Django>=1.5, which provides
-   StreamingHttpResponse.
+   :py:class:`~django.http.StreamingHttpResponse`.
 
-There is no need to register this application in your Django's
-``INSTALLED_APPS`` setting.
 
-Next, you'll have to setup some download view(s). See :doc:`demo project
-<demo>` for examples, and :doc:`API documentation <api/django_downloadview>`.
+.. rubric:: Notes & references
 
-Optionally, you may setup additional :doc:`server optimizations
-<optimizations/index>`.
+.. seealso::
+
+   * :doc:`/settings`
+   * :doc:`/about/changelog`
+   * :doc:`/about/license`

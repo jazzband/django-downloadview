@@ -1,7 +1,41 @@
+# -*- coding: utf-8 -*-
 """File wrappers for use as exchange data between views and responses."""
-from django.core.files import File
+from __future__ import absolute_import
+from io import BytesIO
+from urlparse import urlparse
+
+import django.core.files
+from django.utils.encoding import force_bytes
 
 import requests
+
+
+class File(django.core.files.File):
+    """Patch Django's :meth:`__iter__` implementation.
+
+    See https://code.djangoproject.com/ticket/21321
+
+    """
+    def __iter__(self):
+        # Iterate over this file-like object by newlines
+        buffer_ = None
+        for chunk in self.chunks():
+            chunk_buffer = BytesIO(force_bytes(chunk))
+
+            for line in chunk_buffer:
+                if buffer_:
+                    line = buffer_ + line
+                    buffer_ = None
+
+                # If this is the end of a line, yield
+                # otherwise, wait for the next round
+                if line[-1] in ('\n', '\r'):
+                    yield line
+                else:
+                    buffer_ = line
+
+        if buffer_ is not None:
+            yield buffer_
 
 
 class StorageFile(File):
@@ -185,7 +219,14 @@ class HTTPFile(File):
                  **kwargs):
         self.request_factory = request_factory
         self.url = url
-        self.name = name
+        if name is None:
+            parts = urlparse(url)
+            if parts.path:  # Name from path.
+                self.name = parts.path.strip('/').rsplit('/', 1)[-1]
+            else:  # Name from domain.
+                self.name = parts.netloc
+        else:
+            self.name = name
         kwargs['stream'] = True
         self.request_kwargs = kwargs
 

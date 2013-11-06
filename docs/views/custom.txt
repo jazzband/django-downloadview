@@ -1,0 +1,76 @@
+##################
+Make your own view
+##################
+
+.. currentmodule:: django_downloadview.views.base
+
+*************
+DownloadMixin
+*************
+
+The :py:class:`django_downloadview.views.DownloadMixin` class is not a view. It
+is a base class which you can inherit of to create custom download views.
+
+``DownloadMixin`` is a base of `BaseDownloadView`_, which itself is a base of
+all other django_downloadview's builtin views.
+
+.. autoclass:: DownloadMixin
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource
+
+
+****************
+BaseDownloadView
+****************
+
+The :py:class:`django_downloadview.views.BaseDownloadView` class is a base
+class to create download views. It inherits `DownloadMixin`_ and
+:py:class:`django.views.generic.base.View`.
+
+The only thing it does is to implement
+:py:meth:`get <django_downloadview.views.BaseDownloadView.get>`: it triggers
+:py:meth:`DownloadMixin's render_to_response
+<django_downloadview.views.DownloadMixin.render_to_response>`.
+
+.. autoclass:: BaseDownloadView
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource
+
+
+************************************
+Handling http not modified responses
+************************************
+
+Sometimes, you know the latest date and time the content was generated at, and
+you know a new request would generate exactly the same content. In such a case,
+you should implement :py:meth:`~VirtualDownloadView.was_modified_since` in your
+view.
+
+.. note::
+
+   Default :py:meth:`~VirtualDownloadView.was_modified_since` implementation
+   trusts file wrapper's ``was_modified_since`` if any. Else (if calling
+   ``was_modified_since()`` raises ``NotImplementedError`` or
+   ``AttributeError``) it returns ``True``, i.e. it assumes the file was
+   modified.
+
+As an example, the download views above always generate "Hello world!"... so,
+if the client already downloaded it, we can safely return some HTTP "304 Not
+Modified" response:
+
+.. code:: python
+
+   from django.core.files.base import ContentFile
+   from django_downloadview import VirtualDownloadView
+
+   class TextDownloadView(VirtualDownloadView):
+       def get_file(self):
+           """Return :class:`django.core.files.base.ContentFile` object."""
+           return ContentFile(u"Hello world!", name='hello-world.txt')
+
+       def was_modified_since(self, file_instance, since):
+           return False  # Never modified, always u"Hello world!".

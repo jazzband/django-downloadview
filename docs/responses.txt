@@ -1,0 +1,32 @@
+#########
+Responses
+#########
+
+.. currentmodule:: django_downloadview.response
+
+Views return :class:`DownloadResponse`.
+
+Middlewares (and decorators) are given the opportunity to capture responses and
+convert them to :class:`ProxiedDownloadResponse`.
+
+
+****************
+DownloadResponse
+****************
+
+.. autoclass:: DownloadResponse
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource
+
+
+***********************
+ProxiedDownloadResponse
+***********************
+
+.. autoclass:: ProxiedDownloadResponse
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource

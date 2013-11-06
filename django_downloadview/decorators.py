@@ -1,17 +1,17 @@
 """View decorators.
 
 See also decorators provided by server-specific modules, such as
-:py:func:`django_downloadview.nginx.x_accel_redirect`.
+:func:`django_downloadview.nginx.x_accel_redirect`.
 
 """
 
 
 class DownloadDecorator(object):
-    """View decorator factory to apply middleware to ``view_func`` response.
+    """View decorator factory to apply middleware to ``view_func``'s response.
 
     Middleware instance is built from ``middleware_factory`` with ``*args`` and
     ``**kwargs``. Middleware factory is typically a class, such as some
-    :py:class:`django_downloadview.middlewares.XAccelMiddleware` subclass.
+    :py:class:`django_downloadview.BaseDownloadMiddleware` subclass.
 
     Response is built from view, then the middleware's ``process_response``
     method is applied on response.

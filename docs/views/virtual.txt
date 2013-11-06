@@ -1,0 +1,76 @@
+###################
+VirtualDownloadView
+###################
+
+.. py:module:: django_downloadview.views.virtual
+
+:class:`VirtualDownloadView` **serves files that do not live on disk**.
+Use it when you want to stream a file which content is dynamically generated
+or which lives in memory.
+
+It is all about overriding :meth:`VirtualDownloadView.get_file` method so that
+it returns a suitable file wrapper...
+
+.. note::
+
+   Current implementation does not support reverse-proxy optimizations,
+   because there is no place reverse-proxy can load files from after Django
+   exited.
+
+
+***************************************
+Serve text (string or unicode) or bytes
+***************************************
+
+Let's consider you build text dynamically, as a bytes or string or unicode
+object. Serve it with Django's builtin
+:class:`~django.core.files.base.ContentFile` wrapper:
+
+.. literalinclude:: /../demo/demoproject/virtual/views.py
+   :language: python
+   :lines: 3-5, 8-13
+
+
+**************
+Serve StringIO
+**************
+
+:class:`~StringIO.StringIO` object lives in memory. Let's wrap it in some
+download view via :class:`~django_downloadview.files.VirtualFile`:
+
+.. literalinclude:: /../demo/demoproject/virtual/views.py
+   :language: python
+   :lines: 1-2, 5-6, 14-20
+
+
+************************
+Stream generated content
+************************
+
+Let's consider you have a generator function (``yield``) or an iterator object
+(``__iter__()``):
+
+
+.. literalinclude:: /../demo/demoproject/virtual/views.py
+   :language: python
+   :lines: 23-26
+
+
+Stream generated content using :class:`VirtualDownloadView`,
+:class:`~django_downloadview.files.VirtualFile` and
+:class:`~django_downloadview.file.StringIteratorIO`:
+
+.. literalinclude:: /../demo/demoproject/virtual/views.py
+   :language: python
+   :lines: 5-9, 29-33
+
+
+*************
+API reference
+*************
+
+.. autoclass:: VirtualDownloadView
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource

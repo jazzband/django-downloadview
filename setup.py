@@ -1,42 +1,54 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
 """Python packaging."""
 import os
+
 from setuptools import setup
 
 
-def read_relative_file(filename):
-    """Returns contents of the given file, which path is supposed relative
-    to this module."""
-    with open(os.path.join(os.path.dirname(__file__), filename)) as f:
-        return f.read().strip()
+here = os.path.abspath(os.path.dirname(__file__))
 
 
 NAME = 'django-downloadview'
-README = read_relative_file('README')
-VERSION = read_relative_file('VERSION')
-PACKAGES = ['django_downloadview']
-REQUIRES = ['setuptools', 'django>=1.5', 'requests']
+DESCRIPTION = 'Serve files with Django and reverse-proxies.'
+README = open(os.path.join(here, 'README.rst')).read()
+VERSION = open(os.path.join(here, 'VERSION')).read().strip()
+AUTHOR = u'Benoît Bryon'
+EMAIL = u'benoit@marmelune.net'
+URL = 'https://{name}.readthedocs.org/'.format(name=NAME)
+CLASSIFIERS = ['Development Status :: 4 - Beta',
+               'License :: OSI Approved :: BSD License',
+               'Programming Language :: Python :: 2.7',
+               'Programming Language :: Python :: 2.6',
+               'Framework :: Django']
+KEYWORDS = ['file',
+            'stream',
+            'download',
+            'FileField',
+            'ImageField',
+            'x-accel',
+            'x-accel-redirect',
+            'x-sendfile',
+            'sendfile',
+            'mod_xsendfile',
+            'offload']
+PACKAGES = [NAME.replace('-', '_')]
+REQUIREMENTS = ['setuptools', 'Django>=1.5', 'requests']
+ENTRY_POINTS = {}
 
 
 if __name__ == '__main__':  # Don't run setup() when we import this module.
     setup(name=NAME,
           version=VERSION,
-          description='Generic download views for Django.',
+          description=DESCRIPTION,
           long_description=README,
-          classifiers=['Development Status :: 4 - Beta',
-                       'License :: OSI Approved :: BSD License',
-                       'Programming Language :: Python :: 2.7',
-                       'Programming Language :: Python :: 2.6',
-                       'Framework :: Django',
-                       ],
-          keywords='class-based view, generic view, download, file, '
-                   'FileField, ImageField, nginx, x-accel, x-sendfile',
-          author='Benoît Bryon',
-          author_email='benoit@marmelune.net',
-          url='https://github.com/benoitbryon/%s' % NAME,
+          classifiers=CLASSIFIERS,
+          keywords=' '.join(KEYWORDS),
+          author=AUTHOR,
+          author_email=EMAIL,
+          url=URL,
           license='BSD',
           packages=PACKAGES,
           include_package_data=True,
           zip_safe=False,
-          install_requires=REQUIRES,
-          )
+          install_requires=REQUIREMENTS,
+          entry_points=ENTRY_POINTS)

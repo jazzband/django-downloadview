@@ -1,0 +1,89 @@
+#############
+File wrappers
+#############
+
+.. py:module:: django_downloadview.files
+
+A view return :class:`~django_downloadview.response.DownloadResponse` which
+itself carries a file wrapper. Here are file wrappers distributed by Django
+and django-downloadview.
+
+
+*****************
+Django's builtins
+*****************
+
+`Django itself provides some file wrappers`_ you can use within
+``django-downloadview``:
+
+* :py:class:`django.core.files.File` wraps a file that live on local
+  filesystem, initialized with a path. ``django-downloadview`` uses this
+  wrapper in :doc:`/views/path`.
+
+* :py:class:`django.db.models.fields.files.FieldFile` wraps a file that is
+  managed in a model. ``django-downloadview`` uses this wrapper in 
+  :doc:`/views/object`.
+
+* :py:class:`django.core.files.base.ContentFile` wraps a bytes, string or
+  unicode object. You may use it with :doc:`VirtualDownloadView
+  </views/virtual>`.
+
+
+****************************
+django-downloadview builtins
+****************************
+
+``django-downloadview`` implements additional file wrappers:
+
+* :class:`StorageFile` wraps a file that is
+  managed via a storage (but not necessarily via a model).
+  :doc:`/views/storage` uses this wrapper.
+
+* :class:`HTTPFile` wraps a file that lives at
+  some (remote) location, initialized with an URL.
+  :doc:`/views/http` uses this wrapper.
+
+* :class:`VirtualFile` wraps a file that lives in
+  memory, i.e. built as a string.
+  This is a convenient wrapper to use in :doc:`/views/virtual` subclasses.
+
+
+*************
+API reference
+*************
+
+StorageFile
+===========
+
+.. autoclass:: StorageFile
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource
+
+HTTPFile
+========
+
+.. autoclass:: HTTPFile
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource
+
+
+VirtualFile
+===========
+
+.. autoclass:: VirtualFile
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource
+
+
+.. rubric:: Notes & references
+
+.. target-notes::
+
+.. _`Django itself provides some file wrappers`:
+   https://docs.djangoproject.com/en/1.5/ref/files/file/
