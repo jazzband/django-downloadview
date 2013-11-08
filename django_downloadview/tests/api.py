@@ -42,7 +42,6 @@ class APITestCase(unittest.TestCase):
             'BaseDownloadView',
             'DownloadMixin',
             # File wrappers:
-            'File',
             'StorageFile',
             'HTTPFile',
             'VirtualFile',

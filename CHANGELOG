@@ -13,15 +13,15 @@ documentation.
 
 - Bugfix #57 - ``PathDownloadView`` opens files in binary mode (was text mode).
 
-- Bugfix #44 - Introduced ``django_downloadview.File``, which patches
-  ``django.core.files.base.File.__iter__()`` implementation.
-  See https://code.djangoproject.com/ticket/21321
-
 - Bugfix #48 - Fixed ``basename`` assertion in ``assert_download_response``:
   checks ``Content-Disposition`` header.
 
 - Bugfix #49 - Fixed ``content`` assertion in ``assert_download_response``:
   checks only response's ``streaming_content`` attribute.
+
+- Bugfix #60 - ``VirtualFile.__iter__`` uses ``force_bytes()`` to support both
+  "text-mode" and "binary-mode" content.
+  See https://code.djangoproject.com/ticket/21321
 
 - Feature #50 - Introduced ``django_downloadview.DownloadDispatcherMiddleware``
   that iterates over a list of configurable download middlewares. Allows to
@@ -58,7 +58,6 @@ documentation.
 
 - Refactoring #53 - Added base classes in ``django_downloadview.middlewares``,
   such as ``ProxiedDownloadMiddleware``.
-
 
 - Refactoring #54 - Expose most Python API directly in `django_downloadview`
   package. Simplifies ``import`` statements in client applications.
