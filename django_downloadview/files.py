@@ -4,38 +4,10 @@ from __future__ import absolute_import
 from io import BytesIO
 from urlparse import urlparse
 
-import django.core.files
+from django.core.files.base import File
 from django.utils.encoding import force_bytes
 
 import requests
-
-
-class File(django.core.files.File):
-    """Patch Django's :meth:`__iter__` implementation.
-
-    See https://code.djangoproject.com/ticket/21321
-
-    """
-    def __iter__(self):
-        # Iterate over this file-like object by newlines
-        buffer_ = None
-        for chunk in self.chunks():
-            chunk_buffer = BytesIO(force_bytes(chunk))
-
-            for line in chunk_buffer:
-                if buffer_:
-                    line = buffer_ + line
-                    buffer_ = None
-
-                # If this is the end of a line, yield
-                # otherwise, wait for the next round
-                if line[-1] in ('\n', '\r'):
-                    yield line
-                else:
-                    buffer_ = line
-
-        if buffer_ is not None:
-            yield buffer_
 
 
 class StorageFile(File):
@@ -203,6 +175,33 @@ class VirtualFile(File):
         return super(VirtualFile, self)._set_size(value)
 
     size = property(_get_size, _set_size)
+
+    def __iter__(self):
+        """Same as ``File.__iter__()`` but using ``force_bytes()``.
+
+        See https://code.djangoproject.com/ticket/21321
+
+        """
+        # Iterate over this file-like object by newlines
+        buffer_ = None
+        for chunk in self.chunks():
+            chunk_buffer = BytesIO(force_bytes(chunk))
+
+            for line in chunk_buffer:
+                if buffer_:
+                    line = buffer_ + line
+                    buffer_ = None
+
+                # If this is the end of a line, yield
+                # otherwise, wait for the next round
+                if line[-1] in ('\n', '\r'):
+                    yield line
+                else:
+                    buffer_ = line
+
+        if buffer_ is not None:
+            yield buffer_
+
 
 
 class HTTPFile(File):

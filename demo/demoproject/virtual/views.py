@@ -16,7 +16,7 @@ class TextDownloadView(VirtualDownloadView):
 class StringIODownloadView(VirtualDownloadView):
     def get_file(self):
         """Return wrapper on ``StringIO`` object."""
-        file_obj = StringIO(u"Hello world!\n".encode('utf-8'))
+        file_obj = StringIO(u"Hello world!\n")
         return VirtualFile(file_obj, name='hello-world.txt')
 
 

@@ -3,8 +3,7 @@
 from django_downloadview.io import StringIteratorIO  # NoQA
 from django_downloadview.files import (StorageFile,  # NoQA
                                        VirtualFile,
-                                       HTTPFile,
-                                       File)
+                                       HTTPFile)
 from django_downloadview.response import (DownloadResponse,  # NoQA
                                           ProxiedDownloadResponse)
 from django_downloadview.middlewares import (BaseDownloadMiddleware,  # NoQA
