@@ -4,16 +4,18 @@ SHELL = /bin/bash
 ROOT_DIR = $(shell pwd)
 BIN_DIR = $(ROOT_DIR)/bin
 DATA_DIR = $(ROOT_DIR)/var
+VIRTUALENV_DIR = $(ROOT_DIR)/lib/virtualenv
+PIP = $(VIRTUALENV_DIR)/bin/pip
 WGET = wget
-PYTHON = $(shell which python)
+PYTHON = $(VIRTUALENV_DIR)/bin/python
 PROJECT = $(shell $(PYTHON) -c "import setup; print setup.NAME")
 PACKAGE = $(shell $(PYTHON) -c "import setup; print setup.PACKAGES[0]")
 BUILDOUT_CFG = $(ROOT_DIR)/etc/buildout.cfg
 BUILDOUT_DIR = $(ROOT_DIR)/lib/buildout
-BUILDOUT_VERSION = 1.7.0
+BUILDOUT_VERSION = 2.2.1
 BUILDOUT_BOOTSTRAP_URL = https://raw.github.com/buildout/buildout/$(BUILDOUT_VERSION)/bootstrap/bootstrap.py
 BUILDOUT_BOOTSTRAP = $(BUILDOUT_DIR)/bootstrap.py
-BUILDOUT_BOOTSTRAP_ARGS = -c $(BUILDOUT_CFG) --version=$(BUILDOUT_VERSION) --distribute buildout:directory=$(ROOT_DIR)
+BUILDOUT_BOOTSTRAP_ARGS = -c $(BUILDOUT_CFG) --version=$(BUILDOUT_VERSION) buildout:directory=$(ROOT_DIR)
 BUILDOUT = $(BIN_DIR)/buildout
 BUILDOUT_ARGS = -N -c $(BUILDOUT_CFG) buildout:directory=$(ROOT_DIR)
 NOSE = $(BIN_DIR)/nosetests
@@ -26,7 +28,11 @@ configure:
 develop: buildout
 
 
-buildout:
+virtualenv:
+	if [ ! -d $(VIRTUALENV_DIR)/bin/ ]; then virtualenv --no-site-packages $(VIRTUALENV_DIR); fi
+	$(PIP) install -r $(ROOT_DIR)/etc/virtualenv.cfg
+
+buildout: virtualenv
 	if [ ! -d $(BUILDOUT_DIR) ]; then mkdir -p $(BUILDOUT_DIR); fi
 	if [ ! -f $(BUILDOUT_BOOTSTRAP) ]; then wget -O $(BUILDOUT_BOOTSTRAP) $(BUILDOUT_BOOTSTRAP_URL); fi
 	if [ ! -x $(BUILDOUT) ]; then $(PYTHON) $(BUILDOUT_BOOTSTRAP) $(BUILDOUT_BOOTSTRAP_ARGS); fi

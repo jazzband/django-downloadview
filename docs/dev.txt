@@ -44,12 +44,9 @@ Setup a development environment
 
 System requirements:
 
-* `Python`_ version 2.7, available as ``python`` command.
-  
-  .. note::
+* `Python`_ version 2.7, available as ``python`` command
 
-     You may use `Virtualenv`_ to make sure the active ``python`` is the right
-     one.
+* `Virtualenv`_ version >= 1.9.1, available as ``virtualenv`` command
 
 * make and wget to use the provided :file:`Makefile`.
 
