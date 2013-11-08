@@ -11,6 +11,8 @@ future releases, check `milestones`_ and :doc:`/about/vision`.
 Big refactoring around middleware configuration, API readability and
 documentation.
 
+- Bugfix #57 - ``PathDownloadView`` opens files in binary mode (was text mode).
+
 - Bugfix #44 - Introduced ``django_downloadview.File``, which patches
   ``django.core.files.base.File.__iter__()`` implementation.
   See https://code.djangoproject.com/ticket/21321
