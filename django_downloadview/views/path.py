@@ -30,4 +30,4 @@ class PathDownloadView(BaseDownloadView):
 
     def get_file(self):
         """Use path to return wrapper around file to serve."""
-        return File(open(self.get_path()))
+        return File(open(self.get_path(), 'rb'))
