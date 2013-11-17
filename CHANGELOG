@@ -8,7 +8,7 @@ future releases, check `milestones`_ and :doc:`/about/vision`.
 1.4 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Feature #10 - Registered `django-downloadview` on djangopackages.com.
 
 
 1.3 (2013-11-08)
