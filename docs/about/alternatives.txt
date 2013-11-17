@@ -71,25 +71,6 @@ directory of local filesystem**.
 :func:`django_downloadview.sendfile` is a port of django-sendfile's main function.
 
 
-********************
-django-private-files
-********************
-
-`django-private-files`_ provides utilities for controlling access to static
-files based on conditions you can specify within your Django application.
-
-
-**********************
-django-protected-files
-**********************
-
-`django-protected-files`_ is a Django application that lets you serve protected
-static files via your frontend server after authorizing the user against
-``django.contrib.auth``.
-
-As of 2012-12-10, this project seems inactive.
-
-
 .. rubric:: References
 
 .. target-notes::
@@ -98,7 +79,3 @@ As of 2012-12-10, this project seems inactive.
    https://docs.djangoproject.com/en/1.6/ref/contrib/staticfiles/#static-file-development-view
 .. _`Django ticket #2131`: https://code.djangoproject.com/ticket/2131
 .. _`django-sendfile`: http://pypi.python.org/pypi/django-sendfile
-.. _`requests`: https://pypi.python.org/pypi/requests
-.. _`django-private-files`: http://pypi.python.org/pypi/django-private-files
-.. _`django-protected-files`:
-   https://github.com/lincolnloop/django-protected-files
