@@ -5,22 +5,22 @@ Alternatives and related projects
 This document presents other projects that provide similar or complementary
 functionalities. It focuses on differences with django-downloadview.
 
+There is a comparison grid on djangopackages.com:
+https://www.djangopackages.com/grids/g/file-streaming/.
+
+Here are additional highlights...
+
 
 *************************
 Django's static file view
 *************************
 
-`Django has a builtin static file view`_. It can stream files. As explained in
-Django documentation, it is designed for development purposes. For production,
-static files'd better be served by some optimized server.
+`django.contrib.staticfiles provides a view to serve files`_. It is simple and
+quite naive by design: it is meant for development, not for production.
+See `Django ticket #2131`_: advanced file streaming is left to third-party
+applications.
 
-Django-downloadview can replace Django's builtin static file view:
-
-* perform actions with Django when receiving download requests: check
-  permissions, generate files, gzip, logging, signals...
-* delegate actual download to a reverse proxy for increased performance.
-* disable optimization middlewares or decorators in development, if you want to
-  serve files with Django.
+`django-downloadview` is such a third-party application.
 
 
 ***************
@@ -71,33 +71,11 @@ directory of local filesystem**.
 :func:`django_downloadview.sendfile` is a port of django-sendfile's main function.
 
 
-********************
-django-private-files
-********************
-
-`django-private-files`_ provides utilities for controlling access to static
-files based on conditions you can specify within your Django application.
-
-
-**********************
-django-protected-files
-**********************
-
-`django-protected-files`_ is a Django application that lets you serve protected
-static files via your frontend server after authorizing the user against
-``django.contrib.auth``.
-
-As of 2012-12-10, this project seems inactive.
-
-
 .. rubric:: References
 
 .. target-notes::
 
-.. _`Django has a builtin static file view`:
-   https://docs.djangoproject.com/en/1.4/ref/contrib/staticfiles/#static-file-development-view
+.. _`django.contrib.staticfiles provides a view to serve files`:
+   https://docs.djangoproject.com/en/1.6/ref/contrib/staticfiles/#static-file-development-view
+.. _`Django ticket #2131`: https://code.djangoproject.com/ticket/2131
 .. _`django-sendfile`: http://pypi.python.org/pypi/django-sendfile
-.. _`requests`: https://pypi.python.org/pypi/requests
-.. _`django-private-files`: http://pypi.python.org/pypi/django-private-files
-.. _`django-protected-files`:
-   https://github.com/lincolnloop/django-protected-files
