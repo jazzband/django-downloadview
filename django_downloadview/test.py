@@ -6,6 +6,8 @@ from django.conf import settings
 from django.test.utils import override_settings
 
 from django_downloadview.middlewares import is_download_response
+from django_downloadview.response import (encode_basename_ascii,
+                                          encode_basename_utf8)
 
 
 def setup_view(view, request, *args, **kwargs):
@@ -108,9 +110,24 @@ class DownloadResponseValidator(object):
 
     def assert_basename(self, test_case, response, value):
         """Implies ``attachement is True``."""
-        test_case.assertTrue(
-            response['Content-Disposition'].endswith(
-                'filename={name}'.format(name=value)))
+        ascii_name = encode_basename_ascii(value)
+        utf8_name = encode_basename_utf8(value)
+        if ascii_name == utf8_name:  # Only ASCII characters.
+            check_ascii = True
+            if "filename*=" in response['Content-Disposition']:
+                check_utf8 = True
+        else:
+            check_utf8 = True
+            if "filename=" in response['Content-Disposition']:
+                check_ascii = True
+        if check_ascii:
+            test_case.assertIn('filename={name}'.format(
+                name=ascii_name),
+                response['Content-Disposition'])
+        if check_utf8:
+            test_case.assertIn(
+                "filename*=UTF-8''{name}".format(name=utf8_name),
+                response['Content-Disposition'])
 
     def assert_content_type(self, test_case, response, value):
         test_case.assertEqual(response['Content-Type'], value)
