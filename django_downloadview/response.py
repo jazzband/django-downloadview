@@ -2,9 +2,58 @@
 """:py:class:`django.http.HttpResponse` subclasses."""
 import os
 import mimetypes
+import re
+import unicodedata
+import urllib
 
 from django.conf import settings
 from django.http import HttpResponse, StreamingHttpResponse
+from django.utils.encoding import force_str
+
+
+def encode_basename_ascii(value):
+    """Return US-ASCII encoded ``value`` for use in Content-Disposition header.
+
+    >>> encode_basename_ascii(unicode('éà', 'utf-8'))
+    u'ea'
+
+    Spaces are converted to underscores.
+
+    >>> encode_basename_ascii(' ')
+    u'_'
+
+    Text with non US-ASCII characters is expected to be unicode.
+
+    >>> encode_basename_ascii('éà')  # doctest: +ELLIPSIS
+    Traceback (most recent call last):
+        ...
+    UnicodeDecodeError: \'ascii\' codec can\'t decode byte ...
+
+    Of course, ASCII values are not modified.
+
+    >>> encode_basename_ascii('ea')
+    u'ea'
+
+    """
+    ascii_basename = unicode(value)
+    ascii_basename = unicodedata.normalize('NFKD', ascii_basename)
+    ascii_basename = ascii_basename.encode('ascii', 'ignore')
+    ascii_basename = ascii_basename.decode('ascii')
+    ascii_basename = re.sub(r'[\s]', '_', ascii_basename)
+    return ascii_basename
+
+
+def encode_basename_utf8(value):
+    """Return UTF-8 encoded ``value`` for use in Content-Disposition header.
+
+    >>> encode_basename_utf8(u' .txt')
+    '%20.txt'
+
+    >>> encode_basename_utf8(unicode('éà', 'utf-8'))
+    '%C3%A9%C3%A0'
+
+    """
+    return urllib.quote(force_str(value))
 
 
 class DownloadResponse(StreamingHttpResponse):
@@ -86,6 +135,10 @@ class DownloadResponse(StreamingHttpResponse):
         Uses an internal ``_default_headers`` cache.
         Default values are computed if only cache hasn't been set.
 
+        ``Content-Disposition`` header is encoded according to `RFC 5987
+        <http://tools.ietf.org/html/rfc5987>`_. See also
+        http://stackoverflow.com/questions/93551/how-to-encode-the-filename-parameter-of-content-disposition-header-in-http.
+
         """
         try:
             return self._default_headers
@@ -97,8 +150,11 @@ class DownloadResponse(StreamingHttpResponse):
             except (AttributeError, NotImplementedError):
                 pass  # Generated files.
             if self.attachment:
-                headers['Content-Disposition'] = 'attachment; filename=%s' \
-                                                 % self.get_basename()
+                basename = self.get_basename()
+                headers['Content-Disposition'] = \
+                    "attachment; filename={ascii}; filename*=UTF-8''{utf8}" \
+                    .format(ascii=encode_basename_ascii(basename),
+                            utf8=encode_basename_utf8(basename))
             self._default_headers = headers
             return self._default_headers
 
