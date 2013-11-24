@@ -8,6 +8,11 @@ future releases, check `milestones`_ and :doc:`/about/vision`.
 1.4 (unreleased)
 ----------------
 
+Bugfixes.
+
+- Bugfix #43 - ``ObjectDownloadView`` returns HTTP 404 if model instance's file
+  field is empty (was HTTP 500).
+
 - Bugfix #7 - Special characters in file names (``Content-Disposition`` header)
   are urlencoded. An US-ASCII fallback is also provided.
 

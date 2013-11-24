@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 """Base material for download views: :class:`DownloadMixin` and
 :class:`BaseDownloadView`"""
-from django.http import HttpResponseNotModified
+from django.http import HttpResponseNotModified, Http404
 from django.views.generic.base import View
 from django.views.static import was_modified_since
 
+from django_downloadview import exceptions
 from django_downloadview.response import DownloadResponse
 
 
@@ -33,7 +34,12 @@ class DownloadMixin(object):
     basename = None
 
     def get_file(self):
-        """Return a file wrapper instance."""
+        """Return a file wrapper instance.
+
+        Raises :class:`~django_downloadview.exceptions.FileNotFound` if file
+        does not exist.
+
+        """
         raise NotImplementedError()
 
     def get_basename(self):
@@ -78,8 +84,14 @@ class DownloadMixin(object):
         response = self.response_class(*response_args, **response_kwargs)
         return response
 
+    def file_not_found_response(self):
+        """Raise Http404."""
+        raise Http404()
+
     def render_to_response(self, *response_args, **response_kwargs):
-        """Return "download" response.
+        """Return "download" response (if everything is ok).
+
+        Return :meth:`file_not_found_response` if file does not exist.
 
         Respects the "HTTP_IF_MODIFIED_SINCE" header if any. In that case, uses
         :py:meth:`was_modified_since` and :py:meth:`not_modified_response`.
@@ -87,7 +99,10 @@ class DownloadMixin(object):
         Else, uses :py:meth:`download_response` to return a download response.
 
         """
-        self.file_instance = self.get_file()
+        try:
+            self.file_instance = self.get_file()
+        except exceptions.FileNotFound:
+            return self.file_not_found_response()
         # Respect the If-Modified-Since header.
         since = self.request.META.get('HTTP_IF_MODIFIED_SINCE', None)
         if since is not None:
