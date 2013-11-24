@@ -17,10 +17,30 @@ pip:
 
    pip install django-downloadview
 
+Installing `django-downloadview` will automatically trigger the installation of
+the following requirements:
+
+.. literalinclude:: /../setup.py
+   :language: python
+   :lines: 35
+
 .. note::
 
    Since version 1.1, django-downloadview requires Django>=1.5, which provides
    :py:class:`~django.http.StreamingHttpResponse`.
+
+
+**************************
+Known good set of versions
+**************************
+
+`django-downloadview` has been tested in an environment with the following set
+of versions. If something is going wrong with other versions, please report it
+in `django-downloadview's bugtracker`_.
+
+.. literalinclude:: /../etc/buildout.cfg
+   :language: ini
+   :lines: 67-
 
 
 .. rubric:: Notes & references
@@ -30,3 +50,8 @@ pip:
    * :doc:`/settings`
    * :doc:`/about/changelog`
    * :doc:`/about/license`
+
+.. target-notes::
+
+.. _`django-downloadview's bugtracker`:
+   https://github.com/benoitbryon/django-downloadview/issues

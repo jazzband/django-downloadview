@@ -8,7 +8,7 @@ future releases, check `milestones`_ and :doc:`/about/vision`.
 1.4 (unreleased)
 ----------------
 
-Bugfixes.
+Bugfixes and documentation features.
 
 - Bugfix #43 - ``ObjectDownloadView`` returns HTTP 404 if model instance's file
   field is empty (was HTTP 500).
@@ -17,6 +17,9 @@ Bugfixes.
   are urlencoded. An US-ASCII fallback is also provided.
 
 - Feature #10 - `django-downloadview` is registered on djangopackages.com.
+
+- Feature #65 - INSTALL documentation shows "known good set" (KGS) of versions,
+  i.e. versions that have been used in test environment.
 
 
 1.3 (2013-11-08)
