@@ -61,18 +61,15 @@ class ObjectDownloadView(SingleObjectMixin, BaseDownloadView):
         is typically a :class:`~django.db.models.fields.files.FieldFile` or
         subclass.
 
+        Raises :class:`~django_downloadview.exceptions.FileNotFound` if
+        instance's field is empty.
+
         Additional attributes are set on the file wrapper if :attr:`encoding`,
         :attr:`mime_type`, :attr:`charset`, :attr:`modification_time` or
         :attr:`size` are configured.
 
         """
-        try:
-            file_instance = getattr(self.object, self.file_field)
-        except AttributeError:
-            raise FileNotFound('Failed to retrieve file from field="{field}" '
-                               'on object="{object}"'.format(
-                                   field=self.file_field,
-                                   object=self.object))
+        file_instance = getattr(self.object, self.file_field)
         if not file_instance:
             raise FileNotFound('Field="{field}" on object="{object}" is '
                                'empty'.format(

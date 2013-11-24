@@ -208,12 +208,17 @@ class ObjectDownloadViewTestCase(unittest.TestCase):
         view.get_file()
 
     def test_get_file_wrong_field(self):
-        """ObjectDownloadView.get_file() raises FileNotFound if field does not
-        exist."""
+        """ObjectDownloadView.get_file() raises AttributeError if field does
+        not exist.
+
+        ``AttributeError`` is expected because this is a configuration error,
+        i.e. it is related to Python code.
+
+        """
         view = setup_view(views.ObjectDownloadView(file_field='other_field'),
                           'fake request')
         view.object = mock.Mock(spec=['file'])
-        with self.assertRaises(exceptions.FileNotFound):
+        with self.assertRaises(AttributeError):
             view.get_file()
 
     def test_get_file_empty_field(self):
