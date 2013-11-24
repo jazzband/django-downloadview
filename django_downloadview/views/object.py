@@ -2,25 +2,33 @@
 """Stream files that live in models."""
 from django.views.generic.detail import SingleObjectMixin
 
+from django_downloadview.exceptions import FileNotFound
 from django_downloadview.views.base import BaseDownloadView
 
 
 class ObjectDownloadView(SingleObjectMixin, BaseDownloadView):
     """Serve file fields from models.
 
-    This class extends BaseDetailView, so you can use its arguments to target
-    the instance to operate on: slug, slug_kwarg, model, queryset...
-    See Django's DetailView reference for details.
+    This class extends :class:`~django.views.generic.detail.SingleObjectMixin`,
+    so you can use its arguments to target the instance to operate on:
+    ``slug``, ``slug_kwarg``, ``model``, ``queryset``...
 
-    In addition to BaseDetailView arguments, you can set arguments related to
-    the file to be downloaded.
+    In addition to :class:`~django.views.generic.detail.SingleObjectMixin`
+    arguments, you can set arguments related to the file to be downloaded:
 
-    The main one is ``file_field``.
+    * :attr:`file_field`;
+    * :attr:`basename_field`;
+    * :attr:`encoding_field`;
+    * :attr:`mime_type_field`;
+    * :attr:`charset_field`;
+    * :attr:`modification_time_field`;
+    * :attr:`size_field`.
 
-    The other arguments are provided for convenience, in case your model holds
-    some (deserialized) metadata about the file, such as its basename, its
-    modification time, its MIME type... These fields may be particularly handy
-    if your file storage is not the local filesystem.
+    :attr:`file_field` is the main one. Other arguments are provided for
+    convenience, in case your model holds some (deserialized) metadata about
+    the file, such as its basename, its modification time, its MIME type...
+    These fields may be particularly handy if your file storage is not the
+    local filesystem.
 
     """
     #: Name of the model's attribute which contains the file to be streamed.
@@ -58,7 +66,18 @@ class ObjectDownloadView(SingleObjectMixin, BaseDownloadView):
         :attr:`size` are configured.
 
         """
-        file_instance = getattr(self.object, self.file_field)
+        try:
+            file_instance = getattr(self.object, self.file_field)
+        except AttributeError:
+            raise FileNotFound('Failed to retrieve file from field="{field}" '
+                               'on object="{object}"'.format(
+                                   field=self.file_field,
+                                   object=self.object))
+        if not file_instance:
+            raise FileNotFound('Field="{field}" on object="{object}" is '
+                               'empty'.format(
+                                   field=self.file_field,
+                                   object=self.object))
         for field in ('encoding', 'mime_type', 'charset', 'modification_time',
                       'size'):
             model_field = getattr(self, '%s_field' % field, False)

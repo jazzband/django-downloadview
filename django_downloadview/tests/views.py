@@ -6,11 +6,13 @@ try:
 except ImportError:
     import mock
 
+from django.http import Http404
 from django.http.response import HttpResponseNotModified
 import django.test
 
+from django_downloadview import exceptions
 from django_downloadview.test import setup_view
-from django_downloadview.views import base
+from django_downloadview import views
 
 
 class DownloadMixinTestCase(unittest.TestCase):
@@ -21,13 +23,13 @@ class DownloadMixinTestCase(unittest.TestCase):
         Subclasses must implement it!
 
         """
-        mixin = base.DownloadMixin()
+        mixin = views.DownloadMixin()
         with self.assertRaises(NotImplementedError):
             mixin.get_file()
 
     def test_get_basename(self):
         """DownloadMixin.get_basename() returns basename attribute."""
-        mixin = base.DownloadMixin()
+        mixin = views.DownloadMixin()
         self.assertEqual(mixin.get_basename(), None)
         mixin.basename = 'fake'
         self.assertEqual(mixin.get_basename(), 'fake')
@@ -42,7 +44,7 @@ class DownloadMixinTestCase(unittest.TestCase):
         file_wrapper = mock.Mock()
         file_wrapper.was_modified_since = mock.Mock(
             return_value=mock.sentinel.was_modified)
-        mixin = base.DownloadMixin()
+        mixin = views.DownloadMixin()
         self.assertIs(
             mixin.was_modified_since(file_wrapper, mock.sentinel.since),
             mock.sentinel.was_modified)
@@ -66,7 +68,7 @@ class DownloadMixinTestCase(unittest.TestCase):
         file_wrapper.modified_time = mock.sentinel.modified_time
         was_modified_since_mock = mock.Mock(
             return_value=mock.sentinel.was_modified)
-        mixin = base.DownloadMixin()
+        mixin = views.DownloadMixin()
         with mock.patch('django_downloadview.views.base.was_modified_since',
                         new=was_modified_since_mock):
             self.assertIs(
@@ -97,20 +99,20 @@ class DownloadMixinTestCase(unittest.TestCase):
             side_effect=NotImplementedError)
         type(file_wrapper).modified_time = mock.PropertyMock(
             side_effect=NotImplementedError)
-        mixin = base.DownloadMixin()
+        mixin = views.DownloadMixin()
         self.assertIs(
             mixin.was_modified_since(file_wrapper, 'fake since'),
             True)
 
     def test_not_modified_response(self):
         "DownloadMixin.not_modified_response returns HttpResponseNotModified."
-        mixin = base.DownloadMixin()
+        mixin = views.DownloadMixin()
         response = mixin.not_modified_response()
         self.assertTrue(isinstance(response, HttpResponseNotModified))
 
     def test_download_response(self):
         "DownloadMixin.download_response() returns download response instance."
-        mixin = base.DownloadMixin()
+        mixin = views.DownloadMixin()
         mixin.file_instance = mock.sentinel.file_wrapper
         response_factory = mock.Mock(return_value=mock.sentinel.response)
         mixin.response_class = response_factory
@@ -126,7 +128,7 @@ class DownloadMixinTestCase(unittest.TestCase):
         """DownloadMixin.render_to_response() respects HTTP_IF_MODIFIED_SINCE
         header (calls ``not_modified_response()``)."""
         # Setup.
-        mixin = base.DownloadMixin()
+        mixin = views.DownloadMixin()
         mixin.request = django.test.RequestFactory().get(
             '/dummy-url',
             HTTP_IF_MODIFIED_SINCE=mock.sentinel.http_if_modified_since)
@@ -147,7 +149,7 @@ class DownloadMixinTestCase(unittest.TestCase):
     def test_render_to_response_modified(self):
         """DownloadMixin.render_to_response() calls download_response()."""
         # Setup.
-        mixin = base.DownloadMixin()
+        mixin = views.DownloadMixin()
         mixin.request = django.test.RequestFactory().get(
             '/dummy-url',
             HTTP_IF_MODIFIED_SINCE=None)
@@ -163,6 +165,24 @@ class DownloadMixinTestCase(unittest.TestCase):
         self.assertEqual(mixin.was_modified_since.call_count, 0)
         mixin.download_response.assert_called_once_with()
 
+    def test_render_to_response_file_not_found(self):
+        "DownloadMixin.render_to_response() calls file_not_found_response()."
+        # Setup.
+        mixin = views.DownloadMixin()
+        mixin.request = django.test.RequestFactory().get('/dummy-url')
+        mixin.get_file = mock.Mock(side_effect=exceptions.FileNotFound)
+        mixin.file_not_found_response = mock.Mock()
+        # Run.
+        mixin.render_to_response()
+        # Check.
+        mixin.file_not_found_response.assert_called_once_with()
+
+    def test_file_not_found_response(self):
+        """DownloadMixin.file_not_found_response() raises Http404."""
+        mixin = views.DownloadMixin()
+        with self.assertRaises(Http404):
+            mixin.file_not_found_response()
+
 
 class BaseDownloadViewTestCase(unittest.TestCase):
     "Tests around :class:`django_downloadviews.views.base.BaseDownloadView`."
@@ -171,9 +191,37 @@ class BaseDownloadViewTestCase(unittest.TestCase):
         request = django.test.RequestFactory().get('/dummy-url')
         args = ['dummy-arg']
         kwargs = {'dummy': 'kwarg'}
-        view = setup_view(base.BaseDownloadView(), request, *args, **kwargs)
+        view = setup_view(views.BaseDownloadView(), request, *args, **kwargs)
         view.render_to_response = mock.Mock(
             return_value=mock.sentinel.response)
         response = view.get(request, *args, **kwargs)
         self.assertIs(response, mock.sentinel.response)
         view.render_to_response.assert_called_once_with()
+
+
+class ObjectDownloadViewTestCase(unittest.TestCase):
+    "Tests for :class:`django_downloadviews.views.object.ObjectDownloadView`."
+    def test_get_file_ok(self):
+        "ObjectDownloadView.get_file() returns ``file`` field by default."
+        view = setup_view(views.ObjectDownloadView(), 'fake request')
+        view.object = mock.Mock(spec=['file'])
+        view.get_file()
+
+    def test_get_file_wrong_field(self):
+        """ObjectDownloadView.get_file() raises FileNotFound if field does not
+        exist."""
+        view = setup_view(views.ObjectDownloadView(file_field='other_field'),
+                          'fake request')
+        view.object = mock.Mock(spec=['file'])
+        with self.assertRaises(exceptions.FileNotFound):
+            view.get_file()
+
+    def test_get_file_empty_field(self):
+        """ObjectDownloadView.get_file() raises FileNotFound if field does not
+        exist."""
+        view = setup_view(views.ObjectDownloadView(file_field='other_field'),
+                          'fake request')
+        view.object = mock.Mock()
+        view.object.other_field = None
+        with self.assertRaises(exceptions.FileNotFound):
+            view.get_file()
