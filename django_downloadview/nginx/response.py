@@ -4,7 +4,8 @@ from datetime import timedelta
 
 from django.utils.timezone import now
 
-from django_downloadview.response import ProxiedDownloadResponse
+from django_downloadview.response import (ProxiedDownloadResponse,
+                                          content_disposition)
 from django_downloadview.utils import content_type_to_charset, url_basename
 
 
@@ -17,8 +18,7 @@ class XAccelRedirectResponse(ProxiedDownloadResponse):
         if attachment:
             self.basename = basename or url_basename(redirect_url,
                                                      content_type)
-            self['Content-Disposition'] = 'attachment; filename={name}'.format(
-                name=self.basename)
+            self['Content-Disposition'] = content_disposition(self.basename)
         self['X-Accel-Redirect'] = redirect_url
         self['X-Accel-Charset'] = content_type_to_charset(content_type)
         if with_buffering is not None:

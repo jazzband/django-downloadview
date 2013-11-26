@@ -5,6 +5,7 @@ Download middlewares capture :py:class:`django_downloadview.DownloadResponse`
 responses and may replace them with optimized download responses.
 
 """
+import copy
 import collections
 import os
 
@@ -134,7 +135,7 @@ class SmartDownloadMiddleware(BaseDownloadMiddleware):
         """Populate :attr:`dispatcher` using :attr:`factory` and
         ``settings.DOWNLOADVIEW_RULES``."""
         try:
-            options_list = settings.DOWNLOADVIEW_RULES
+            options_list = copy.deepcopy(settings.DOWNLOADVIEW_RULES)
         except AttributeError:
             raise ImproperlyConfigured('SmartDownloadMiddleware requires '
                                        'settings.DOWNLOADVIEW_RULES')
@@ -145,7 +146,12 @@ class SmartDownloadMiddleware(BaseDownloadMiddleware):
                 kwargs = options
             else:
                 args = options
-            middleware_instance = self.backend_factory(*args, **kwargs)
+            if 'backend' in kwargs:  # Specific backend for this rule.
+                factory = import_member(kwargs['backend'])
+                del kwargs['backend']
+            else:  # Fallback to global backend.
+                factory = self.backend_factory
+            middleware_instance = factory(*args, **kwargs)
             self.dispatcher.middlewares.append((key, middleware_instance))
 
     def process_download_response(self, request, response):

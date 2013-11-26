@@ -11,17 +11,37 @@ proxy:
 As a result, you get increased performance: reverse proxies are more efficient
 than Django at serving static files.
 
-The setup depends on the reverse proxy:
 
-.. toctree::
-   :titlesonly:
+***********************
+Supported features grid
+***********************
 
-   nginx
+Supported features depend on backend. Given the file you want to stream, the
+backend may or may not be able to handle it:
 
-.. note::
++-----------------------+-------------------------+-------------------------+
+| View / File           | :doc:`nginx`            | :doc:`apache`           |
++=======================+=========================+=========================+
+| :doc:`/views/path`    | Yes, local filesystem.  | Yes, local filesystem.  |
++-----------------------+-------------------------+-------------------------+
+| :doc:`/views/storage` | Yes, local and remote.  | Yes, local filesystem.  |
++-----------------------+-------------------------+-------------------------+
+| :doc:`/views/object`  | Yes, local and remote.  | Yes, local filesystem.  |
++-----------------------+-------------------------+-------------------------+
+| :doc:`/views/http`    | Yes.                    | No.                     |
++-----------------------+-------------------------+-------------------------+
+| :doc:`/views/virtual` | No.                     | No.                     |
++-----------------------+-------------------------+-------------------------+
 
-   Currently, only `nginx's X-Accel`_ is supported, but `contributions are
-   welcome`_!
+As an example, :doc:`Nginx X-Accel </optimizations/nginx>` handles URL for
+internal redirects, so it can manage
+:class:`~django_downloadview.files.HTTPFile`; whereas :doc:`Apache X-Sendfile
+</optimizations/apache>` handles absolute path, so it can only deal with files
+on local filesystem.
+
+There are currently no optimizations to stream in-memory files, since they only
+live on Django side, i.e. they do not persist after Django returned a response.
+Note: there is `a feature request about "local cache" for streamed files`_.
 
 
 *****************
@@ -36,16 +56,36 @@ able to capture :class:`~django_downloadview.response.DownloadResponse`
 instances and convert them to
 :class:`~django_downloadview.response.ProxiedDownloadResponse`.
 
+The :class:`~django_downloadview.response.ProxiedDownloadResponse` is specific
+to the reverse-proxy (backend): it tells the reverse proxy to stream some
+resource.
+
 .. note::
 
    The feature is inspired by :mod:`Django's TemplateResponse
    <django.template.response>`
 
 
+***********************
+Available optimizations
+***********************
+
+Here are optimizations builtin `django_downloadview`:
+
+.. toctree::
+   :titlesonly:
+
+   nginx
+   apache
+
+.. note:: If you need support for additional optimizations, `tell us`_!
+
+
 .. rubric:: Notes & references
 
 .. target-notes::
 
-.. _`nginx's X-Accel`: http://wiki.nginx.org/X-accel
-.. _`contributions are welcome`:
+.. _`tell us`:
    https://github.com/benoitbryon/django-downloadview/issues?labels=optimizations
+.. _`a feature request about "local cache" for streamed files`:
+   https://github.com/benoitbryon/django-downloadview/issues/70

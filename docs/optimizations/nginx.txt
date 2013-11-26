@@ -11,6 +11,15 @@ to Nginx and get increased performance:
 See `Nginx X-accel documentation`_ for details.
 
 
+*****************
+Known limitations
+*****************
+
+* Nginx needs access to the resource by URL (proxy) or path (location).
+* Thus :class:`~django_downloadview.files.VirtualFile` and any generated files
+  cannot be streamed by Nginx.
+
+
 ************
 Given a view
 ************
@@ -43,20 +52,20 @@ Example:
 
 .. literalinclude:: /../demo/demoproject/settings.py
    :language: python
-   :lines: 62-69
+   :lines: 63-70
 
 Then set ``django_downloadview.nginx.XAccelRedirectMiddleware`` as
 ``DOWNLOADVIEW_BACKEND``:
 
 .. literalinclude:: /../demo/demoproject/settings.py
    :language: python
-   :lines: 73
+   :lines: 74
 
 Then register as many ``DOWNLOADVIEW_RULES`` as you wish:
 
 .. literalinclude:: /../demo/demoproject/settings.py
    :language: python
-   :lines: 74-77
+   :lines: 78, 79-82, 92
 
 Each item in ``DOWNLOADVIEW_RULES`` is a dictionary of keyword arguments passed
 to the middleware factory. In the example above, we capture responses by

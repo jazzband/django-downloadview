@@ -112,6 +112,8 @@ class DownloadResponseValidator(object):
         """Implies ``attachement is True``."""
         ascii_name = encode_basename_ascii(value)
         utf8_name = encode_basename_utf8(value)
+        check_utf8 = False
+        check_ascii = False
         if ascii_name == utf8_name:  # Only ASCII characters.
             check_ascii = True
             if "filename*=" in response['Content-Disposition']:

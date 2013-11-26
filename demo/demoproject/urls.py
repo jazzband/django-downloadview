@@ -31,6 +31,10 @@ urlpatterns = patterns(
     url(r'^nginx/', include('demoproject.nginx.urls',
                             app_name='nginx',
                             namespace='nginx')),
+    # Apache optimizations.
+    url(r'^apache/', include('demoproject.apache.urls',
+                             app_name='apache',
+                             namespace='apache')),
     # An informative homepage.
-    url(r'', home, name='home')
+    url(r'$', home, name='home')
 )

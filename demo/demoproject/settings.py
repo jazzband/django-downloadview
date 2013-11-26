@@ -52,6 +52,7 @@ INSTALLED_APPS = (
     'demoproject.http',  # Demo around HTTPDownloadView
     'demoproject.virtual',  # Demo around VirtualDownloadView
     'demoproject.nginx',  # Sample optimizations for Nginx X-Accel.
+    'demoproject.apache',  # Sample optimizations for Apache X-Sendfile.
     # For test purposes. The demo project is part of django-downloadview
     # test suite.
     'django_nose',
@@ -71,9 +72,23 @@ MIDDLEWARE_CLASSES = [
 
 # Specific configuration for django_downloadview.SmartDownloadMiddleware.
 DOWNLOADVIEW_BACKEND = 'django_downloadview.nginx.XAccelRedirectMiddleware'
+"""Could also be:
+DOWNLOADVIEW_BACKEND = 'django_downloadview.apache.XSendfileMiddleware'
+"""
 DOWNLOADVIEW_RULES = [
-    {'source_url': '/media/nginx/',
-     'destination_url': '/nginx-optimized-by-middleware/'},
+    {
+        'source_url': '/media/nginx/',
+        'destination_url': '/nginx-optimized-by-middleware/',
+    },
+    {
+        'source_url': '/media/apache/',
+        'destination_dir': '/apache-optimized-by-middleware/',
+        # Bypass global default backend with additional argument "backend".
+        # Notice that in general use case, ``DOWNLOADVIEW_BACKEND`` should be
+        # enough. Here, the django_downloadview demo project needs to
+        # demonstrate usage of several backends.
+        'backend': 'django_downloadview.apache.XSendfileMiddleware',
+    },
 ]
 
 
