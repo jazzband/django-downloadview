@@ -56,6 +56,18 @@ def encode_basename_utf8(value):
     return urllib.quote(force_str(value))
 
 
+def content_disposition(filename):
+    """Return value of ``Content-Disposition`` header."""
+    ascii_filename = encode_basename_ascii(filename)
+    utf8_filename = encode_basename_utf8(filename)
+    if ascii_filename == utf8_filename:  # ASCII only.
+        return "attachment; filename={ascii}".format(ascii=ascii_filename)
+    else:
+        return "attachment; filename={ascii}; filename*=UTF-8''{utf8}" \
+               .format(ascii=ascii_filename,
+                       utf8=utf8_filename)
+
+
 class DownloadResponse(StreamingHttpResponse):
     """File download response (Django serves file, client downloads it).
 
@@ -151,10 +163,7 @@ class DownloadResponse(StreamingHttpResponse):
                 pass  # Generated files.
             if self.attachment:
                 basename = self.get_basename()
-                headers['Content-Disposition'] = \
-                    "attachment; filename={ascii}; filename*=UTF-8''{utf8}" \
-                    .format(ascii=encode_basename_ascii(basename),
-                            utf8=encode_basename_utf8(basename))
+                headers['Content-Disposition'] = content_disposition(basename)
             self._default_headers = headers
             return self._default_headers
 

@@ -1,0 +1,131 @@
+######
+Apache
+######
+
+If you serve Django behind Apache, then you can delegate the file streaming
+to Apache and get increased performance:
+
+* lower resources used by Python/Django workers ;
+* faster download.
+
+See `Apache mod_xsendfile documentation`_ for details.
+
+
+*****************
+Known limitations
+*****************
+
+* Apache needs access to the resource by path on local filesystem.
+* Thus only files that live on local filesystem can be streamed by Apache.
+
+
+************
+Given a view
+************
+
+Let's consider the following view:
+
+.. literalinclude:: /../demo/demoproject/apache/views.py
+   :language: python
+   :lines: 1-6, 8-16
+
+What is important here is that the files will have an ``url`` property
+implemented by storage. Let's setup an optimization rule based on that URL.
+
+.. note::
+
+   It is generally easier to setup rules based on URL rather than based on
+   name in filesystem. This is because path is generally relative to storage,
+   whereas URL usually contains some storage identifier, i.e. it is easier to
+   target a specific location by URL rather than by filesystem name.
+
+
+***************************
+Setup XSendfile middlewares
+***************************
+
+Make sure ``django_downloadview.SmartDownloadMiddleware`` is in
+``MIDDLEWARE_CLASSES`` of your `Django` settings.
+
+Example:
+
+.. literalinclude:: /../demo/demoproject/settings.py
+   :language: python
+   :lines: 63-70
+
+Then set ``django_downloadview.apache.XSendfileMiddleware`` as
+``DOWNLOADVIEW_BACKEND``:
+
+.. literalinclude:: /../demo/demoproject/settings.py
+   :language: python
+   :lines: 76
+
+Then register as many ``DOWNLOADVIEW_RULES`` as you wish:
+
+.. literalinclude:: /../demo/demoproject/settings.py
+   :language: python
+   :lines: 78, 79-82, 92
+
+Each item in ``DOWNLOADVIEW_RULES`` is a dictionary of keyword arguments passed
+to the middleware factory. In the example above, we capture responses by
+``source_url`` and convert them to internal redirects to ``destination_dir``.
+
+.. autoclass:: django_downloadview.apache.middlewares.XSendfileMiddleware
+   :members:
+   :inherited-members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource
+
+
+****************************************
+Per-view setup with x_sendfile decorator
+****************************************
+
+Middlewares should be enough for most use cases, but you may want per-view
+configuration. For `Apache`, there is ``x_sendfile``:
+
+.. autofunction:: django_downloadview.apache.decorators.x_sendfile
+
+As an example:
+
+.. literalinclude:: /../demo/demoproject/apache/views.py
+   :language: python
+   :lines: 1-7, 17-
+
+
+*************************************
+Test responses with assert_x_sendfile
+*************************************
+
+Use :func:`~django_downloadview.apache.decorators.assert_x_sendfile`
+function as a shortcut in your tests.
+
+.. literalinclude:: /../demo/demoproject/apache/tests.py
+   :language: python
+
+.. autofunction:: django_downloadview.apache.tests.assert_x_sendfile
+
+The tests above assert the `Django` part is OK. Now let's configure `Apache`.
+
+
+************
+Setup Apache
+************
+
+See `Apache mod_xsendfile documentation`_ for details.
+
+
+*********************************************
+Assert everything goes fine with healthchecks
+*********************************************
+
+:doc:`Healthchecks </healthchecks>` are the best way to check the complete
+setup.
+
+
+.. rubric:: References
+
+.. target-notes::
+
+.. _`Apache mod_xsendfile documentation`: https://tn123.org/mod_xsendfile/ 
