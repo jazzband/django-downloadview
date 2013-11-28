@@ -1,0 +1,1 @@
+"""Lighttpd optimizations."""

@@ -35,6 +35,10 @@ urlpatterns = patterns(
     url(r'^apache/', include('demoproject.apache.urls',
                              app_name='apache',
                              namespace='apache')),
+    # Lighttpd optimizations.
+    url(r'^lighttpd/', include('demoproject.lighttpd.urls',
+                               app_name='lighttpd',
+                               namespace='lighttpd')),
     # An informative homepage.
     url(r'$', home, name='home')
 )

@@ -52,20 +52,20 @@ Example:
 
 .. literalinclude:: /../demo/demoproject/settings.py
    :language: python
-   :lines: 63-70
+   :lines: 64-71
 
 Then set ``django_downloadview.nginx.XAccelRedirectMiddleware`` as
 ``DOWNLOADVIEW_BACKEND``:
 
 .. literalinclude:: /../demo/demoproject/settings.py
    :language: python
-   :lines: 74
+   :lines: 75
 
 Then register as many ``DOWNLOADVIEW_RULES`` as you wish:
 
 .. literalinclude:: /../demo/demoproject/settings.py
    :language: python
-   :lines: 78, 79-82, 92
+   :lines: 80, 81-84, 103
 
 Each item in ``DOWNLOADVIEW_RULES`` is a dictionary of keyword arguments passed
 to the middleware factory. In the example above, we capture responses by
