@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 """Unit tests around views."""
+import os
 import unittest
 try:
     from unittest import mock
 except ImportError:
     import mock
 
+from django.core.files import File
 from django.http import Http404
 from django.http.response import HttpResponseNotModified
 import django.test
@@ -197,6 +199,35 @@ class BaseDownloadViewTestCase(unittest.TestCase):
         response = view.get(request, *args, **kwargs)
         self.assertIs(response, mock.sentinel.response)
         view.render_to_response.assert_called_once_with()
+
+
+class PathDownloadViewTestCase(unittest.TestCase):
+    "Tests for :class:`django_downloadviews.views.path.PathDownloadView`."
+    def test_get_file_ok(self):
+        "PathDownloadView.get_file() returns ``File`` instance."
+        view = setup_view(views.PathDownloadView(path=__file__),
+                          'fake request')
+        file_wrapper = view.get_file()
+        self.assertTrue(isinstance(file_wrapper, File))
+
+    def test_get_file_does_not_exist(self):
+        """PathDownloadView.get_file() raises FileNotFound if field does not
+        exist.
+
+        """
+        view = setup_view(views.PathDownloadView(path='i-do-no-exist'),
+                          'fake request')
+        with self.assertRaises(exceptions.FileNotFound):
+            view.get_file()
+
+    def test_get_file_is_directory(self):
+        """PathDownloadView.get_file() raises FileNotFound if file is a
+        directory."""
+        view = setup_view(
+            views.PathDownloadView(path=os.path.dirname(__file__)),
+            'fake request')
+        with self.assertRaises(exceptions.FileNotFound):
+            view.get_file()
 
 
 class ObjectDownloadViewTestCase(unittest.TestCase):

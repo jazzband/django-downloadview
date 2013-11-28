@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 """Port of django-sendfile in django-downloadview."""
-from django.conf import settings
-from django.core.files.storage import FileSystemStorage
-
-from django_downloadview.views.storage import StorageDownloadView
+from django_downloadview.views.path import PathDownloadView
 
 
 def sendfile(request, filename, attachment=False, attachment_filename=None,
@@ -15,9 +12,7 @@ def sendfile(request, filename, attachment=False, attachment_filename=None,
     :class:`StorageDownloadView` to stream the file by ``filename``.
 
     """
-    storage = FileSystemStorage(location=settings.SENDFILE_ROOT)
-    view = StorageDownloadView().as_view(storage=storage,
-                                         path=filename,
-                                         attachment=attachment,
-                                         basename=attachment_filename)
+    view = PathDownloadView().as_view(path=filename,
+                                      attachment=attachment,
+                                      basename=attachment_filename)
     return view(request)
