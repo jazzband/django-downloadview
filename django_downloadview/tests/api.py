@@ -70,6 +70,24 @@ class APITestCase(unittest.TestCase):
             'assert_x_accel_redirect']
         self.assert_module_attributes('django_downloadview.nginx', api)
 
+    def test_apache_attributes(self):
+        """Apache-related API is exposed in django_downloadview.apache."""
+        api = [
+            'XSendfileResponse',
+            'XSendfileMiddleware',
+            'x_sendfile',
+            'assert_x_sendfile']
+        self.assert_module_attributes('django_downloadview.apache', api)
+
+    def test_lighttpd_attributes(self):
+        """Lighttpd-related API is exposed in django_downloadview.lighttpd."""
+        api = [
+            'XSendfileResponse',
+            'XSendfileMiddleware',
+            'x_sendfile',
+            'assert_x_sendfile']
+        self.assert_module_attributes('django_downloadview.lighttpd', api)
+
 
 class DeprecatedAPITestCase(django.test.SimpleTestCase):
     """Make sure using deprecated items raise DeprecationWarning."""

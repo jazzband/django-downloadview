@@ -1,22 +1,28 @@
-######
-Apache
-######
+########
+Lighttpd
+########
 
-If you serve Django behind Apache, then you can delegate the file streaming
-to Apache and get increased performance:
+If you serve Django behind `Lighttpd`, then you can delegate the file streaming
+to `Lighttpd` and get increased performance:
 
 * lower resources used by Python/Django workers ;
 * faster download.
 
-See `Apache mod_xsendfile documentation`_ for details.
+See `Lighttpd X-Sendfile documentation`_ for details.
+
+.. note::
+
+   Currently, `django_downloadview` supports ``X-Sendfile``, but not
+   ``X-Sendfile2``. If you need ``X-Sendfile2`` or know how to handle it,
+   check `X-Sendfile2 feature request on django_downloadview's bugtracker`_.
 
 
 *****************
 Known limitations
 *****************
 
-* Apache needs access to the resource by path on local filesystem.
-* Thus only files that live on local filesystem can be streamed by Apache.
+* Lighttpd needs access to the resource by path on local filesystem.
+* Thus only files that live on local filesystem can be streamed by Lighttpd.
 
 
 ************
@@ -25,7 +31,7 @@ Given a view
 
 Let's consider the following view:
 
-.. literalinclude:: /../demo/demoproject/apache/views.py
+.. literalinclude:: /../demo/demoproject/lighttpd/views.py
    :language: python
    :lines: 1-6, 8-16
 
@@ -53,24 +59,24 @@ Example:
    :language: python
    :lines: 64-71
 
-Then set ``django_downloadview.apache.XSendfileMiddleware`` as
+Then set ``django_downloadview.lighttpd.XSendfileMiddleware`` as
 ``DOWNLOADVIEW_BACKEND``:
 
 .. literalinclude:: /../demo/demoproject/settings.py
    :language: python
-   :lines: 77
+   :lines: 78
 
 Then register as many ``DOWNLOADVIEW_RULES`` as you wish:
 
 .. literalinclude:: /../demo/demoproject/settings.py
    :language: python
-   :lines: 80, 85-87, 93, 103
+   :lines: 80, 94-96, 102, 103
 
 Each item in ``DOWNLOADVIEW_RULES`` is a dictionary of keyword arguments passed
 to the middleware factory. In the example above, we capture responses by
 ``source_url`` and convert them to internal redirects to ``destination_dir``.
 
-.. autoclass:: django_downloadview.apache.middlewares.XSendfileMiddleware
+.. autoclass:: django_downloadview.lighttpd.middlewares.XSendfileMiddleware
    :members:
    :inherited-members:
    :undoc-members:
@@ -83,13 +89,13 @@ Per-view setup with x_sendfile decorator
 ****************************************
 
 Middlewares should be enough for most use cases, but you may want per-view
-configuration. For `Apache`, there is ``x_sendfile``:
+configuration. For `Lighttpd`, there is ``x_sendfile``:
 
-.. autofunction:: django_downloadview.apache.decorators.x_sendfile
+.. autofunction:: django_downloadview.lighttpd.decorators.x_sendfile
 
 As an example:
 
-.. literalinclude:: /../demo/demoproject/apache/views.py
+.. literalinclude:: /../demo/demoproject/lighttpd/views.py
    :language: python
    :lines: 1-7, 17-
 
@@ -98,22 +104,22 @@ As an example:
 Test responses with assert_x_sendfile
 *************************************
 
-Use :func:`~django_downloadview.apache.decorators.assert_x_sendfile`
+Use :func:`~django_downloadview.lighttpd.decorators.assert_x_sendfile`
 function as a shortcut in your tests.
 
-.. literalinclude:: /../demo/demoproject/apache/tests.py
+.. literalinclude:: /../demo/demoproject/lighttpd/tests.py
    :language: python
 
-.. autofunction:: django_downloadview.apache.tests.assert_x_sendfile
+.. autofunction:: django_downloadview.lighttpd.tests.assert_x_sendfile
 
-The tests above assert the `Django` part is OK. Now let's configure `Apache`.
+The tests above assert the `Django` part is OK. Now let's configure `Lighttpd`.
 
 
-************
-Setup Apache
-************
+**************
+Setup Lighttpd
+**************
 
-See `Apache mod_xsendfile documentation`_ for details.
+See `Lighttpd X-Sendfile documentation`_ for details.
 
 
 *********************************************
@@ -128,4 +134,7 @@ setup.
 
 .. target-notes::
 
-.. _`Apache mod_xsendfile documentation`: https://tn123.org/mod_xsendfile/ 
+.. _`Lighttpd X-Sendfile documentation`:
+   http://redmine.lighttpd.net/projects/lighttpd/wiki/X-LIGHTTPD-send-file
+.. _`X-Sendfile2 feature request on django_downloadview's bugtracker`:
+   https://github.com/benoitbryon/django-downloadview/issues/67

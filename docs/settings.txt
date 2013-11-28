@@ -26,7 +26,7 @@ Example:
 
 .. literalinclude:: /../demo/demoproject/settings.py
    :language: python
-   :lines: 63-70
+   :lines: 64-71
 
 
 ********************
@@ -43,7 +43,7 @@ Example:
 
 .. literalinclude:: /../demo/demoproject/settings.py
    :language: python
-   :lines: 74
+   :lines: 75
 
 See :doc:`/optimizations/index` for a list of available backends (middlewares).
 
@@ -69,7 +69,7 @@ Here is an example containing one rule using keyword arguments:
 
 .. literalinclude:: /../demo/demoproject/settings.py
    :language: python
-   :lines: 78, 79-82, 92
+   :lines: 80, 81-84, 103
 
 See :doc:`/optimizations/index` for details about builtin backends
 (middlewares) and their options.

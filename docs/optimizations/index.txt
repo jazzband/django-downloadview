@@ -19,19 +19,19 @@ Supported features grid
 Supported features depend on backend. Given the file you want to stream, the
 backend may or may not be able to handle it:
 
-+-----------------------+-------------------------+-------------------------+
-| View / File           | :doc:`nginx`            | :doc:`apache`           |
-+=======================+=========================+=========================+
-| :doc:`/views/path`    | Yes, local filesystem.  | Yes, local filesystem.  |
-+-----------------------+-------------------------+-------------------------+
-| :doc:`/views/storage` | Yes, local and remote.  | Yes, local filesystem.  |
-+-----------------------+-------------------------+-------------------------+
-| :doc:`/views/object`  | Yes, local and remote.  | Yes, local filesystem.  |
-+-----------------------+-------------------------+-------------------------+
-| :doc:`/views/http`    | Yes.                    | No.                     |
-+-----------------------+-------------------------+-------------------------+
-| :doc:`/views/virtual` | No.                     | No.                     |
-+-----------------------+-------------------------+-------------------------+
++-----------------------+-------------------------+-------------------------+-------------------------+
+| View / File           | :doc:`nginx`            | :doc:`apache`           | :doc:`lighttpd`         |
++=======================+=========================+=========================+=========================+
+| :doc:`/views/path`    | Yes, local filesystem.  | Yes, local filesystem.  | Yes, local filesystem.  |
++-----------------------+-------------------------+-------------------------+-------------------------+
+| :doc:`/views/storage` | Yes, local and remote.  | Yes, local filesystem.  | Yes, local filesystem.  |
++-----------------------+-------------------------+-------------------------+-------------------------+
+| :doc:`/views/object`  | Yes, local and remote.  | Yes, local filesystem.  | Yes, local filesystem.  |
++-----------------------+-------------------------+-------------------------+-------------------------+
+| :doc:`/views/http`    | Yes.                    | No.                     | No.                     |
++-----------------------+-------------------------+-------------------------+-------------------------+
+| :doc:`/views/virtual` | No.                     | No.                     | No.                     |
++-----------------------+-------------------------+-------------------------+-------------------------+
 
 As an example, :doc:`Nginx X-Accel </optimizations/nginx>` handles URL for
 internal redirects, so it can manage
@@ -77,6 +77,7 @@ Here are optimizations builtin `django_downloadview`:
 
    nginx
    apache
+   lighttpd
 
 .. note:: If you need support for additional optimizations, `tell us`_!
 

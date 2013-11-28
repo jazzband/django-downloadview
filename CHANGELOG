@@ -10,6 +10,7 @@ future releases, check `milestones`_ and :doc:`/about/vision`.
 
 X-Sendfile support.
 
+- Feature #2 - Introduced support of Lighttpd's x-Sendfile.
 - Feature #36 - Introduced support of Apache's mod_xsendfile.
 
 
