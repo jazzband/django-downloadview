@@ -11,7 +11,12 @@ future releases, check `milestones`_ and :doc:`/about/vision`.
 X-Sendfile support.
 
 - Feature #2 - Introduced support of Lighttpd's x-Sendfile.
+
 - Feature #36 - Introduced support of Apache's mod_xsendfile.
+
+- Feature #41 - ``django_downloadview.sendfile`` is a port of
+  `django-sendfile`'s ``sendfile`` function. The documentation contains notes
+  about migrating from `django-sendfile` to `django-downloadview`.
 
 
 1.4 (2013-11-24)

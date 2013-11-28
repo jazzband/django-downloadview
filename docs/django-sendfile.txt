@@ -1,0 +1,57 @@
+##############################
+Migrating from django-sendfile
+##############################
+
+`django-sendfile`_ is a wrapper around web-server specific methods for sending
+files to web clients. See :doc:`/about/alternatives` for details about this
+project.
+
+`django-downloadview` provides a :func:`port of django-sendfile's main function
+<django_downloadview.shortcuts.sendfile>`.
+
+.. warning::
+
+   `django-downloadview` can replace the following `django-sendfile`'s
+   backends: ``nginx``, ``xsendfile``, ``simple``. But it currently cannot
+   replace ``mod_wsgi`` backend.
+
+Here are tips to migrate from `django-sendfile` to `django-downloadview`...
+
+1. In your project's and apps dependencies, replace ``django-sendfile`` by
+   ``django-downloadview``.
+
+2. In your Python scripts, replace ``import sendfile`` and ``from sendfile``
+   by ``import django_downloadview`` and ``from django_downloadview``.
+   You get something like ``from django_downloadview import sendfile``
+
+3. Adapt your settings as explained in :doc:`/settings`. Pay attention to:
+
+   * replace ``sendfile`` by ``django_downloadview`` in ``INSTALLED_APPS``.
+   * replace ``SENDFILE_BACKEND`` by ``DOWNLOADVIEW_BACKEND``
+   * setup ``DOWNLOADVIEW_RULES``. It replaces ``SENDFILE_ROOT`` and can do
+     more.
+   * register ``django_downloadview.SmartDownloadMiddleware`` in
+     ``MIDDLEWARE_CLASSES``.
+
+4. Change your tests if any. You can no longer use `django-senfile`'s
+   ``development`` backend. See :doc:`/testing` for `django-downloadview`'s
+   toolkit.
+
+5. Here you are! ... or please report your story/bug at `django-downloadview's
+   bugtracker`_ ;)
+
+
+*************
+API reference
+*************
+
+.. autofunction:: django_downloadview.shortcuts.sendfile
+
+
+.. rubric:: References
+
+.. target-notes::
+
+.. _`django-sendfile`: http://pypi.python.org/pypi/django-sendfile
+.. _`django-downloadview's bugtracker`:
+   https://github.com/benoitbryon/django-downloadview/issues
