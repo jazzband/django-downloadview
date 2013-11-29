@@ -1,18 +1,22 @@
 # -*- coding: utf-8 -*-
 """Unit tests around views."""
+import os
 import unittest
 try:
     from unittest import mock
 except ImportError:
     import mock
 
+from django.core.files import File
 from django.http import Http404
 from django.http.response import HttpResponseNotModified
 import django.test
 
 from django_downloadview import exceptions
 from django_downloadview.test import setup_view
+from django_downloadview.response import DownloadResponse
 from django_downloadview import views
+from django_downloadview.shortcuts import sendfile
 
 
 class DownloadMixinTestCase(unittest.TestCase):
@@ -119,7 +123,9 @@ class DownloadMixinTestCase(unittest.TestCase):
         response_kwargs = {'dummy': 'value',
                            'file_instance': mock.sentinel.file_wrapper,
                            'attachment': True,
-                           'basename': None}
+                           'basename': None,
+                           'file_mimetype': None,
+                           'file_encoding': None}
         response = mixin.download_response(**response_kwargs)
         self.assertIs(response, mock.sentinel.response)
         response_factory.assert_called_once_with(**response_kwargs)  # Not args
@@ -199,6 +205,35 @@ class BaseDownloadViewTestCase(unittest.TestCase):
         view.render_to_response.assert_called_once_with()
 
 
+class PathDownloadViewTestCase(unittest.TestCase):
+    "Tests for :class:`django_downloadviews.views.path.PathDownloadView`."
+    def test_get_file_ok(self):
+        "PathDownloadView.get_file() returns ``File`` instance."
+        view = setup_view(views.PathDownloadView(path=__file__),
+                          'fake request')
+        file_wrapper = view.get_file()
+        self.assertTrue(isinstance(file_wrapper, File))
+
+    def test_get_file_does_not_exist(self):
+        """PathDownloadView.get_file() raises FileNotFound if field does not
+        exist.
+
+        """
+        view = setup_view(views.PathDownloadView(path='i-do-no-exist'),
+                          'fake request')
+        with self.assertRaises(exceptions.FileNotFound):
+            view.get_file()
+
+    def test_get_file_is_directory(self):
+        """PathDownloadView.get_file() raises FileNotFound if file is a
+        directory."""
+        view = setup_view(
+            views.PathDownloadView(path=os.path.dirname(__file__)),
+            'fake request')
+        with self.assertRaises(exceptions.FileNotFound):
+            view.get_file()
+
+
 class ObjectDownloadViewTestCase(unittest.TestCase):
     "Tests for :class:`django_downloadviews.views.object.ObjectDownloadView`."
     def test_get_file_ok(self):
@@ -230,3 +265,38 @@ class ObjectDownloadViewTestCase(unittest.TestCase):
         view.object.other_field = None
         with self.assertRaises(exceptions.FileNotFound):
             view.get_file()
+
+
+class SendfileTestCase(django.test.TestCase):
+    """Tests around :func:`django_downloadview.sendfile.sendfile`."""
+    def test_defaults(self):
+        """sendfile() takes at least request and filename."""
+        request = django.test.RequestFactory().get('/fake-url')
+        filename = __file__
+        response = sendfile(request, filename)
+        self.assertTrue(isinstance(response, DownloadResponse))
+        self.assertFalse(response.attachment)
+
+    def test_custom(self):
+        """sendfile() accepts various arguments for response tuning."""
+        request = django.test.RequestFactory().get('/fake-url')
+        filename = __file__
+        response = sendfile(request,
+                            filename,
+                            attachment=True,
+                            attachment_filename='toto.txt',
+                            mimetype='test/octet-stream',
+                            encoding='gzip')
+        self.assertTrue(isinstance(response, DownloadResponse))
+        self.assertTrue(response.attachment)
+        self.assertEqual(response.basename, 'toto.txt')
+        self.assertEqual(response['Content-Type'],
+                         'test/octet-stream; charset=utf-8')
+        self.assertEqual(response.get_encoding(), 'gzip')
+
+    def test_404(self):
+        """sendfile() raises Http404 if file does not exists."""
+        request = django.test.RequestFactory().get('/fake-url')
+        filename = 'i-do-no-exist'
+        with self.assertRaises(Http404):
+            sendfile(request, filename)

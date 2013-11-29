@@ -30,6 +30,11 @@ django-sendfile
 `django-sendfile`_ is a wrapper around web-server specific methods for sending
 files to web clients.
 
+.. note::
+
+   :func:`django_downloadview.shortcuts.sendfile` is a port of
+   `django-sendfile`'s main function. See :doc:`/django-sendfile` for details.
+
 ``django-senfile``'s main focus is simplicity: API is made of a single
 ``sendfile()`` function you call inside your views:
 
@@ -63,12 +68,6 @@ Here are main differences between the two projects:
   ``settings.SENDFILE_ROOT``), thus optimizations are limited to a single
   root folder. Whereas ``django-downloadview``'s
   ``DownloadDispatcherMiddleware`` supports multiple configurations.
-
-As of 2012-04-11, ``django-sendfile`` (version 0.3.2) seems quite popular and
-may be a good alternative **provided you serve files that live in a single
-directory of local filesystem**.
-
-:func:`django_downloadview.sendfile` is a port of django-sendfile's main function.
 
 
 .. rubric:: References

@@ -57,7 +57,25 @@ def encode_basename_utf8(value):
 
 
 def content_disposition(filename):
-    """Return value of ``Content-Disposition`` header."""
+    """Return value of ``Content-Disposition`` header with 'attachment'.
+
+    >>> content_disposition('demo.txt')
+    'attachment; filename=demo.txt'
+
+    If filename is empty, only "attachment" is returned.
+
+    >>> content_disposition('')
+    'attachment'
+
+    If filename contains non US-ASCII characters, the returned value contains
+    UTF-8 encoded filename and US-ASCII fallback.
+
+    >>> content_disposition(unicode('é.txt', 'utf-8'))
+    "attachment; filename=e.txt; filename*=UTF-8''%C3%A9.txt"
+
+    """
+    if not filename:
+        return 'attachment'
     ascii_filename = encode_basename_ascii(filename)
     utf8_filename = encode_basename_utf8(filename)
     if ascii_filename == utf8_filename:  # ASCII only.
@@ -99,6 +117,15 @@ class DownloadResponse(StreamingHttpResponse):
         response (default implementation uses mimetypes, based on file
         name).
 
+    ``file_mimetype``
+        Value for file's mimetype. If ``None`` (the default), then the file's
+        mimetype will be guessed via Python's :mod:`mimetypes`. See
+        :meth:`get_mime_type`.
+
+    ``file_encoding``
+        Value for file's encoding. If ``None`` (the default), then the file's
+        encoding will be guessed via Python's :mod:`mimetypes`. See
+        :meth:`get_encoding`.
 
     Here are some highlights to understand internal mechanisms and motivations:
 
@@ -125,7 +152,8 @@ class DownloadResponse(StreamingHttpResponse):
 
     """
     def __init__(self, file_instance, attachment=True, basename=None,
-                 status=200, content_type=None):
+                 status=200, content_type=None, file_mimetype=None,
+                 file_encoding=None):
         """Constructor."""
         self.file = file_instance
         super(DownloadResponse, self).__init__(streaming_content=self.file,
@@ -135,6 +163,8 @@ class DownloadResponse(StreamingHttpResponse):
         self.attachment = attachment
         if not content_type:
             del self['Content-Type']  # Will be set later.
+        self.file_mimetype = file_mimetype
+        self.file_encoding = file_encoding
         # Apply default headers.
         for header, value in self.default_headers.items():
             if not header in self:
@@ -195,6 +225,8 @@ class DownloadResponse(StreamingHttpResponse):
 
     def get_mime_type(self):
         """Return mime-type of the file."""
+        if self.file_mimetype is not None:
+            return self.file_mimetype
         default_mime_type = 'application/octet-stream'
         basename = self.get_basename()
         mime_type, encoding = mimetypes.guess_type(basename)
@@ -202,6 +234,8 @@ class DownloadResponse(StreamingHttpResponse):
 
     def get_encoding(self):
         """Return encoding of the file to serve."""
+        if self.file_encoding is not None:
+            return self.file_encoding
         basename = self.get_basename()
         mime_type, encoding = mimetypes.guess_type(basename)
         return encoding

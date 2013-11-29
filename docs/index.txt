@@ -18,6 +18,7 @@ Contents
    healthchecks
    files
    responses
+   django-sendfile
    demo
    about/index
    dev

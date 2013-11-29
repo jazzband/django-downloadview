@@ -33,6 +33,16 @@ class DownloadMixin(object):
     #: Client-side filename, if only file is returned as attachment.
     basename = None
 
+    #: File's mime type.
+    #: If ``None`` (the default), then the file's mime type will be guessed via
+    #: :mod:`mimetypes`.
+    mimetype = None
+
+    #: File's encoding.
+    #: If ``None`` (the default), then the file's encoding will be guessed via
+    #: :mod:`mimetypes`.
+    encoding = None
+
     def get_file(self):
         """Return a file wrapper instance.
 
@@ -43,7 +53,28 @@ class DownloadMixin(object):
         raise NotImplementedError()
 
     def get_basename(self):
+        """Return :attr:`basename`.
+
+        Override this method if you need more dynamic basename.
+
+        """
         return self.basename
+
+    def get_mimetype(self):
+        """Return :attr:`mimetype`.
+
+        Override this method if you need more dynamic mime type.
+
+        """
+        return self.mimetype
+
+    def get_encoding(self):
+        """Return :attr:`encoding`.
+
+        Override this method if you need more dynamic encoding.
+
+        """
+        return self.encoding
 
     def was_modified_since(self, file_instance, since):
         """Return True if ``file_instance`` was modified after ``since``.
@@ -81,6 +112,8 @@ class DownloadMixin(object):
         response_kwargs.setdefault('file_instance', self.file_instance)
         response_kwargs.setdefault('attachment', self.attachment)
         response_kwargs.setdefault('basename', self.get_basename())
+        response_kwargs.setdefault('file_mimetype', self.get_mimetype())
+        response_kwargs.setdefault('file_encoding', self.get_encoding())
         response = self.response_class(*response_args, **response_kwargs)
         return response
 

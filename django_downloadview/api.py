@@ -16,7 +16,7 @@ from django_downloadview.views import (PathDownloadView,  # NoQA
                                        VirtualDownloadView,
                                        BaseDownloadView,
                                        DownloadMixin)
-from django_downloadview.sendfile import sendfile  # NoQA
+from django_downloadview.shortcuts import sendfile  # NoQA
 from django_downloadview.test import (assert_download_response,  # NoQA
                                       setup_view,
                                       temporary_media_root)

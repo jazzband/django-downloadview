@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 """:class:`PathDownloadView`."""
+import os
+
 from django.core.files import File
 
+from django_downloadview.exceptions import FileNotFound
 from django_downloadview.views.base import BaseDownloadView
 
 
@@ -30,4 +33,7 @@ class PathDownloadView(BaseDownloadView):
 
     def get_file(self):
         """Use path to return wrapper around file to serve."""
+        filename = self.get_path()
+        if not os.path.isfile(filename):
+            raise FileNotFound('File "{0}" does not exists'.format(filename))
         return File(open(self.get_path(), 'rb'))
