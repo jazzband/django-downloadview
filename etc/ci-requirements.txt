@@ -1,0 +1,10 @@
+coverage
+docutils
+-e ./
+-e ./demo/
+mock
+nose
+rednose
+Sphinx
+sphinxcontrib-testbuild
+zest.releaser

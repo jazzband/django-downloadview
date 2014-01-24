@@ -2,22 +2,14 @@
 # See INSTALL and docs/dev.txt for details.
 SHELL = /bin/bash
 ROOT_DIR = $(shell pwd)
-BIN_DIR = $(ROOT_DIR)/bin
 DATA_DIR = $(ROOT_DIR)/var
 VIRTUALENV_DIR = $(ROOT_DIR)/lib/virtualenv
-PIP = $(VIRTUALENV_DIR)/bin/pip
+BIN_DIR = $(VIRTUALENV_DIR)/bin
+PIP = $(BIN_DIR)/pip
 WGET = wget
-PYTHON = $(VIRTUALENV_DIR)/bin/python
+PYTHON = $(BIN_DIR)/python
 PROJECT = $(shell $(PYTHON) -c "import setup; print setup.NAME")
 PACKAGE = $(shell $(PYTHON) -c "import setup; print setup.PACKAGES[0]")
-BUILDOUT_CFG = $(ROOT_DIR)/etc/buildout.cfg
-BUILDOUT_DIR = $(ROOT_DIR)/lib/buildout
-BUILDOUT_VERSION = 2.2.1
-BUILDOUT_BOOTSTRAP_URL = https://raw.github.com/buildout/buildout/$(BUILDOUT_VERSION)/bootstrap/bootstrap.py
-BUILDOUT_BOOTSTRAP = $(BUILDOUT_DIR)/bootstrap.py
-BUILDOUT_BOOTSTRAP_ARGS = -c $(BUILDOUT_CFG) --version=$(BUILDOUT_VERSION) buildout:directory=$(ROOT_DIR)
-BUILDOUT = $(BIN_DIR)/buildout
-BUILDOUT_ARGS = -N -c $(BUILDOUT_CFG) buildout:directory=$(ROOT_DIR)
 NOSE = $(BIN_DIR)/nosetests
 
 
@@ -25,18 +17,22 @@ configure:
 	# Configuration is stored in etc/ folder. Not generated yet.
 
 
-develop: buildout
+develop: directories pip
 
 
 virtualenv:
 	if [ ! -d $(VIRTUALENV_DIR)/bin/ ]; then virtualenv --no-site-packages $(VIRTUALENV_DIR); fi
 	$(PIP) install -r $(ROOT_DIR)/etc/virtualenv.cfg
 
-buildout: virtualenv
-	if [ ! -d $(BUILDOUT_DIR) ]; then mkdir -p $(BUILDOUT_DIR); fi
-	if [ ! -f $(BUILDOUT_BOOTSTRAP) ]; then wget -O $(BUILDOUT_BOOTSTRAP) $(BUILDOUT_BOOTSTRAP_URL); fi
-	if [ ! -x $(BUILDOUT) ]; then $(PYTHON) $(BUILDOUT_BOOTSTRAP) $(BUILDOUT_BOOTSTRAP_ARGS); fi
-	$(BUILDOUT) $(BUILDOUT_ARGS)
+
+pip: virtualenv
+	$(PIP) install -r etc/ci-requirements.txt
+
+
+directories:
+	mkdir -p var/docs
+	mkdir -p docs/_static
+	mkdir -p var/test
 
 
 clean:
@@ -58,7 +54,7 @@ test: test-app test-demo test-documentation
 
 
 test-app:
-	$(NOSE) -c $(ROOT_DIR)/etc/nose/base.cfg -c $(ROOT_DIR)/etc/nose/$(PACKAGE).cfg
+	$(BIN_DIR)/demo test --nose-verbosity=2 -c $(ROOT_DIR)/etc/nose/base.cfg -c $(ROOT_DIR)/etc/nose/$(PACKAGE).cfg django_downloadview
 	mv $(ROOT_DIR)/.coverage $(ROOT_DIR)/var/test/app.coverage
 
 
@@ -86,6 +82,7 @@ demo: develop
 	cp -r $(ROOT_DIR)/demo/demoproject/fixtures var/media/object-other
 	cp -r $(ROOT_DIR)/demo/demoproject/fixtures var/media/nginx
 	$(BIN_DIR)/demo loaddata demo.json
+
 
 runserver: demo
 	$(BIN_DIR)/demo runserver

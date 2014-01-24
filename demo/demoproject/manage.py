@@ -4,8 +4,10 @@ import sys
 
 from django.core.management import execute_from_command_line
 
+
 def main():
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "%s.settings" % __package__)
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE",
+                          "{package}.settings".format(package=__package__))
     execute_from_command_line(sys.argv)
 
 
