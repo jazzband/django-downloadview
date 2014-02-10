@@ -1,9 +1,9 @@
-###########################
-Contributing to the project
-###########################
+############
+Contributing
+############
 
-This document provides guidelines for people who want to contribute to the
-project.
+This document provides guidelines for people who want to contribute to
+`django-downloadview`.
 
 
 **************
@@ -42,13 +42,8 @@ Fork and branch
 Setup a development environment
 *******************************
 
-System requirements:
-
-* `Python`_ version 2.7, available as ``python`` command
-
-* `Virtualenv`_ version >= 1.9.1, available as ``virtualenv`` command
-
-* make and wget to use the provided :file:`Makefile`.
+System requirements: `Python`_ version 2.7 and `tox`_ (you may use a
+`Virtualenv`_).
 
 Execute:
 
@@ -68,8 +63,7 @@ The Makefile
 
 A :file:`Makefile` is provided to ease development. Use it to:
 
-* setup the development environment: ``make develop``
-* update it, as an example, after a pull: ``make update``
+* setup a minimal development environment: ``make develop``
 * run tests: ``make test``
 * build documentation: ``make documentation``
 
@@ -85,9 +79,7 @@ The :doc:`/demo` is part of the tests. Maintain it along with code and
 documentation.
 
 
-**********
-References
-**********
+.. rubric:: Notes & references
 
 .. target-notes::
 
@@ -96,6 +88,7 @@ References
 .. _`rebase`: http://git-scm.com/book/en/Git-Branching-Rebasing
 .. _`merge-based rebase`: http://tech.novapost.fr/psycho-rebasing-en.html
 .. _`Python`: http://python.org
+.. _`tox`: http://tox.testrun.org
 .. _`Virtualenv`: http://virtualenv.org
 .. _`style guide for Sphinx-based documentations`:
    http://documentation-style-guide-sphinx.readthedocs.org/

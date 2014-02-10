@@ -136,8 +136,8 @@ class DownloadResponse(StreamingHttpResponse):
           generator-iterator) that produces the output in a block-by-block
           fashion.
 
-    * `Django WSGI handler (application implementation) return response object
-      <https://github.com/django/django/blob/fd1279a44df3b9a837453cd79fd0fbcf81bae39d/django/core/handlers/wsgi.py#L268>`_.
+    * Django WSGI handler (application implementation) returns response object
+      (see :mod:`django.core.handlers.wsgi`).
 
     * :class:`django.http.HttpResponse` and subclasses are iterators.
 
@@ -179,7 +179,7 @@ class DownloadResponse(StreamingHttpResponse):
 
         ``Content-Disposition`` header is encoded according to `RFC 5987
         <http://tools.ietf.org/html/rfc5987>`_. See also
-        http://stackoverflow.com/questions/93551/how-to-encode-the-filename-parameter-of-content-disposition-header-in-http.
+        http://stackoverflow.com/questions/93551/.
 
         """
         try:

@@ -8,7 +8,9 @@ future releases, check `milestones`_ and :doc:`/about/vision`.
 1.6 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Feature #74: the Makefile in project's repository no longer creates a
+  virtualenv. Developers setup the environment as they like, i.e. using
+  virtualenv, virtualenvwrapper or whatever. Tests are run with tox.
 
 
 1.5 (2013-11-29)

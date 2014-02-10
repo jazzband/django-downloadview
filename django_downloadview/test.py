@@ -46,7 +46,7 @@ class temporary_media_root(override_settings):
     Use this function as a context manager:
 
     >>> from django_downloadview.test import temporary_media_root
-    >>> from django.conf import settings
+    >>> from django.conf import settings  # NoQA
     >>> global_media_root = settings.MEDIA_ROOT
     >>> with temporary_media_root():
     ...     global_media_root == settings.MEDIA_ROOT
