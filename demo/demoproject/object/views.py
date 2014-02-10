@@ -16,3 +16,8 @@ another_file_view = ObjectDownloadView.as_view(
 deserialized_basename_view = ObjectDownloadView.as_view(
     model=Document,
     basename_field='basename')
+
+#: Serve ``file`` attribute of ``Document`` model, inline rather than as attachment
+inline_file_view = ObjectDownloadView.as_view(
+    model=Document,
+    attachment=False)
