@@ -33,7 +33,7 @@ Let's consider the following view:
 
 .. literalinclude:: /../demo/demoproject/lighttpd/views.py
    :language: python
-   :lines: 1-6, 8-16
+   :lines: 1-6, 8-17
 
 What is important here is that the files will have an ``url`` property
 implemented by storage. Let's setup an optimization rule based on that URL.
@@ -97,7 +97,7 @@ As an example:
 
 .. literalinclude:: /../demo/demoproject/lighttpd/views.py
    :language: python
-   :lines: 1-7, 17-
+   :lines: 1-7, 18-
 
 
 *************************************

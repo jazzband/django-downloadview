@@ -4,11 +4,12 @@ Install
 
 .. note::
 
-   If you want to install a development environment, please see :doc:`/dev`.
+   If you want to install a development environment, please see
+   :doc:`/contributing`.
 
 System requirements:
 
-* Python 2.7
+* Python version 2.7
 
 Install the package with your favorite Python installer. As an example, with
 pip:
@@ -22,25 +23,12 @@ the following requirements:
 
 .. literalinclude:: /../setup.py
    :language: python
-   :lines: 35
+   :lines: 39
 
 .. note::
 
    Since version 1.1, django-downloadview requires Django>=1.5, which provides
    :py:class:`~django.http.StreamingHttpResponse`.
-
-
-**************************
-Known good set of versions
-**************************
-
-`django-downloadview` has been tested in an environment with the following set
-of versions. If something is going wrong with other versions, please report it
-in `django-downloadview's bugtracker`_.
-
-.. literalinclude:: /../etc/buildout.cfg
-   :language: ini
-   :lines: 67-
 
 
 .. rubric:: Notes & references

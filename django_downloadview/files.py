@@ -203,7 +203,6 @@ class VirtualFile(File):
             yield buffer_
 
 
-
 class HTTPFile(File):
     """Wrapper for files that live on remote HTTP servers.
 
