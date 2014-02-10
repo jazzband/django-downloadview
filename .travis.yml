@@ -1,5 +1,10 @@
 language: python
-python:
-  - "2.7"
-install: make configure develop
-script: make test
+env:
+  - TOXENV=py27
+  - TOXENV=flake8
+  - TOXENV=sphinx
+  - TOXENV=readme
+install:
+  - pip install tox
+script:
+  - tox

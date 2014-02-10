@@ -21,4 +21,4 @@ Contents
    django-sendfile
    demo
    about/index
-   dev
+   contributing

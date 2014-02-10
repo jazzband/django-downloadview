@@ -9,7 +9,7 @@ class StringIteratorIO(io.TextIOBase):
 
     Original code by Matt Joiner <anacrolix@gmail.com> from:
 
-    * http://stackoverflow.com/questions/12593576/adapt-an-iterator-to-behave-like-a-file-like-object-in-python
+    * http://stackoverflow.com/questions/12593576/
     * https://gist.github.com/anacrolix/3788413
 
     """
