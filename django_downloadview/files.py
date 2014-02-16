@@ -2,7 +2,7 @@
 """File wrappers for use as exchange data between views and responses."""
 from __future__ import absolute_import
 from io import BytesIO
-from urlparse import urlparse
+from six.moves.urllib.parse import urlparse
 
 from django.core.files.base import File
 from django.utils.encoding import force_bytes

@@ -4,7 +4,8 @@ import os
 import mimetypes
 import re
 import unicodedata
-import urllib
+import six
+from six.moves import urllib
 
 from django.conf import settings
 from django.http import HttpResponse, StreamingHttpResponse
@@ -14,28 +15,31 @@ from django.utils.encoding import force_str
 def encode_basename_ascii(value):
     """Return US-ASCII encoded ``value`` for use in Content-Disposition header.
 
-    >>> encode_basename_ascii(unicode('éà', 'utf-8'))
+    >>> encode_basename_ascii('éà')  # doctest: +IGNORE_UNICODE
     u'ea'
 
     Spaces are converted to underscores.
 
-    >>> encode_basename_ascii(' ')
+    >>> encode_basename_ascii(' ')  # doctest: +IGNORE_UNICODE
     u'_'
 
     Text with non US-ASCII characters is expected to be unicode.
 
-    >>> encode_basename_ascii('éà')  # doctest: +ELLIPSIS
+    >>> from six import b
+    >>> encode_basename_ascii(b('éà'))  # doctest: +ELLIPSIS
     Traceback (most recent call last):
         ...
-    UnicodeDecodeError: \'ascii\' codec can\'t decode byte ...
+    UnicodeDecodeError: ...
 
     Of course, ASCII values are not modified.
 
-    >>> encode_basename_ascii('ea')
+    >>> encode_basename_ascii('ea')  # doctest: +IGNORE_UNICODE
     u'ea'
 
     """
-    ascii_basename = unicode(value)
+    if isinstance(value, six.binary_type):
+        value = value.decode('utf-8')
+    ascii_basename = six.text_type(value)
     ascii_basename = unicodedata.normalize('NFKD', ascii_basename)
     ascii_basename = ascii_basename.encode('ascii', 'ignore')
     ascii_basename = ascii_basename.decode('ascii')
@@ -49,11 +53,11 @@ def encode_basename_utf8(value):
     >>> encode_basename_utf8(u' .txt')
     '%20.txt'
 
-    >>> encode_basename_utf8(unicode('éà', 'utf-8'))
+    >>> encode_basename_utf8(u'éà')
     '%C3%A9%C3%A0'
 
     """
-    return urllib.quote(force_str(value))
+    return urllib.parse.quote(force_str(value))
 
 
 def content_disposition(filename):
@@ -70,7 +74,7 @@ def content_disposition(filename):
     If filename contains non US-ASCII characters, the returned value contains
     UTF-8 encoded filename and US-ASCII fallback.
 
-    >>> content_disposition(unicode('é.txt', 'utf-8'))
+    >>> content_disposition(u'é.txt')
     "attachment; filename=e.txt; filename*=UTF-8''%C3%A9.txt"
 
     """

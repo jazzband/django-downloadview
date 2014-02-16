@@ -26,7 +26,7 @@ def url_basename(url, content_type):
 
     If URL contains extension, it is kept as-is.
 
-    >>> url_basename(u'/path/to/somefile.rst', 'text/plain')
+    >>> url_basename(u'/path/to/somefile.rst', 'text/plain')  # doctest: +IGNORE_UNICODE
     u'somefile.rst'
 
     """
@@ -43,5 +43,5 @@ def import_member(import_string):
 
     """
     module_name, factory_name = str(import_string).rsplit('.', 1)
-    module = __import__(module_name, globals(), locals(), [factory_name], -1)
+    module = __import__(module_name, globals(), locals(), [factory_name], 0)
     return getattr(module, factory_name)
