@@ -13,28 +13,22 @@ from django.utils.encoding import force_str
 
 
 def encode_basename_ascii(value):
-    """Return US-ASCII encoded ``value`` for use in Content-Disposition header.
+    u"""Return US-ASCII encoded ``value`` for Content-Disposition header.
 
-    >>> encode_basename_ascii('éà')  # doctest: +IGNORE_UNICODE
-    u'ea'
+    >>> print(encode_basename_ascii(u'éà'))
+    ea
 
     Spaces are converted to underscores.
 
-    >>> encode_basename_ascii(' ')  # doctest: +IGNORE_UNICODE
-    u'_'
-
-    Text with non US-ASCII characters is expected to be unicode.
-
-    >>> from six import b
-    >>> encode_basename_ascii(b('éà'))  # doctest: +ELLIPSIS
-    Traceback (most recent call last):
-        ...
-    UnicodeDecodeError: ...
+    >>> print(encode_basename_ascii(' '))
+    _
 
     Of course, ASCII values are not modified.
 
-    >>> encode_basename_ascii('ea')  # doctest: +IGNORE_UNICODE
-    u'ea'
+    >>> print(encode_basename_ascii('ea'))
+    ea
+    >>> print(encode_basename_ascii(b'ea'))
+    ea
 
     """
     if isinstance(value, six.binary_type):
@@ -48,34 +42,34 @@ def encode_basename_ascii(value):
 
 
 def encode_basename_utf8(value):
-    """Return UTF-8 encoded ``value`` for use in Content-Disposition header.
+    u"""Return UTF-8 encoded ``value`` for use in Content-Disposition header.
 
-    >>> encode_basename_utf8(u' .txt')
-    '%20.txt'
+    >>> print(encode_basename_utf8(u' .txt'))
+    %20.txt
 
-    >>> encode_basename_utf8(u'éà')
-    '%C3%A9%C3%A0'
+    >>> print(encode_basename_utf8(u'éà'))
+    %C3%A9%C3%A0
 
     """
     return urllib.parse.quote(force_str(value))
 
 
 def content_disposition(filename):
-    """Return value of ``Content-Disposition`` header with 'attachment'.
+    u"""Return value of ``Content-Disposition`` header with 'attachment'.
 
-    >>> content_disposition('demo.txt')
-    'attachment; filename=demo.txt'
+    >>> print(content_disposition('demo.txt'))
+    attachment; filename=demo.txt
 
     If filename is empty, only "attachment" is returned.
 
-    >>> content_disposition('')
-    'attachment'
+    >>> print(content_disposition(''))
+    attachment
 
     If filename contains non US-ASCII characters, the returned value contains
     UTF-8 encoded filename and US-ASCII fallback.
 
-    >>> content_disposition(u'é.txt')
-    "attachment; filename=e.txt; filename*=UTF-8''%C3%A9.txt"
+    >>> print(content_disposition(u'é.txt'))
+    attachment; filename=e.txt; filename*=UTF-8''%C3%A9.txt
 
     """
     if not filename:

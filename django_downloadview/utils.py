@@ -26,8 +26,8 @@ def url_basename(url, content_type):
 
     If URL contains extension, it is kept as-is.
 
-    >>> url_basename(u'/path/to/somefile.rst', 'text/plain')  # doctest: +IGNORE_UNICODE
-    u'somefile.rst'
+    >>> print(url_basename(u'/path/to/somefile.rst', 'text/plain'))
+    somefile.rst
 
     """
     return url.split('/')[-1]
