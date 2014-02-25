@@ -35,7 +35,7 @@ KEYWORDS = ['file',
             'mod_xsendfile',
             'offload']
 PACKAGES = [NAME.replace('-', '_')]
-REQUIREMENTS = ['setuptools', 'Django>=1.5', 'requests']
+REQUIREMENTS = ['setuptools', 'Django>=1.5', 'requests', 'six']
 if IS_PYTHON2:
     REQUIREMENTS.append('mock')
 ENTRY_POINTS = {}

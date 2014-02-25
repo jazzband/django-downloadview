@@ -4,7 +4,8 @@ import os
 import mimetypes
 import re
 import unicodedata
-import urllib
+import six
+from six.moves import urllib
 
 from django.conf import settings
 from django.http import HttpResponse, StreamingHttpResponse
@@ -12,30 +13,27 @@ from django.utils.encoding import force_str
 
 
 def encode_basename_ascii(value):
-    """Return US-ASCII encoded ``value`` for use in Content-Disposition header.
+    u"""Return US-ASCII encoded ``value`` for Content-Disposition header.
 
-    >>> encode_basename_ascii(unicode('éà', 'utf-8'))
-    u'ea'
+    >>> print(encode_basename_ascii(u'éà'))
+    ea
 
     Spaces are converted to underscores.
 
-    >>> encode_basename_ascii(' ')
-    u'_'
-
-    Text with non US-ASCII characters is expected to be unicode.
-
-    >>> encode_basename_ascii('éà')  # doctest: +ELLIPSIS
-    Traceback (most recent call last):
-        ...
-    UnicodeDecodeError: \'ascii\' codec can\'t decode byte ...
+    >>> print(encode_basename_ascii(' '))
+    _
 
     Of course, ASCII values are not modified.
 
-    >>> encode_basename_ascii('ea')
-    u'ea'
+    >>> print(encode_basename_ascii('ea'))
+    ea
+    >>> print(encode_basename_ascii(b'ea'))
+    ea
 
     """
-    ascii_basename = unicode(value)
+    if isinstance(value, six.binary_type):
+        value = value.decode('utf-8')
+    ascii_basename = six.text_type(value)
     ascii_basename = unicodedata.normalize('NFKD', ascii_basename)
     ascii_basename = ascii_basename.encode('ascii', 'ignore')
     ascii_basename = ascii_basename.decode('ascii')
@@ -44,34 +42,34 @@ def encode_basename_ascii(value):
 
 
 def encode_basename_utf8(value):
-    """Return UTF-8 encoded ``value`` for use in Content-Disposition header.
+    u"""Return UTF-8 encoded ``value`` for use in Content-Disposition header.
 
-    >>> encode_basename_utf8(u' .txt')
-    '%20.txt'
+    >>> print(encode_basename_utf8(u' .txt'))
+    %20.txt
 
-    >>> encode_basename_utf8(unicode('éà', 'utf-8'))
-    '%C3%A9%C3%A0'
+    >>> print(encode_basename_utf8(u'éà'))
+    %C3%A9%C3%A0
 
     """
-    return urllib.quote(force_str(value))
+    return urllib.parse.quote(force_str(value))
 
 
 def content_disposition(filename):
-    """Return value of ``Content-Disposition`` header with 'attachment'.
+    u"""Return value of ``Content-Disposition`` header with 'attachment'.
 
-    >>> content_disposition('demo.txt')
-    'attachment; filename=demo.txt'
+    >>> print(content_disposition('demo.txt'))
+    attachment; filename=demo.txt
 
     If filename is empty, only "attachment" is returned.
 
-    >>> content_disposition('')
-    'attachment'
+    >>> print(content_disposition(''))
+    attachment
 
     If filename contains non US-ASCII characters, the returned value contains
     UTF-8 encoded filename and US-ASCII fallback.
 
-    >>> content_disposition(unicode('é.txt', 'utf-8'))
-    "attachment; filename=e.txt; filename*=UTF-8''%C3%A9.txt"
+    >>> print(content_disposition(u'é.txt'))
+    attachment; filename=e.txt; filename*=UTF-8''%C3%A9.txt
 
     """
     if not filename:

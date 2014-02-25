@@ -1,3 +1,4 @@
+from six import iteritems
 from django_downloadview.nginx.response import XAccelRedirectResponse
 
 
@@ -35,7 +36,7 @@ class XAccelRedirectValidator(object):
 
         """
         self.assert_x_accel_redirect_response(test_case, response)
-        for key, value in assertions.iteritems():
+        for key, value in iteritems(assertions):
             assert_func = getattr(self, 'assert_%s' % key)
             assert_func(test_case, response, value)
 

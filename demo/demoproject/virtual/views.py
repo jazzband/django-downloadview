@@ -1,4 +1,4 @@
-from StringIO import StringIO
+from six import StringIO
 
 from django.core.files.base import ContentFile
 
@@ -10,7 +10,7 @@ from django_downloadview import StringIteratorIO
 class TextDownloadView(VirtualDownloadView):
     def get_file(self):
         """Return :class:`django.core.files.base.ContentFile` object."""
-        return ContentFile(u"Hello world!\n", name='hello-world.txt')
+        return ContentFile(b"Hello world!\n", name='hello-world.txt')
 
 
 class StringIODownloadView(VirtualDownloadView):

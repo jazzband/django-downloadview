@@ -26,8 +26,8 @@ def url_basename(url, content_type):
 
     If URL contains extension, it is kept as-is.
 
-    >>> url_basename(u'/path/to/somefile.rst', 'text/plain')
-    u'somefile.rst'
+    >>> print(url_basename(u'/path/to/somefile.rst', 'text/plain'))
+    somefile.rst
 
     """
     return url.split('/')[-1]
@@ -43,5 +43,5 @@ def import_member(import_string):
 
     """
     module_name, factory_name = str(import_string).rsplit('.', 1)
-    module = __import__(module_name, globals(), locals(), [factory_name], -1)
+    module = __import__(module_name, globals(), locals(), [factory_name], 0)
     return getattr(module, factory_name)
