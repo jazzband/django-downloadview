@@ -1,5 +1,6 @@
 """Testing utilities."""
 import shutil
+from six import iteritems
 import tempfile
 
 from django.conf import settings
@@ -101,7 +102,7 @@ class DownloadResponseValidator(object):
 
         """
         self.assert_download_response(test_case, response)
-        for key, value in assertions.iteritems():
+        for key, value in iteritems(assertions):
             assert_func = getattr(self, 'assert_%s' % key)
             assert_func(test_case, response, value)
 
@@ -138,7 +139,9 @@ class DownloadResponseValidator(object):
         test_case.assertTrue(response['Content-Type'].startswith(value))
 
     def assert_content(self, test_case, response, value):
-        test_case.assertEqual(''.join(response.streaming_content), value)
+        test_case.assertEqual(
+            ''.join([s.decode('utf-8') for s in response.streaming_content]),
+            value)
 
     def assert_attachment(self, test_case, response, value):
         test_case.assertEqual('attachment;' in response['Content-Disposition'],
