@@ -61,6 +61,18 @@ Then here is the code to serve "another_file" instead of the default "file":
    :language: python
    :lines: 1-5, 10-12
 
+***********************************************
+Serving a file inline rather than as a download
+***********************************************
+
+If you would prefer to serve a file as an element of an exsting page
+rather than triggering a download, you can use :attr:`ObjectDownloadView.attachment` to specify
+that the HTTP Response object should not have the attachment attribute.
+
+.. literalinclude:: /../demo/demoproject/object/views.py
+   :language: python
+   :lines: 1-5, 20-23
+
 **********************************
 Mapping file attributes to model's
 **********************************
