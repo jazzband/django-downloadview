@@ -5,8 +5,10 @@ This document describes changes between past releases. For information about
 future releases, check `milestones`_ and :doc:`/about/vision`.
 
 
-1.6 (unreleased)
+1.6 (2014-03-03)
 ----------------
+
+Python 3 support, development environment refactoring.
 
 - Feature #46: introduced support for Python>=3.3.
 

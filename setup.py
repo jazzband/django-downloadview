@@ -22,6 +22,7 @@ URL = 'https://{name}.readthedocs.org/'.format(name=NAME)
 CLASSIFIERS = ['Development Status :: 4 - Beta',
                'License :: OSI Approved :: BSD License',
                'Programming Language :: Python :: 2.7',
+               'Programming Language :: Python :: 3.3',
                'Framework :: Django']
 KEYWORDS = ['file',
             'stream',
