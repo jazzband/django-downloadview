@@ -91,39 +91,7 @@ class DownloadResponse(StreamingHttpResponse):
     where :attr:`~django.http.StreamingHttpResponse.streaming_content` is a
     file wrapper.
 
-    Constructor differs a bit from :class:`~django.http.response.HttpResponse`:
-
-    ``file_instance``
-        A :doc:`file wrapper instance </files>`, such as
-        :class:`~django.core.files.base.File`.
-
-    ``attachement``
-        Boolean. Whether to return the file as attachment or not.
-        Affects ``Content-Disposition`` header.
-
-    ``basename``
-        Unicode. Client-side name of the file to stream.
-        Only used if ``attachment`` is ``True``.
-        Affects ``Content-Disposition`` header.
-
-    ``status``
-        HTTP status code.
-
-    ``content_type``
-        Value for ``Content-Type`` header.
-        If ``None``, then mime-type and encoding will be populated by the
-        response (default implementation uses mimetypes, based on file
-        name).
-
-    ``file_mimetype``
-        Value for file's mimetype. If ``None`` (the default), then the file's
-        mimetype will be guessed via Python's :mod:`mimetypes`. See
-        :meth:`get_mime_type`.
-
-    ``file_encoding``
-        Value for file's encoding. If ``None`` (the default), then the file's
-        encoding will be guessed via Python's :mod:`mimetypes`. See
-        :meth:`get_encoding`.
+    Constructor differs a bit from :class:`~django.http.response.HttpResponse`.
 
     Here are some highlights to understand internal mechanisms and motivations:
 
@@ -152,17 +120,42 @@ class DownloadResponse(StreamingHttpResponse):
     def __init__(self, file_instance, attachment=True, basename=None,
                  status=200, content_type=None, file_mimetype=None,
                  file_encoding=None):
-        """Constructor."""
+        """Constructor.
+
+        :param content_type: Value for ``Content-Type`` header.
+                             If ``None``, then mime-type and encoding will be
+                             populated by the response (default implementation
+                             uses :mod:`mimetypes`, based on file name).
+
+        """
+        #: A :doc:`file wrapper instance </files>`, such as
+        #: :class:`~django.core.files.base.File`.
         self.file = file_instance
         super(DownloadResponse, self).__init__(streaming_content=self.file,
                                                status=status,
                                                content_type=content_type)
+
+        #: Client-side name of the file to stream.
+        #: Only used if ``attachment`` is ``True``.
+        #: Affects ``Content-Disposition`` header.
         self.basename = basename
+
+        #: Whether to return the file as attachment or not.
+        #: Affects ``Content-Disposition`` header.
         self.attachment = attachment
         if not content_type:
             del self['Content-Type']  # Will be set later.
+
+        #: Value for file's mimetype.
+        #: If ``None`` (the default), then the file's mimetype will be guessed
+        #: via Python's :mod:`mimetypes`. See :meth:`get_mime_type`.
         self.file_mimetype = file_mimetype
+
+        #: Value for file's encoding. If ``None`` (the default), then the
+        #: file's encoding will be guessed via Python's :mod:`mimetypes`. See
+        #: :meth:`get_encoding`.
         self.file_encoding = file_encoding
+
         # Apply default headers.
         for header, value in self.default_headers.items():
             if not header in self:

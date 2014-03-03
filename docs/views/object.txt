@@ -38,7 +38,17 @@ Setup a view to stream the ``file`` attribute:
 
 .. literalinclude:: /../demo/demoproject/object/urls.py
    :language: python
-   :lines: 1-7, 8-10, 17
+   :lines: 1-7, 8-10, 20
+
+
+************
+Base options
+************
+
+:class:`ObjectDownloadView` inherits from
+:class:`~django_downloadview.views.base.DownloadMixin`, which has various
+options such as :attr:`~django_downloadview.views.base.DownloadMixin.basename`
+or :attr:`~django_downloadview.views.base.DownloadMixin.attachment`.
 
 
 ***************************
@@ -60,6 +70,7 @@ Then here is the code to serve "another_file" instead of the default "file":
 .. literalinclude:: /../demo/demoproject/object/views.py
    :language: python
    :lines: 1-5, 10-12
+
 
 **********************************
 Mapping file attributes to model's

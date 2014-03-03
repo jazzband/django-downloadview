@@ -28,6 +28,16 @@ Setup a view to stream files given path:
    :emphasize-lines: 14
 
 
+************
+Base options
+************
+
+:class:`PathDownloadView` inherits from
+:class:`~django_downloadview.views.base.DownloadMixin`, which has various
+options such as :attr:`~django_downloadview.views.base.DownloadMixin.basename`
+or :attr:`~django_downloadview.views.base.DownloadMixin.attachment`.
+
+
 **************************
 Computing path dynamically
 **************************
