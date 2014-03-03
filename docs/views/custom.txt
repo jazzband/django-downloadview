@@ -4,6 +4,7 @@ Make your own view
 
 .. currentmodule:: django_downloadview.views.base
 
+
 *************
 DownloadMixin
 *************
@@ -39,6 +40,22 @@ The only thing it does is to implement
    :undoc-members:
    :show-inheritance:
    :member-order: bysource
+
+
+***********************************************
+Serving a file inline rather than as attachment
+***********************************************
+
+Use :attr:`~DownloadMixin.attachment` to make a view serve a file inline rather
+than as attachment, i.e. to display the file as if it was an internal part of a
+page rather than triggering "Save file as..." prompt.
+
+See details in :attr:`attachment API documentation
+<~DownloadMixin.attachment>`.
+
+.. literalinclude:: /../demo/demoproject/object/views.py
+   :language: python
+   :lines: 1-5, 20-23
 
 
 ************************************

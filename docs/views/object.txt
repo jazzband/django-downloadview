@@ -62,29 +62,6 @@ Then here is the code to serve "another_file" instead of the default "file":
    :lines: 1-5, 10-12
 
 
-***********************************************
-Serving a file inline rather than as attachment
-***********************************************
-
-You can setup :attr:`~django_downloadview.views.base.DownloadMixin.attachment`
-to make a view serve a file inline rather than as attachment:
-
-* ``attachment`` is ``False``: inline file, which content is displayed inside
-  the browser, as if it was an element of the current page.
-
-* ``attachment`` is ``True`` (default): attached file, which usually triggers a
-  download, i.e. the user is prompted to "save the file as ...".
-
-.. literalinclude:: /../demo/demoproject/object/views.py
-   :language: python
-   :lines: 1-5, 20-23
-
-.. note::
-
-   The actual behaviour client-side depends on browsers and their
-   configuration.
-
-
 **********************************
 Mapping file attributes to model's
 **********************************
