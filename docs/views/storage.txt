@@ -34,6 +34,16 @@ via URLconfs:
    :lines: 1-7, 8-10, 14
 
 
+************
+Base options
+************
+
+:class:`StorageDownloadView` inherits from
+:class:`~django_downloadview.views.base.DownloadMixin`, which has various
+options such as :attr:`~django_downloadview.views.base.DownloadMixin.basename`
+or :attr:`~django_downloadview.views.base.DownloadMixin.attachment`.
+
+
 **************************
 Computing path dynamically
 **************************

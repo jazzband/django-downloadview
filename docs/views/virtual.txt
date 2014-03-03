@@ -18,6 +18,16 @@ it returns a suitable file wrapper...
    exited.
 
 
+************
+Base options
+************
+
+:class:`VirtualDownloadView` inherits from
+:class:`~django_downloadview.views.base.DownloadMixin`, which has various
+options such as :attr:`~django_downloadview.views.base.DownloadMixin.basename`
+or :attr:`~django_downloadview.views.base.DownloadMixin.attachment`.
+
+
 ***************************************
 Serve text (string or unicode) or bytes
 ***************************************
