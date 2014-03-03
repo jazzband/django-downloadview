@@ -68,3 +68,17 @@ class DeserializedBasenameTestCase(django.test.TestCase):
                                  content=file_content,
                                  basename=basename,
                                  mime_type='text/plain')
+
+
+class InlineFileTestCase(django.test.TestCase):
+    @temporary_media_root()
+    def test_download_response(self):
+        "'inline_file_view' streams Document.file inline."
+        setup_document()
+        url = reverse('object:inline_file', kwargs={'slug': slug})
+        response = self.client.get(url)
+        assert_download_response(self,
+                                 response,
+                                 content=file_content,
+                                 mime_type='text/plain',
+                                 attachment=False)

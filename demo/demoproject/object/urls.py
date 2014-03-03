@@ -14,4 +14,7 @@ urlpatterns = patterns(
     url(r'^deserialized_basename/(?P<slug>[a-zA-Z0-9_-]+)/$',
         views.deserialized_basename_view,
         name='deserialized_basename'),
+    url(r'^inline-file/(?P<slug>[a-zA-Z0-9_-]+)/$',
+        views.inline_file_view,
+        name='inline_file'),
 )

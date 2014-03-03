@@ -28,6 +28,21 @@ class DownloadMixin(object):
     response_class = DownloadResponse
 
     #: Whether to return the response as attachment or not.
+    #:
+    #: When ``True`` (the default), the view returns file "as attachment",
+    #: which usually triggers a "Save the file as ..." prompt.
+    #:
+    #: When ``False``, the view returns file "inline", as if it was an element
+    #: of the current page.
+    #:
+    #: .. note::
+    #:
+    #:    The actual behaviour client-side depends on the browser and its
+    #:    configuration.
+    #:
+    #: In fact, affects the "Content-Disposition" header via :attr:`response's
+    #: attachment attribute
+    #: <django_downloadview.response.DownloadResponse.attachment>`.
     attachment = True
 
     #: Client-side filename, if only file is returned as attachment.
