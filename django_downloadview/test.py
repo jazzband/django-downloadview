@@ -144,8 +144,13 @@ class DownloadResponseValidator(object):
             value)
 
     def assert_attachment(self, test_case, response, value):
-        test_case.assertEqual('attachment;' in response['Content-Disposition'],
-                              value)
+        if value:
+            test_case.assertTrue(
+                'attachment;' in response['Content-Disposition'])
+        else:
+            test_case.assertTrue(
+                'Content-Disposition' not in response
+                or 'attachment;' not in response['Content-Disposition'])
 
 
 def assert_download_response(test_case, response, **assertions):
