@@ -1,25 +1,53 @@
 # Reference card for usual actions in development environment.
 #
-# For standard installation of hospital as a library, see INSTALL.
-# For details about hospital's development environment, see CONTRIBUTING.rst.
+# For standard installation of django-downloadview as a library, see INSTALL.
+#
+# For details about django-downloadview's development environment, see
+# CONTRIBUTING.rst.
+#
+PIP = pip
+TOX = tox
 
 
+.PHONY: all help develop clean distclean maintainer-clean test documentation sphinx readme demo runserver release
+
+
+# Default target. Does nothing.
+all:
+	@echo "Reference card for usual actions in development environment."
+	@echo "Nothing to do by default."
+	@echo "Try 'make help'."
+
+
+#: help - Display callable targets.
+help:
+	@echo "Reference card for usual actions in development environment."
+	@echo "Here are available targets:"
+	@egrep -o "^#: (.+)" [Mm]akefile  | sed 's/#: /* /'
+
+
+#: develop - Install minimal development utilities such as tox.
 develop:
-	pip install tox zest.releaser
-	pip install -e ./
-	pip install -e ./demo/
+	$(PIP) install tox
+	$(PIP) install -e ./
+	$(PIP) install -e ./demo/
 
 
+#: clean - Basic cleanup, mostly temporary files.
 clean:
 	find . -name "*.pyc" -delete
+	find . -name "__pycache__" -delete
 	find . -name ".noseids" -delete
 
 
+#: distclean - Remove local builds, such as *.egg-info.
 distclean: clean
+	rm -rf *.egg
 	rm -rf *.egg-info
 	rm -rf demo/*.egg-info
 
 
+#: maintainer-clean - Remove almost everything that can be re-generated.
 maintainer-clean: distclean
 	rm -rf bin/
 	rm -rf lib/
@@ -28,23 +56,23 @@ maintainer-clean: distclean
 	rm -rf .tox/
 
 
+#: test - Run full test suite.
 test:
-	tox
+	$(TOX)
 
 
-test-app:
-	tox -e py27
-
-
-test-demo:
-	tox -e demo
-
-
+#: sphinx - Build Sphinx documentation.
 sphinx:
-	tox -e sphinx
+	$(TOX) -e sphinx
 
 
-documentation: sphinx
+#: readme - Build standalone documentation files (README, CONTRIBUTING...).
+readme:
+	$(TOX) -e readme
+
+
+#: documentation - Build full documentation.
+documentation: sphinx readme
 
 
 demo: develop
@@ -61,5 +89,6 @@ runserver: demo
 	demo runserver
 
 
+#: release - Tag and push to PyPI.
 release:
-	fullrelease
+	$(TOX) -e release

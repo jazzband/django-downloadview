@@ -24,59 +24,60 @@ Please use the `bugtracker`_ **before** starting some work:
   ``refs #TICKET-ID`` syntax.
 
 
-***************
-Fork and branch
-***************
+******************
+Use topic branches
+******************
 
-* Work in forks and branches.
+* Work in branches.
 
 * Prefix your branch with the ticket ID corresponding to the issue. As an
   example, if you are working on ticket #23 which is about contribute
   documentation, name your branch like ``23-contribute-doc``.
 
 * If you work in a development branch and want to refresh it with changes from
-  master, please `rebase`_ or `merge-based rebase`_, i.e. don't merge master.
+  master, please `rebase`_ or `merge-based rebase`_, i.e. do not merge master.
 
 
-*******************************
-Setup a development environment
-*******************************
+***********
+Fork, clone
+***********
 
-System requirements: `Python`_ version 2.7 and `tox`_ (you may use a
-`Virtualenv`_).
+Clone `django-downloadview` repository (adapt to use your own fork):
 
-Execute:
-
-.. code-block:: sh
+.. code:: sh
 
    git clone git@github.com:benoitbryon/django-downloadview.git
    cd django-downloadview/
-   make develop
-
-If you cannot execute the Makefile, read it and adapt the few commands it
-contains to your needs.
 
 
-************
-The Makefile
-************
+*************
+Usual actions
+*************
 
-A :file:`Makefile` is provided to ease development. Use it to:
+The `Makefile` is the reference card for usual actions in development
+environment:
 
-* setup a minimal development environment: ``make develop``
-* run tests: ``make test``
-* build documentation: ``make documentation``
+* Install development toolkit with `pip`_: ``make develop``.
 
-The :file:`Makefile` is intended to be a live reference for the development
-environment.
+* Run tests with `tox`_: ``make test``.
+
+* Build documentation: ``make documentation``. It builds `Sphinx`_
+  documentation in `var/docs/html/index.html`.
+
+* Release project with `zest.releaser`_: ``make release``.
+
+* Cleanup local repository: ``make clean``, ``make distclean`` and
+  ``make maintainer-clean``.
+
+See also ``make help``.
 
 
 *********************
 Demo project included
 *********************
 
-The :doc:`/demo` is part of the tests. Maintain it along with code and
-documentation.
+The `demo` included in project's repository is part of the tests and
+documentation. Maintain it along with code and documentation.
 
 
 .. rubric:: Notes & references
@@ -87,8 +88,7 @@ documentation.
    https://github.com/benoitbryon/django-downloadview/issues
 .. _`rebase`: http://git-scm.com/book/en/Git-Branching-Rebasing
 .. _`merge-based rebase`: http://tech.novapost.fr/psycho-rebasing-en.html
-.. _`Python`: http://python.org
+.. _`pip`: https://pypi.python.org/pypi/pip/
 .. _`tox`: http://tox.testrun.org
-.. _`Virtualenv`: http://virtualenv.org
-.. _`style guide for Sphinx-based documentations`:
-   http://documentation-style-guide-sphinx.readthedocs.org/
+.. _`Sphinx`: https://pypi.python.org/pypi/Sphinx/
+.. _`zest.releaser`: https://pypi.python.org/pypi/zest.releaser/

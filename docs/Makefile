@@ -3,7 +3,7 @@
 
 # You can set these variables from the command line.
 SPHINXOPTS    =
-SPHINXBUILD   = sphinx-build  # Turn warnings into errors.
+SPHINXBUILD   = sphinx-build
 PAPER         =
 BUILDDIR      = ../var/docs
 
