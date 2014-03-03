@@ -10,6 +10,10 @@ future releases, check `milestones`_ and :doc:`/about/vision`.
 
 - Feature #46: introduced support for Python>=3.3.
 
+- Feature #80: added documentation about "how to serve a file inline VS how to
+  serve a file as attachment". Improved documentation of views' base options
+  inherited from ``DownloadMixin``.
+
 - Feature #74: the Makefile in project's repository no longer creates a
   virtualenv. Developers setup the environment as they like, i.e. using
   virtualenv, virtualenvwrapper or whatever. Tests are run with tox.
