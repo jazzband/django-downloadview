@@ -158,7 +158,7 @@ class DownloadResponse(StreamingHttpResponse):
 
         # Apply default headers.
         for header, value in self.default_headers.items():
-            if not header in self:
+            if header not in self:
                 self[header] = value  # Does self support setdefault?
 
     @property
