@@ -35,9 +35,9 @@ Let's serve a file stored in a FileField of some model:
    )
 
 
-**********
-Ressources
-**********
+*********
+Resources
+*********
 
 * Documentation: http://django-downloadview.readthedocs.org
 * PyPI page: http://pypi.python.org/pypi/django-downloadview
