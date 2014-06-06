@@ -13,7 +13,7 @@ class DownloadResponseTestCase(unittest.TestCase):
                                     attachment=True,
                                     basename=u'espacé .txt',)
         headers = response.default_headers
-        self.assertIn("filename=espace_.txt",
+        self.assertIn("filename=\"espace_.txt\"",
                       headers['Content-Disposition'])
-        self.assertIn("filename*=UTF-8''espac%C3%A9%20.txt",
+        self.assertIn("filename*=UTF-8''\"espac%C3%A9%20.txt\"",
                       headers['Content-Disposition'])
