@@ -77,9 +77,9 @@ def content_disposition(filename):
     ascii_filename = encode_basename_ascii(filename)
     utf8_filename = encode_basename_utf8(filename)
     if ascii_filename == utf8_filename:  # ASCII only.
-        return "attachment; filename={ascii}".format(ascii=ascii_filename)
+        return "attachment; filename=\"{ascii}\"".format(ascii=ascii_filename)
     else:
-        return "attachment; filename={ascii}; filename*=UTF-8''{utf8}" \
+        return "attachment; filename=\"{ascii}\"; filename*=UTF-8''\"{utf8}\"" \
                .format(ascii=ascii_filename,
                        utf8=utf8_filename)
 
