@@ -124,7 +124,7 @@ class DownloadResponseValidator(object):
             if "filename=" in response['Content-Disposition']:
                 check_ascii = True
         if check_ascii:
-            test_case.assertIn('filename={name}'.format(
+            test_case.assertIn('filename="{name}"'.format(
                 name=ascii_name),
                 response['Content-Disposition'])
         if check_utf8:
