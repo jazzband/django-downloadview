@@ -69,7 +69,7 @@ def content_disposition(filename):
     UTF-8 encoded filename and US-ASCII fallback.
 
     >>> print(content_disposition(u'é.txt'))
-    attachment; filename=e.txt; filename*=UTF-8''%C3%A9.txt
+    attachment; filename="e.txt"; filename*=UTF-8''%C3%A9.txt
 
     """
     if not filename:
