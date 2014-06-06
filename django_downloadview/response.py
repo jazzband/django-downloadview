@@ -58,7 +58,7 @@ def content_disposition(filename):
     u"""Return value of ``Content-Disposition`` header with 'attachment'.
 
     >>> print(content_disposition('demo.txt'))
-    attachment; filename=demo.txt
+    attachment; filename="demo.txt"
 
     If filename is empty, only "attachment" is returned.
 
