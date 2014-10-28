@@ -44,4 +44,4 @@ Resources
 * Code repository: https://github.com/benoitbryon/django-downloadview
 * Bugtracker: https://github.com/benoitbryon/django-downloadview/issues
 * Continuous integration: https://travis-ci.org/benoitbryon/django-downloadview
-* Roadmap: https://github.com/benoitbryon/django-downloadview/issues/milestones
+* Roadmap: https://github.com/benoitbryon/django-downloadview/milestones
