@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """Base material for download views: :class:`DownloadMixin` and
 :class:`BaseDownloadView`"""
+import datetime
+
 from django.http import HttpResponseNotModified, Http404
 from django.views.generic.base import View
 from django.views.static import was_modified_since
@@ -116,7 +118,10 @@ class DownloadMixin(object):
             except (AttributeError, NotImplementedError):
                 return True
             else:
-                return was_modified_since(since, modification_time, size)
+                epoch_delta = modification_time - datetime.datetime(1970, 1, 1)
+                return was_modified_since(since,
+                                          epoch_delta.total_seconds(),
+                                          size)
 
     def not_modified_response(self, *response_args, **response_kwargs):
         """Return :class:`django.http.HttpResponseNotModified` instance."""
