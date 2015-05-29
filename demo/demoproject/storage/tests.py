@@ -2,6 +2,7 @@ import unittest
 
 from django.core.files.base import ContentFile
 from django.core.urlresolvers import reverse
+from django.http.response import HttpResponseNotModified
 import django.test
 
 from django_downloadview import assert_download_response, temporary_media_root
@@ -25,6 +26,30 @@ class StaticPathTestCase(django.test.TestCase):
         setup_file('1.txt')
         url = reverse('storage:static_path', kwargs={'path': '1.txt'})
         response = self.client.get(url)
+        assert_download_response(self,
+                                 response,
+                                 content=file_content,
+                                 basename='1.txt',
+                                 mime_type='text/plain')
+
+    @temporary_media_root()
+    def test_not_modified_download_response(self):
+        """'storage:static_path' sends not modified response if unmodified"""
+        setup_file('1.txt')
+        url = reverse('storage:static_path', kwargs={'path': '1.txt'})
+        response = self.client.get(
+          url,
+          HTTP_IF_MODIFIED_SINCE='Sat, 29 Oct 2025 19:43:31 GMT')
+        self.assertTrue(isinstance(response, HttpResponseNotModified))
+
+    @temporary_media_root()
+    def test_modified_since_download_response(self):
+        """'storage:static_path' streams file if modified"""
+        setup_file('1.txt')
+        url = reverse('storage:static_path', kwargs={'path': '1.txt'})
+        response = self.client.get(
+          url,
+          HTTP_IF_MODIFIED_SINCE='Sat, 29 Oct 1980 19:43:31 GMT')
         assert_download_response(self,
                                  response,
                                  content=file_content,
