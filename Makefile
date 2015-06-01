@@ -28,6 +28,7 @@ help:
 
 #: develop - Install minimal development utilities such as tox.
 develop:
+	mkdir -p var
 	$(PIP) install tox
 	$(PIP) install -e ./
 	$(PIP) install -e ./demo/
