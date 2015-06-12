@@ -75,12 +75,14 @@ readme:
 #: demo - Setup demo project.
 .PHONY: demo
 demo:
+	pip install -e .
+	pip install -e demo
 	demo migrate --noinput
 	# Install fixtures.
-	mkdir -p var/media
-	cp -r demo/demoproject/fixtures var/media/object
-	cp -r demo/demoproject/fixtures var/media/object-other
-	cp -r demo/demoproject/fixtures var/media/nginx
+	mkdir -p var/media/object var/media/object-other/ var/media/nginx
+	cp -r demo/demoproject/fixtures/* var/media/object/
+	cp -r demo/demoproject/fixtures/* var/media/object-other/
+	cp -r demo/demoproject/fixtures/* var/media/nginx/
 	demo loaddata demo.json
 
 
