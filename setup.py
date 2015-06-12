@@ -62,11 +62,7 @@ REQUIREMENTS = [
 ]
 ENTRY_POINTS = {}
 SETUP_REQUIREMENTS = ['setuptools']
-TEST_REQUIREMENTS = [
-    'tox'
-]
-if IS_PYTHON2:
-    TEST_REQUIREMENTS.append('mock')
+TEST_REQUIREMENTS = ['tox']
 CMDCLASS = {'test': Tox}
 EXTRA_REQUIREMENTS = {
     'test': TEST_REQUIREMENTS,
