@@ -9,7 +9,7 @@ from django.utils.encoding import force_bytes
 
 import requests
 
-from django_downloadview.io import StringIteratorIO
+from django_downloadview.io import BytesIteratorIO
 
 
 class StorageFile(File):
@@ -244,8 +244,8 @@ class HTTPFile(File):
         try:
             return self._file
         except AttributeError:
-            content = self.request.iter_content()
-            self._file = StringIteratorIO(content)
+            content = self.request.iter_content(decode_unicode=False)
+            self._file = BytesIteratorIO(content)
             return self._file
 
     @property

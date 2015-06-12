@@ -4,7 +4,7 @@ from django.core.files.base import ContentFile
 
 from django_downloadview import VirtualDownloadView
 from django_downloadview import VirtualFile
-from django_downloadview import StringIteratorIO
+from django_downloadview import TextIteratorIO
 
 
 class TextDownloadView(VirtualDownloadView):
@@ -15,7 +15,7 @@ class TextDownloadView(VirtualDownloadView):
 
 class StringIODownloadView(VirtualDownloadView):
     def get_file(self):
-        """Return wrapper on ``StringIO`` object."""
+        """Return wrapper on ``six.StringIO`` object."""
         file_obj = StringIO(u"Hello world!\n")
         return VirtualFile(file_obj, name='hello-world.txt')
 
@@ -29,5 +29,5 @@ def generate_hello():
 class GeneratedDownloadView(VirtualDownloadView):
     def get_file(self):
         """Return wrapper on ``StringIteratorIO`` object."""
-        file_obj = StringIteratorIO(generate_hello())
+        file_obj = TextIteratorIO(generate_hello())
         return VirtualFile(file_obj, name='hello-world.txt')

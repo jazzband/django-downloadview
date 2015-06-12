@@ -139,9 +139,9 @@ class DownloadResponseValidator(object):
         test_case.assertTrue(response['Content-Type'].startswith(value))
 
     def assert_content(self, test_case, response, value):
-        test_case.assertEqual(
-            ''.join([s.decode('utf-8') for s in response.streaming_content]),
-            value)
+        from django.utils.encoding import force_bytes
+        parts = [force_bytes(s) for s in response.streaming_content]
+        test_case.assertEqual(b''.join(parts), force_bytes(value))
 
     def assert_attachment(self, test_case, response, value):
         if value:

@@ -14,8 +14,8 @@ it returns a suitable file wrapper...
 .. note::
 
    Current implementation does not support reverse-proxy optimizations,
-   because there is no place reverse-proxy can load files from after Django
-   exited.
+   because content is actually generated within Django, not stored in some
+   third-party place.
 
 
 ************
@@ -68,7 +68,7 @@ Let's consider you have a generator function (``yield``) or an iterator object
 
 Stream generated content using :class:`VirtualDownloadView`,
 :class:`~django_downloadview.files.VirtualFile` and
-:class:`~django_downloadview.file.StringIteratorIO`:
+:class:`~django_downloadview.io.BytesIteratorIO`:
 
 .. literalinclude:: /../demo/demoproject/virtual/views.py
    :language: python
