@@ -58,7 +58,7 @@ def content_disposition(filename):
     u"""Return value of ``Content-Disposition`` header with 'attachment'.
 
     >>> print(content_disposition('demo.txt'))
-    attachment; filename=demo.txt
+    attachment; filename="demo.txt"
 
     If filename is empty, only "attachment" is returned.
 
@@ -69,7 +69,7 @@ def content_disposition(filename):
     UTF-8 encoded filename and US-ASCII fallback.
 
     >>> print(content_disposition(u'é.txt'))
-    attachment; filename=e.txt; filename*=UTF-8''%C3%A9.txt
+    attachment; filename="e.txt"; filename*=UTF-8''%C3%A9.txt
 
     """
     if not filename:
@@ -77,9 +77,9 @@ def content_disposition(filename):
     ascii_filename = encode_basename_ascii(filename)
     utf8_filename = encode_basename_utf8(filename)
     if ascii_filename == utf8_filename:  # ASCII only.
-        return "attachment; filename={ascii}".format(ascii=ascii_filename)
+        return "attachment; filename=\"{ascii}\"".format(ascii=ascii_filename)
     else:
-        return "attachment; filename={ascii}; filename*=UTF-8''{utf8}" \
+        return "attachment; filename=\"{ascii}\"; filename*=UTF-8''{utf8}" \
                .format(ascii=ascii_filename,
                        utf8=utf8_filename)
 
