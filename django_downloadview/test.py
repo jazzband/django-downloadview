@@ -5,6 +5,7 @@ import tempfile
 
 from django.conf import settings
 from django.test.utils import override_settings
+from django.utils.encoding import force_bytes
 
 from django_downloadview.middlewares import is_download_response
 from django_downloadview.response import (encode_basename_ascii,
@@ -139,7 +140,7 @@ class DownloadResponseValidator(object):
         test_case.assertTrue(response['Content-Type'].startswith(value))
 
     def assert_content(self, test_case, response, value):
-        from django.utils.encoding import force_bytes
+        """Assert value equals response's content (byte comparison)."""
         parts = [force_bytes(s) for s in response.streaming_content]
         test_case.assertEqual(b''.join(parts), force_bytes(value))
 
