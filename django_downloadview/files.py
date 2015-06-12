@@ -9,6 +9,8 @@ from django.utils.encoding import force_bytes
 
 import requests
 
+from django_downloadview.io import StringIteratorIO
+
 
 class StorageFile(File):
     """A file in a Django storage.
@@ -239,7 +241,12 @@ class HTTPFile(File):
 
     @property
     def file(self):
-        return self.request.raw
+        try:
+            return self._file
+        except AttributeError:
+            content = self.request.iter_content()
+            self._file = StringIteratorIO(content)
+            return self._file
 
     @property
     def size(self):
