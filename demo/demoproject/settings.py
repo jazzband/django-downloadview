@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
-"""Django settings for Django-DownloadView demo project."""
-from os.path import abspath, dirname, join
+"""Django settings for django-downloadview demo project."""
+import os
 
 
 # Configure some relative directories.
-demoproject_dir = dirname(abspath(__file__))
-demo_dir = dirname(demoproject_dir)
-root_dir = dirname(demo_dir)
-data_dir = join(root_dir, 'var')
-cfg_dir = join(root_dir, 'etc')
+demoproject_dir = os.path.dirname(os.path.abspath(__file__))
+demo_dir = os.path.dirname(demoproject_dir)
+root_dir = os.path.dirname(demo_dir)
+data_dir = os.path.join(root_dir, 'var')
+cfg_dir = os.path.join(root_dir, 'etc')
 
 
 # Mandatory settings.
@@ -20,7 +20,7 @@ WSGI_APPLICATION = 'demoproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': join(data_dir, 'db.sqlite'),
+        'NAME': os.path.join(data_dir, 'db.sqlite'),
     }
 }
 
@@ -29,21 +29,14 @@ DATABASES = {
 SECRET_KEY = "This is a secret made public on project's repository."
 
 # Media and static files.
-MEDIA_ROOT = join(data_dir, 'media')
+MEDIA_ROOT = os.path.join(data_dir, 'media')
 MEDIA_URL = '/media/'
-STATIC_ROOT = join(data_dir, 'static')
+STATIC_ROOT = os.path.join(data_dir, 'static')
 STATIC_URL = '/static/'
 
 
 # Applications.
 INSTALLED_APPS = (
-    # Standard Django applications.
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.sites',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
     # The actual django-downloadview demo.
     'demoproject',
     'demoproject.object',  # Demo around ObjectDownloadView
@@ -54,8 +47,14 @@ INSTALLED_APPS = (
     'demoproject.nginx',  # Sample optimizations for Nginx X-Accel.
     'demoproject.apache',  # Sample optimizations for Apache X-Sendfile.
     'demoproject.lighttpd',  # Sample optimizations for Lighttpd X-Sendfile.
-    # For test purposes. The demo project is part of django-downloadview
-    # test suite.
+    # Standard Django applications.
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.sites',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    # Stuff that must be at the end.
     'django_nose',
 )
 
@@ -107,7 +106,10 @@ DOWNLOADVIEW_RULES = [
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-nose_cfg_dir = join(cfg_dir, 'nose')
-NOSE_ARGS = ['--config={etc}/base.cfg'.format(etc=nose_cfg_dir),
-             '--config={etc}/{package}.cfg'.format(etc=nose_cfg_dir,
-                                                   package=__package__)]
+NOSE_ARGS = [
+    '--verbosity=2',
+    '--no-path-adjustment',
+    '--nocapture',
+    '--all-modules',
+    '--with-coverage',
+]

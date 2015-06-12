@@ -22,7 +22,9 @@ CLASSIFIERS = ['Development Status :: 4 - Beta',
                'Framework :: Django']
 KEYWORDS = []
 PACKAGES = ['demoproject']
-REQUIREMENTS = ['django-downloadview', 'django-nose']
+REQUIREMENTS = [
+    'django-downloadview',
+    'django-nose']
 ENTRY_POINTS = {
     'console_scripts': ['demo = demoproject.manage:main']
 }

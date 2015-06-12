@@ -9,39 +9,30 @@ PIP = pip
 TOX = tox
 
 
-.PHONY: all help develop clean distclean maintainer-clean test documentation sphinx readme demo runserver release
-
-
-# Default target. Does nothing.
-all:
-	@echo "Reference card for usual actions in development environment."
-	@echo "Nothing to do by default."
-	@echo "Try 'make help'."
-
-
 #: help - Display callable targets.
+.PHONY: help
 help:
 	@echo "Reference card for usual actions in development environment."
 	@echo "Here are available targets:"
 	@egrep -o "^#: (.+)" [Mm]akefile  | sed 's/#: /* /'
 
 
-#: develop - Install minimal development utilities such as tox.
+#: develop - Install minimal development utilities.
+.PHONY: develop
 develop:
-	mkdir -p var
-	$(PIP) install tox
-	$(PIP) install -e ./
-	$(PIP) install -e ./demo/
+	$(PIP) install -e .
 
 
 #: clean - Basic cleanup, mostly temporary files.
+.PHONY: clean
 clean:
 	find . -name "*.pyc" -delete
+	find . -name '*.pyo' -delete
 	find . -name "__pycache__" -delete
-	find . -name ".noseids" -delete
 
 
 #: distclean - Remove local builds, such as *.egg-info.
+.PHONY: distclean
 distclean: clean
 	rm -rf *.egg
 	rm -rf *.egg-info
@@ -49,35 +40,42 @@ distclean: clean
 
 
 #: maintainer-clean - Remove almost everything that can be re-generated.
+.PHONY: maintainer-clean
 maintainer-clean: distclean
-	rm -rf bin/
-	rm -rf lib/
 	rm -rf build/
 	rm -rf dist/
 	rm -rf .tox/
 
 
-#: test - Run full test suite.
+#: test - Run test suites.
+.PHONY: test
 test:
+	mkdir -p var
+	$(PIP) install -e .[test]
 	$(TOX)
 
 
-#: sphinx - Build Sphinx documentation.
+#: documentation - Build documentation (Sphinx, README, ...)
+.PHONY: documentation
+documentation: sphinx readme
+
+
+#: sphinx - Build Sphinx documentation (docs).
+.PHONY: sphinx
 sphinx:
 	$(TOX) -e sphinx
 
 
 #: readme - Build standalone documentation files (README, CONTRIBUTING...).
+.PHONY: readme
 readme:
 	$(TOX) -e readme
 
 
-#: documentation - Build full documentation.
-documentation: sphinx readme
-
-
-demo: develop
-	demo syncdb --noinput
+#: demo - Setup demo project.
+.PHONY: demo
+demo:
+	demo migrate --noinput
 	# Install fixtures.
 	mkdir -p var/media
 	cp -r demo/demoproject/fixtures var/media/object
@@ -86,10 +84,13 @@ demo: develop
 	demo loaddata demo.json
 
 
+#: runserver - Run demo server.
+.PHONY: runserver
 runserver: demo
 	demo runserver
 
 
 #: release - Tag and push to PyPI.
+.PHONY: release
 release:
 	$(TOX) -e release
