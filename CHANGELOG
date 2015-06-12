@@ -8,7 +8,17 @@ future releases, check `milestones`_ and :doc:`/about/vision`.
 1.7 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Bugfix #97 - ``HTTPFile`` proxies bytes as ``BytesIteratorIO`` (was undecoded
+  urllib3 file object). ``StringIteratorIO`` has been split into
+  ``TextIteratorIO`` and ``BytesIteratorIO``. ``StringIteratorIO`` is
+  deprecated but kept for backward compatibility as an alias for
+  ``TextIteratorIO``.
+
+- Feature #99 - Tox runs project's tests with Python 2.7, 3.3 and 3.4, and with
+  Django 1.5 to 1.8.
+
+- Refactoring #98 - Refreshed development environment: packaging, Tox and
+  Sphinx.
 
 
 1.6 (2014-03-03)

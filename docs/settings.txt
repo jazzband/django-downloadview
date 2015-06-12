@@ -2,23 +2,22 @@
 Configure
 #########
 
-Here is the list of settings used by `django-downloadview`.
+Here is the list of Django settings for `django-downloadview`.
 
 
 **************
 INSTALLED_APPS
 **************
 
-There is no need to register this application in your Django's
-``INSTALLED_APPS`` setting.
+There is no need to register this application in ``INSTALLED_APPS``.
 
 
 ******************
 MIDDLEWARE_CLASSES
 ******************
 
-If you plan to setup reverse-proxy optimizations, add
-``django_downloadview.SmartDownloadMiddleware`` to ``MIDDLEWARE_CLASSES``.
+If you plan to setup :doc:`reverse-proxy optimizations </optimizations/index>`,
+add ``django_downloadview.SmartDownloadMiddleware`` to ``MIDDLEWARE_CLASSES``.
 It is a response middleware. Move it after middlewares that compute the
 response content such as gzip middleware.
 
@@ -26,7 +25,8 @@ Example:
 
 .. literalinclude:: /../demo/demoproject/settings.py
    :language: python
-   :lines: 64-71
+   :start-after: BEGIN middlewares
+   :end-before: END middlewares
 
 
 ********************
@@ -43,7 +43,8 @@ Example:
 
 .. literalinclude:: /../demo/demoproject/settings.py
    :language: python
-   :lines: 75
+   :start-after: BEGIN backend
+   :end-before: END backend
 
 See :doc:`/optimizations/index` for a list of available backends (middlewares).
 
@@ -69,7 +70,8 @@ Here is an example containing one rule using keyword arguments:
 
 .. literalinclude:: /../demo/demoproject/settings.py
    :language: python
-   :lines: 80, 81-84, 103
+   :start-after: BEGIN rules
+   :end-before: END rules
 
 See :doc:`/optimizations/index` for details about builtin backends
 (middlewares) and their options.

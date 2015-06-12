@@ -7,28 +7,70 @@ Install
    If you want to install a development environment, please see
    :doc:`/contributing`.
 
-System requirements:
 
-* Python version 2.7
+************
+Requirements
+************
 
-Install the package with your favorite Python installer. As an example, with
-pip:
-
-.. code:: sh
-
-   pip install django-downloadview
+`django-downloadview` has been tested with Python version 2.7, 3.3 and 3.4.
 
 Installing `django-downloadview` will automatically trigger the installation of
 the following requirements:
 
 .. literalinclude:: /../setup.py
    :language: python
-   :lines: 39
+   :start-after: BEGIN requirements
+   :end-before: END requirements
 
-.. note::
 
-   Since version 1.1, django-downloadview requires Django>=1.5, which provides
-   :py:class:`~django.http.StreamingHttpResponse`.
+************
+As a library
+************
+
+In most cases, you will use `django-downloadview` as a dependency of another
+project. In such a case, you should add `django-downloadview` in your main
+project's requirements. Typically in :file:`setup.py`:
+
+.. code:: python
+
+   from setuptools import setup
+
+   setup(
+       install_requires=[
+           'django-downloadview',
+           #...
+       ]
+       # ...
+   )
+
+Then when you install your main project with your favorite package manager
+(like `pip`_), `django-downloadview` and its recursive dependencies will
+automatically be installed.
+
+
+**********
+Standalone
+**********
+
+You can install `django-downloadview` with your favorite Python package
+manager. As an example with `pip`_:
+
+.. code:: sh
+
+   pip install django-downloadview
+
+
+*****
+Check
+*****
+
+Check `django-downloadview` has been installed:
+
+.. code:: sh
+
+   python -c "import django_downloadview;print(django_downloadview.__version__)"
+
+You should get installed `django-downloadview`'s version.
 
 
 .. rubric:: Notes & references
@@ -41,5 +83,6 @@ the following requirements:
 
 .. target-notes::
 
+.. _`pip`: https://pip.pypa.io/
 .. _`django-downloadview's bugtracker`:
    https://github.com/benoitbryon/django-downloadview/issues
