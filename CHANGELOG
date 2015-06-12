@@ -8,6 +8,9 @@ future releases, check `milestones`_ and :doc:`/about/vision`.
 1.7 (unreleased)
 ----------------
 
+- Bugfix #87 - Filenames with commas are now supported. In download responses,
+  filename is now surrounded by double quotes.
+
 - Bugfix #97 - ``HTTPFile`` proxies bytes as ``BytesIteratorIO`` (was undecoded
   urllib3 file object). ``StringIteratorIO`` has been split into
   ``TextIteratorIO`` and ``BytesIteratorIO``. ``StringIteratorIO`` is
