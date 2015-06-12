@@ -4,7 +4,7 @@
         "model": "object.document", 
         "fields": {
             "slug": "hello-world", 
-            "file": "document/hello-world.txt"
+            "file": "object/hello-world.txt"
         }
     }
 ]

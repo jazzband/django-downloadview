@@ -17,6 +17,8 @@ future releases, check `milestones`_ and :doc:`/about/vision`.
   deprecated but kept for backward compatibility as an alias for
   ``TextIteratorIO``.
 
+- Bugfix #92 - Run demo using ``make demo runserver`` (was broken).
+
 - Feature #99 - Tox runs project's tests with Python 2.7, 3.3 and 3.4, and with
   Django 1.5 to 1.8.
 
