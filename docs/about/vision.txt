@@ -19,8 +19,8 @@ optimizations.
 
    * :doc:`/about/alternatives`
    * `roadmap
-     <https://github.com/benoitbryon/django-downloadview/issues/milestones>`_
+     <https://github.com/benoitbryon/django-downloadview/milestones>`_
 
 .. target-notes::
 
-.. _`Django`: https://django-project.com
+.. _`Django`: https://djangoproject.com

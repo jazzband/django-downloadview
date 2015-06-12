@@ -4,14 +4,14 @@ Overview, concepts
 
 Given:
 
-* you manage files with Django (permissions, search, generation, ...)
+* you manage files with Django (permissions, filters, generation, ...)
 
 * files are stored somewhere or generated somehow (local filesystem, remote
   storage, memory...)
 
 As a developer, you want to serve files quick and efficiently.
 
-Here is an overview of ``django-downloadview``'s answer...
+Here is an overview of `django-downloadview`'s answer...
 
 
 ************************************
@@ -23,9 +23,8 @@ Choose the generic view depending on the file you want to serve:
 * :doc:`/views/object`: file field in a model;
 * :doc:`/views/storage`: file in a storage;
 * :doc:`/views/path`: absolute filename on local filesystem;
-* :doc:`/views/http`: URL (the resource is proxied);
-* :doc:`/views/virtual`: bytes, text, :class:`~StringIO.StringIO`, generated
-  file...
+* :doc:`/views/http`: file at URL (the resource is proxied);
+* :doc:`/views/virtual`: bytes, text, file-like objects, generated files...
 
 
 *************************************************
@@ -67,14 +66,15 @@ Learn more about available file wrappers in :doc:`files`.
 Middlewares convert DownloadResponse into ProxiedDownloadResponse
 *****************************************************************
 
-Before WSGI application use file wrapper to load file contents, middlewares
-(or decorators) are given the opportunity to capture
+Before WSGI application use file wrapper and actually use file contents,
+middlewares or decorators) are given the opportunity to capture
 :class:`~django_downloadview.response.DownloadResponse` instances.
 
 Let's take this opportunity to optimize file loading and streaming!
 
 A good optimization it to delegate streaming to a reverse proxy, such as
-`nginx`_ via `X-Accel`_ internal redirects.
+`nginx`_ via `X-Accel`_ internal redirects. This way, Django doesn't load file
+content in memory.
 
 `django_downloadview` provides middlewares that convert
 :class:`~django_downloadview.response.DownloadResponse` into

@@ -59,7 +59,7 @@ INSTALLED_APPS = (
 )
 
 
-# Middlewares.
+# BEGIN middlewares
 MIDDLEWARE_CLASSES = [
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -68,19 +68,27 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django_downloadview.SmartDownloadMiddleware'
 ]
+# END middlewares
 
 
 # Specific configuration for django_downloadview.SmartDownloadMiddleware.
+# BEGIN backend
 DOWNLOADVIEW_BACKEND = 'django_downloadview.nginx.XAccelRedirectMiddleware'
+# END backend
 """Could also be:
 DOWNLOADVIEW_BACKEND = 'django_downloadview.apache.XSendfileMiddleware'
 DOWNLOADVIEW_BACKEND = 'django_downloadview.lighttpd.XSendfileMiddleware'
 """
+
+# BEGIN rules
 DOWNLOADVIEW_RULES = [
     {
         'source_url': '/media/nginx/',
         'destination_url': '/nginx-optimized-by-middleware/',
     },
+]
+# END rules
+DOWNLOADVIEW_RULES += [
     {
         'source_url': '/media/apache/',
         'destination_dir': '/apache-optimized-by-middleware/',

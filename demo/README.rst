@@ -49,7 +49,7 @@ Execute:
    make runserver
 
 It installs and runs the demo server on localhost, port 8000. So have a look
-at http://localhost:8000/
+at ``http://localhost:8000/``.
 
 .. note::
 

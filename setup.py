@@ -53,16 +53,20 @@ KEYWORDS = ['file',
             'offload']
 PACKAGES = [NAME.replace('-', '_')]
 REQUIREMENTS = [
+    # BEGIN requirements
     'Django>=1.5',
     'requests',
     'setuptools',
     'six',
+    # END requirements
 ]
-if IS_PYTHON2:
-    REQUIREMENTS.append('mock')
 ENTRY_POINTS = {}
 SETUP_REQUIREMENTS = ['setuptools']
-TEST_REQUIREMENTS = ['tox']
+TEST_REQUIREMENTS = [
+    'tox'
+]
+if IS_PYTHON2:
+    TEST_REQUIREMENTS.append('mock')
 CMDCLASS = {'test': Tox}
 EXTRA_REQUIREMENTS = {
     'test': TEST_REQUIREMENTS,

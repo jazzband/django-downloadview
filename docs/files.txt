@@ -105,7 +105,7 @@ VirtualFile
 BytesIteratorIO
 ===============
 
-.. autoclass:: ~django_downloadview.io.BytesIteratorIO
+.. autoclass:: django_downloadview.io.BytesIteratorIO
    :members:
    :undoc-members:
    :show-inheritance:
@@ -115,7 +115,7 @@ BytesIteratorIO
 TextIteratorIO
 ==============
 
-.. autoclass:: ~django_downloadview.io.TextIteratorIO
+.. autoclass:: django_downloadview.io.TextIteratorIO
    :members:
    :undoc-members:
    :show-inheritance:
