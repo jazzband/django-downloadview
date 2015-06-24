@@ -120,4 +120,5 @@ NOSE_ARGS = [
     '--nocapture',
     '--all-modules',
     '--with-coverage',
+    '--with-doctest',
 ]

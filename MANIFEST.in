@@ -1,4 +1,9 @@
 recursive-include django_downloadview *
-global-exclude *.pyc .*.swp
-include *.txt
-include AUTHORS CHANGELOG CONTRIBUTING.rst INSTALL LICENSE README.rst VERSION
+global-exclude *.pyc
+include AUTHORS
+include CHANGELOG
+include CONTRIBUTING.rst
+include INSTALL
+include LICENSE
+include README.rst
+include VERSION

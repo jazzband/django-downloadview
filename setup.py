@@ -35,11 +35,14 @@ AUTHOR = u'Benoît Bryon'
 EMAIL = 'benoit@marmelune.net'
 LICENSE = 'BSD'
 URL = 'https://{name}.readthedocs.org/'.format(name=NAME)
-CLASSIFIERS = ['Development Status :: 5 - Production/Stable',
-               'License :: OSI Approved :: BSD License',
-               'Programming Language :: Python :: 2.7',
-               'Programming Language :: Python :: 3.3',
-               'Framework :: Django']
+CLASSIFIERS = [
+    'Development Status :: 5 - Production/Stable',
+    'Framework :: Django',
+    'License :: OSI Approved :: BSD License',
+    'Programming Language :: Python :: 2.7',
+    'Programming Language :: Python :: 3.3',
+    'Programming Language :: Python :: 3.4',
+]
 KEYWORDS = ['file',
             'stream',
             'download',
