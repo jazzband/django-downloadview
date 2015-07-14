@@ -36,4 +36,4 @@ class PathDownloadView(BaseDownloadView):
         filename = self.get_path()
         if not os.path.isfile(filename):
             raise FileNotFound('File "{0}" does not exists'.format(filename))
-        return File(open(self.get_path(), 'rb'))
+        return File(open(filename, 'rb'))
