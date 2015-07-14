@@ -75,7 +75,7 @@ class DownloadMixinTestCase(unittest.TestCase):
         self.assertIs(
             mixin.was_modified_since(file_wrapper, mock.sentinel.since),
             mock.sentinel.was_modified)
-        file_wrapper.was_modified_since.assertCalledOnceWith(
+        file_wrapper.was_modified_since.assert_called_once_with(
             mock.sentinel.since)
 
     def test_was_modified_since_django(self):
@@ -101,9 +101,10 @@ class DownloadMixinTestCase(unittest.TestCase):
             self.assertIs(
                 mixin.was_modified_since(file_wrapper, mock.sentinel.since),
                 mock.sentinel.was_modified)
-        was_modified_since_mock.assertCalledOnceWith(
-            mock.sentinel.size,
-            mock.sentinel.modified_time)
+        was_modified_since_mock.assert_called_once_with(
+            mock.sentinel.since,
+            mock.sentinel.modified_time,
+            mock.sentinel.size)
 
     def test_was_modified_since_fallback(self):
         """DownloadMixin.was_modified_since() fallbacks to `True`.
