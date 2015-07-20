@@ -2,6 +2,7 @@
 """Tests around :mod:`django_downloadview.views`."""
 import os
 import unittest
+from datetime import datetime
 try:
     from unittest import mock
 except ImportError:
@@ -92,7 +93,7 @@ class DownloadMixinTestCase(unittest.TestCase):
         file_wrapper.was_modified_since = mock.Mock(
             side_effect=AttributeError)
         file_wrapper.size = mock.sentinel.size
-        file_wrapper.modified_time = mock.sentinel.modified_time
+        file_wrapper.modified_time = datetime.now()
         was_modified_since_mock = mock.Mock(
             return_value=mock.sentinel.was_modified)
         mixin = views.DownloadMixin()
