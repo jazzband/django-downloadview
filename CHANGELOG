@@ -8,11 +8,16 @@ future releases, check `milestones`_ and :doc:`/about/vision`.
 1.8 (unreleased)
 ----------------
 
-- Nothing changed yet.
+Bugfixes.
+
+- Bugfix #103 - ``PathDownloadView.get_file()`` makes a single call to
+  ``PathDownloadView.get_file()`` (was doing it twice).
 
 
 1.7 (2015-06-13)
 ----------------
+
+Bugfixes.
 
 - Bugfix #87 - Filenames with commas are now supported. In download responses,
   filename is now surrounded by double quotes.
