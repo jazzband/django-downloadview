@@ -1,5 +1,6 @@
 # coding=utf-8
 """Tests around :mod:`django_downloadview.views`."""
+import calendar
 import os
 import unittest
 from datetime import datetime
@@ -104,7 +105,7 @@ class DownloadMixinTestCase(unittest.TestCase):
                 mock.sentinel.was_modified)
         was_modified_since_mock.assert_called_once_with(
             mock.sentinel.since,
-            mock.sentinel.modified_time,
+            calendar.timegm(file_wrapper.modified_time.utctimetuple()),
             mock.sentinel.size)
 
     def test_was_modified_since_fallback(self):
