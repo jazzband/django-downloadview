@@ -1,7 +1,9 @@
 # coding=utf-8
 """Tests around :mod:`django_downloadview.views`."""
+import calendar
 import os
 import unittest
+from datetime import datetime
 try:
     from unittest import mock
 except ImportError:
@@ -92,7 +94,7 @@ class DownloadMixinTestCase(unittest.TestCase):
         file_wrapper.was_modified_since = mock.Mock(
             side_effect=AttributeError)
         file_wrapper.size = mock.sentinel.size
-        file_wrapper.modified_time = mock.sentinel.modified_time
+        file_wrapper.modified_time = datetime.now()
         was_modified_since_mock = mock.Mock(
             return_value=mock.sentinel.was_modified)
         mixin = views.DownloadMixin()
@@ -103,7 +105,7 @@ class DownloadMixinTestCase(unittest.TestCase):
                 mock.sentinel.was_modified)
         was_modified_since_mock.assert_called_once_with(
             mock.sentinel.since,
-            mock.sentinel.modified_time,
+            calendar.timegm(file_wrapper.modified_time.utctimetuple()),
             mock.sentinel.size)
 
     def test_was_modified_since_fallback(self):

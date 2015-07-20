@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """Base material for download views: :class:`DownloadMixin` and
 :class:`BaseDownloadView`"""
+import calendar
+
 from django.http import HttpResponseNotModified, Http404
 from django.views.generic.base import View
 from django.views.static import was_modified_since
@@ -111,7 +113,8 @@ class DownloadMixin(object):
             return file_instance.was_modified_since(since)
         except (AttributeError, NotImplementedError):
             try:
-                modification_time = file_instance.modified_time
+                modification_time = calendar.timegm(
+                    file_instance.modified_time.utctimetuple())
                 size = file_instance.size
             except (AttributeError, NotImplementedError):
                 return True

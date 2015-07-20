@@ -13,6 +13,9 @@ Bugfixes.
 - Bugfix #103 - ``PathDownloadView.get_file()`` makes a single call to
   ``PathDownloadView.get_file()`` (was doing it twice).
 
+- Bugfix #104 - Pass numeric timestamp to Django's ``was_modified_since()``
+  (was passing a datetime).
+
 
 1.7 (2015-06-13)
 ----------------
