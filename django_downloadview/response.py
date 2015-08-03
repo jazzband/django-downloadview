@@ -119,7 +119,7 @@ class DownloadResponse(StreamingHttpResponse):
     """
     def __init__(self, file_instance, attachment=True, basename=None,
                  status=200, content_type=None, file_mimetype=None,
-                 file_encoding=None):
+                 file_encoding=None, **kwargs):
         """Constructor.
 
         :param content_type: Value for ``Content-Type`` header.
