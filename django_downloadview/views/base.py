@@ -167,4 +167,4 @@ class BaseDownloadView(DownloadMixin, View):
     """A base :class:`DownloadMixin` that implements :meth:`get`."""
     def get(self, request, *args, **kwargs):
         """Handle GET requests: stream a file."""
-        return self.render_to_response()
+        return self.render_to_response(*args, **kwargs)
