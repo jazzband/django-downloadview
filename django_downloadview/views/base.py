@@ -122,8 +122,13 @@ class DownloadMixin(object):
                 return was_modified_since(since, modification_time, size)
 
     def not_modified_response(self, *response_args, **response_kwargs):
-        """Return :class:`django.http.HttpResponseNotModified` instance."""
-        return HttpResponseNotModified(*response_args, **response_kwargs)
+        """Return :class:`django.http.HttpResponseNotModified` instance.
+        Only `django.http.HttpResponseBase.__init__()` kwargs will be used."""
+        allowed_kwargs = {}
+        for k in ('content_type', 'status', 'reason', 'charset'):
+            if k in response_kwargs:
+                allowed_kwargs[k] = response_kwargs[k]
+        return HttpResponseNotModified(*response_args, **allowed_kwargs)
 
     def download_response(self, *response_args, **response_kwargs):
         """Return :class:`~django_downloadview.response.DownloadResponse`."""
