@@ -51,6 +51,7 @@ maintainer-clean: distclean
 .PHONY: test
 test:
 	mkdir -p var
+	$(PIP) install -U pip setuptools
 	$(PIP) install -e .[test]
 	$(TOX)
 
