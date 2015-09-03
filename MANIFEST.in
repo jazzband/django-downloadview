@@ -1,5 +1,6 @@
 recursive-include django_downloadview *
 recursive-include demo *.py *.rst *.html *.json *.txt
+recursive-include docs Makefile *.py *.txt
 global-exclude *.pyc
 include AUTHORS
 include CHANGELOG
