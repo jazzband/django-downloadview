@@ -14,3 +14,13 @@ class SimpleURLTestCase(django.test.TestCase):
                                  content='Hello world!\n',
                                  basename='hello-world.txt',
                                  mime_type='text/plain')
+
+
+class AvatarTestCase(django.test.TestCase):
+    def test_download_response(self):
+        """HTTPDownloadView proxies Content-Type header."""
+        url = reverse('http:avatar_url')
+        response = self.client.get(url)
+        assert_download_response(self,
+                                 response,
+                                 mime_type='image/png')
