@@ -2,7 +2,7 @@
 File wrappers
 #############
 
-.. py:module:: django_downloadview.files
+.. module:: django_downloadview.files
 
 A view return :class:`~django_downloadview.response.DownloadResponse` which
 itself carries a file wrapper. Here are file wrappers distributed by Django
@@ -16,15 +16,15 @@ Django's builtins
 `Django itself provides some file wrappers`_ you can use within
 ``django-downloadview``:
 
-* :py:class:`django.core.files.File` wraps a file that live on local
+* :class:`django.core.files.File` wraps a file that live on local
   filesystem, initialized with a path. ``django-downloadview`` uses this
   wrapper in :doc:`/views/path`.
 
-* :py:class:`django.db.models.fields.files.FieldFile` wraps a file that is
+* :class:`django.db.models.fields.files.FieldFile` wraps a file that is
   managed in a model. ``django-downloadview`` uses this wrapper in 
   :doc:`/views/object`.
 
-* :py:class:`django.core.files.base.ContentFile` wraps a bytes, string or
+* :class:`django.core.files.base.ContentFile` wraps a bytes, string or
   unicode object. You may use it with :doc:`VirtualDownloadView
   </views/virtual>`.
 
@@ -127,4 +127,4 @@ TextIteratorIO
 .. target-notes::
 
 .. _`Django itself provides some file wrappers`:
-   https://docs.djangoproject.com/en/1.5/ref/files/file/
+   https://docs.djangoproject.com/en/1.9/ref/files/file/

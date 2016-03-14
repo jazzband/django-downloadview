@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """Test suite around :mod:`django_downloadview.api` and deprecation plan."""
+from importlib import import_module
 import unittest
 from six.moves import reload_module as reload
 import warnings
@@ -7,7 +8,6 @@ import warnings
 from django.core.exceptions import ImproperlyConfigured
 import django.test
 from django.test.utils import override_settings
-from django.utils.importlib import import_module
 
 
 class APITestCase(unittest.TestCase):
