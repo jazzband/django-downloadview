@@ -75,6 +75,6 @@ Here are main differences between the two projects:
 .. target-notes::
 
 .. _`django.contrib.staticfiles provides a view to serve files`:
-   https://docs.djangoproject.com/en/1.6/ref/contrib/staticfiles/#static-file-development-view
+   https://docs.djangoproject.com/en/1.9/ref/contrib/staticfiles/#static-file-development-view
 .. _`Django ticket #2131`: https://code.djangoproject.com/ticket/2131
 .. _`django-sendfile`: http://pypi.python.org/pypi/django-sendfile
