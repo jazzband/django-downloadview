@@ -256,3 +256,8 @@ class HTTPFile(File):
 
         """
         return self.request.headers['Content-Length']
+
+    @property
+    def content_type(self):
+        """Return content type of the file (from original response)."""
+        return self.request.headers['Content-Type']
