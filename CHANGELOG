@@ -12,6 +12,9 @@ future releases, check `milestones`_ and :doc:`/about/vision`.
 
 - Feature #113 - Introduced support of Python 3.5.
 
+- Feature #116 - ``HTTPFile`` has ``content_type`` property. It makes
+  ``HTTPDownloadView`` proxy ``Content-Type`` header from remote location.
+
 
 1.8 (2015-07-20)
 ----------------
