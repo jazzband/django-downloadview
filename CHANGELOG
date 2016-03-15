@@ -5,7 +5,7 @@ This document describes changes between past releases. For information about
 future releases, check `milestones`_ and :doc:`/about/vision`.
 
 
-1.9 (unreleased)
+1.9 (2016-03-15)
 ----------------
 
 - Feature #112 - Introduced support of Django 1.9.
