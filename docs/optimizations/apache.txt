@@ -51,20 +51,20 @@ Example:
 
 .. literalinclude:: /../demo/demoproject/settings.py
    :language: python
-   :lines: 64-71
+   :lines: 63-70
 
 Then set ``django_downloadview.apache.XSendfileMiddleware`` as
 ``DOWNLOADVIEW_BACKEND``:
 
 .. literalinclude:: /../demo/demoproject/settings.py
    :language: python
-   :lines: 77
+   :lines: 79
 
 Then register as many ``DOWNLOADVIEW_RULES`` as you wish:
 
 .. literalinclude:: /../demo/demoproject/settings.py
    :language: python
-   :lines: 80, 85-87, 93, 103
+   :lines: 84, 92-100, 110
 
 Each item in ``DOWNLOADVIEW_RULES`` is a dictionary of keyword arguments passed
 to the middleware factory. In the example above, we capture responses by
