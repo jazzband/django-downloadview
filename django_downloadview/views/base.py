@@ -60,7 +60,7 @@ class DownloadMixin(object):
     #: :mod:`mimetypes`.
     encoding = None
 
-    def get_file(self):
+    def get_file(self, *args, **kwargs):
         """Return a file wrapper instance.
 
         Raises :class:`~django_downloadview.exceptions.FileNotFound` if file
@@ -151,7 +151,7 @@ class DownloadMixin(object):
 
         """
         try:
-            self.file_instance = self.get_file()
+            self.file_instance = self.get_file(*response_args, **response_kwargs)
         except exceptions.FileNotFound:
             return self.file_not_found_response()
         # Respect the If-Modified-Since header.
@@ -165,6 +165,7 @@ class DownloadMixin(object):
 
 class BaseDownloadView(DownloadMixin, View):
     """A base :class:`DownloadMixin` that implements :meth:`get`."""
+
     def get(self, request, *args, **kwargs):
         """Handle GET requests: stream a file."""
-        return self.render_to_response()
+        return self.render_to_response(*args, **kwargs)

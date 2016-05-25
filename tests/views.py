@@ -21,6 +21,7 @@ from django_downloadview import views
 
 class DownloadMixinTestCase(unittest.TestCase):
     """Test suite around :class:`django_downloadview.views.DownloadMixin`."""
+
     def test_get_file(self):
         """DownloadMixin.get_file() raise NotImplementedError.
 
@@ -218,6 +219,7 @@ class DownloadMixinTestCase(unittest.TestCase):
 
 class BaseDownloadViewTestCase(unittest.TestCase):
     "Tests around :class:`django_downloadviews.views.base.BaseDownloadView`."
+
     def test_get(self):
         """BaseDownloadView.get() calls render_to_response()."""
         request = django.test.RequestFactory().get('/dummy-url')
@@ -228,11 +230,12 @@ class BaseDownloadViewTestCase(unittest.TestCase):
             return_value=mock.sentinel.response)
         response = view.get(request, *args, **kwargs)
         self.assertIs(response, mock.sentinel.response)
-        view.render_to_response.assert_called_once_with()
+        view.render_to_response.assert_called_once_with(*args, **kwargs)
 
 
 class PathDownloadViewTestCase(unittest.TestCase):
     "Tests for :class:`django_downloadviews.views.path.PathDownloadView`."
+
     def test_get_file_ok(self):
         "PathDownloadView.get_file() returns ``File`` instance."
         view = setup_view(views.PathDownloadView(path=__file__),
@@ -262,6 +265,7 @@ class PathDownloadViewTestCase(unittest.TestCase):
 
 class ObjectDownloadViewTestCase(unittest.TestCase):
     "Tests for :class:`django_downloadviews.views.object.ObjectDownloadView`."
+
     def test_get_file_ok(self):
         "ObjectDownloadView.get_file() returns ``file`` field by default."
         view = setup_view(views.ObjectDownloadView(), 'fake request')
@@ -296,6 +300,7 @@ class ObjectDownloadViewTestCase(unittest.TestCase):
 class VirtualDownloadViewTestCase(unittest.TestCase):
     """Test suite around
     :py:class:`django_downloadview.views.VirtualDownloadView`."""
+
     def test_was_modified_since_specific(self):
         """VirtualDownloadView.was_modified_since() delegates to file wrapper.
 
