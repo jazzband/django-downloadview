@@ -120,7 +120,7 @@ class DownloadResponse(StreamingHttpResponse):
 
     def __init__(self, file_instance, attachment=True, basename=None,
                  status=200, content_type=None, file_mimetype=None,
-                 file_encoding=None, **kwargs):
+                 file_encoding=None, extra_headers=None, **kwargs):
         """Constructor.
 
         :param content_type: Value for ``Content-Type`` header.
@@ -161,6 +161,11 @@ class DownloadResponse(StreamingHttpResponse):
         for header, value in self.default_headers.items():
             if header not in self:
                 self[header] = value  # Does self support setdefault?
+
+        # Apply any extra headers.
+        if extra_headers:
+            for header, value in extra_headers:
+                self[header] = value
 
     @property
     def default_headers(self):

@@ -223,8 +223,8 @@ class BaseDownloadViewTestCase(unittest.TestCase):
     def test_get(self):
         """BaseDownloadView.get() calls render_to_response()."""
         request = django.test.RequestFactory().get('/dummy-url')
-        args = ['dummy-arg']
-        kwargs = {'dummy': 'kwarg'}
+        args = []
+        kwargs = {'content_type': 'application/pdf'}
         view = setup_view(views.BaseDownloadView(), request, *args, **kwargs)
         view.render_to_response = mock.Mock(
             return_value=mock.sentinel.response)
