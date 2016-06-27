@@ -39,7 +39,7 @@ Let's serve a file stored in a file field of some model:
 Resources
 *********
 
-* Documentation: http://django-downloadview.readthedocs.org
+* Documentation: https://django-downloadview.readthedocs.io
 * PyPI page: http://pypi.python.org/pypi/django-downloadview
 * Code repository: https://github.com/benoitbryon/django-downloadview
 * Bugtracker: https://github.com/benoitbryon/django-downloadview/issues

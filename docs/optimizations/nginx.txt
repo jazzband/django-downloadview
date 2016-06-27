@@ -136,7 +136,7 @@ Here is what you could have in :file:`/etc/nginx/sites-available/default`:
        # like /optimized-download/myfile.tar.gz
        #
        # See http://wiki.nginx.org/X-accel
-       # and https://django-downloadview.readthedocs.org
+       # and https://django-downloadview.readthedocs.io
        #
        location /proxied-download {
            internal;
