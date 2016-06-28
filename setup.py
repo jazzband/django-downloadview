@@ -34,7 +34,7 @@ VERSION = open(os.path.join(here, 'VERSION')).read().strip()
 AUTHOR = u'Benoît Bryon'
 EMAIL = 'benoit@marmelune.net'
 LICENSE = 'BSD'
-URL = 'https://{name}.readthedocs.org/'.format(name=NAME)
+URL = 'https://{name}.readthedocs.io/'.format(name=NAME)
 CLASSIFIERS = [
     'Development Status :: 5 - Production/Stable',
     'Framework :: Django',
