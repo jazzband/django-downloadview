@@ -47,13 +47,7 @@ class XAccelRedirectMiddleware(ProxiedDownloadMiddleware):
             redirect_url = self.get_redirect_url(response)
         except NoRedirectionMatch:
             return response
-        if self.expires:
-            expires = self.expires
-        else:
-            try:
-                expires = response.expires
-            except AttributeError:
-                expires = None
+        expires = self.expires or getattr(response, 'expires', None)
         return XAccelRedirectResponse(redirect_url=redirect_url,
                                       content_type=response['Content-Type'],
                                       basename=response.basename,
