@@ -28,20 +28,12 @@ class XAccelRedirectMiddleware(ProxiedDownloadMiddleware):
                           DeprecationWarning)
             if destination_url is None:
                 destination_url = media_url
-            else:
-                destination_url = destination_url
-        else:
-            destination_url = destination_url
         if media_root is not None:
             warnings.warn("%s ``media_root`` is deprecated. Use "
                           "``source_dir`` instead." % self.__class__.__name__,
                           DeprecationWarning)
             if source_dir is None:
                 source_dir = media_root
-            else:
-                source_dir = source_dir
-        else:
-            source_dir = source_dir
         super(XAccelRedirectMiddleware, self).__init__(source_dir,
                                                        source_url,
                                                        destination_url)
