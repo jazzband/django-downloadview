@@ -216,8 +216,9 @@ class HTTPFile(File):
 
     """
     def __init__(self, request_factory=requests.get, url='', name=u'',
-                 **kwargs):
+                 base_url=None, **kwargs):
         self.request_factory = request_factory
+        self.base_url = base_url
         self.url = url
         if name is None:
             parts = urlparse(url)
@@ -235,8 +236,8 @@ class HTTPFile(File):
         try:
             return self._request
         except AttributeError:
-            self._request = self.request_factory(self.url,
-                                                 **self.request_kwargs)
+            url = self.base_url + self.url if self.base_url else self.url
+            self._request = self.request_factory(url, **self.request_kwargs)
             return self._request
 
     @property

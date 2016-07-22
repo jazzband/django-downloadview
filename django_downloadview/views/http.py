@@ -14,6 +14,12 @@ class HTTPDownloadView(BaseDownloadView):
     #: Additional keyword arguments for request handler.
     request_kwargs = {}
 
+    def get(self, request, *args, **kwargs):
+        if self.url.startswith('/'):  # Relative url.
+            self.base_url = '{scheme}://{host}'.format(
+                scheme=self.request.scheme, host=self.request.get_host())
+        return super(HTTPDownloadView, self).get(request, *args, **kwargs)
+
     def get_request_factory(self):
         """Return request factory to perform actual HTTP request.
 
@@ -42,5 +48,6 @@ class HTTPDownloadView(BaseDownloadView):
         """Return wrapper which has an ``url`` attribute."""
         return HTTPFile(request_factory=self.get_request_factory(),
                         name=self.get_basename(),
+                        base_url=getattr(self, 'base_url', None),
                         url=self.get_url(),
                         **self.get_request_kwargs())
