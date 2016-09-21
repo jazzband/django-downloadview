@@ -16,8 +16,9 @@ env:
   - TOXENV=py35-django18
   - TOXENV=py35-django19
   - TOXENV=flake8
-  - TOXENV=sphinx
+  # - TOXENV=sphinx # broken link: https://pypi.python.org/pypi/pip/<Paste>
   - TOXENV=readme
 install:
+  - pip install -U pip setuptools
 script:
   - make test
