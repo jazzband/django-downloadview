@@ -24,7 +24,7 @@ KEYWORDS = []
 PACKAGES = ['demoproject']
 REQUIREMENTS = [
     'django-downloadview',
-    'django-nose']
+    'django-nose==1.4.3']
 ENTRY_POINTS = {
     'console_scripts': ['demo = demoproject.manage:main']
 }

@@ -60,7 +60,6 @@ REQUIREMENTS = [
     # BEGIN requirements
     'Django>=1.5',
     'requests',
-    'setuptools',
     'six',
     # END requirements
 ]
