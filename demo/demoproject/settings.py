@@ -133,7 +133,7 @@ if StrictVersion(get_version()) >= StrictVersion('1.8'):
             'DIRS': [
                 os.path.join(os.path.dirname(__file__), "templates"),
             ],
-             'OPTIONS': {
+            'OPTIONS': {
                 'debug': DEBUG,
                 'context_processors': [
                     # Insert your TEMPLATE_CONTEXT_PROCESSORS here or use this
