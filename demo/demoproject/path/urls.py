@@ -1,7 +1,7 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
 from demoproject.path import views
-
+from demoproject.urlpatterns import patterns
 
 urlpatterns = patterns(
     '',

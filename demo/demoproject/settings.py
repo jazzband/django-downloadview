@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 """Django settings for django-downloadview demo project."""
+
+from distutils.version import StrictVersion
 import os
+
+from django.utils.version import get_version
 
 
 # Configure some relative directories.
@@ -112,7 +116,6 @@ DOWNLOADVIEW_RULES += [
 
 # Test/development settings.
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 NOSE_ARGS = [
     '--verbosity=2',
@@ -122,3 +125,32 @@ NOSE_ARGS = [
     '--with-coverage',
     '--with-doctest',
 ]
+
+if StrictVersion(get_version()) >= StrictVersion('1.8'):
+    TEMPLATES = [
+        {
+            'BACKEND': 'django.template.backends.django.DjangoTemplates',
+            'DIRS': [
+                os.path.join(os.path.dirname(__file__), "templates"),
+            ],
+            'OPTIONS': {
+                'debug': DEBUG,
+                'context_processors': [
+                    # Insert your TEMPLATE_CONTEXT_PROCESSORS here or use this
+                    # list if you haven't customized them:
+                    'django.contrib.auth.context_processors.auth',
+                    'django.template.context_processors.debug',
+                    'django.template.context_processors.i18n',
+                    'django.template.context_processors.media',
+                    'django.template.context_processors.static',
+                    'django.template.context_processors.tz',
+                    'django.contrib.messages.context_processors.messages',
+                ],
+            },
+        },
+    ]
+else:
+    TEMPLATE_DEBUG = DEBUG
+    TEMPLATE_DIRS = (
+        os.path.join(os.path.dirname(__file__), "templates"),
+    )

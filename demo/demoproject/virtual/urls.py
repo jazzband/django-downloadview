@@ -1,6 +1,7 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
 from demoproject.virtual import views
+from demoproject.urlpatterns import patterns
 
 
 urlpatterns = patterns(
