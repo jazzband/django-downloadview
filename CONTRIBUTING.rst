@@ -89,6 +89,6 @@ documentation. Maintain it along with code and documentation.
 .. _`rebase`: http://git-scm.com/book/en/Git-Branching-Rebasing
 .. _`merge-based rebase`: http://tech.novapost.fr/psycho-rebasing-en.html
 .. _`pip`: https://pypi.python.org/pypi/pip/
-.. _`tox`: http://tox.testrun.org
+.. _`tox`: https://tox.readthedocs.io
 .. _`Sphinx`: https://pypi.python.org/pypi/Sphinx/
 .. _`zest.releaser`: https://pypi.python.org/pypi/zest.releaser/
