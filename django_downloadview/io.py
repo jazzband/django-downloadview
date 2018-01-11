@@ -40,38 +40,38 @@ class TextIteratorIO(io.TextIOBase):
 
     def read(self, n=None):
         """Return content up to ``n`` length."""
-        l = []
+        parts = []
         if n is None or n < 0:
             while True:
                 m = self._read1()
                 if not m:
                     break
-                l.append(m)
+                parts.append(m)
         else:
             while n > 0:
                 m = self._read1(n)
                 if not m:
                     break
                 n -= len(m)
-                l.append(m)
-        return u''.join(l)
+                parts.append(m)
+        return u''.join(parts)
 
     def readline(self):
-        l = []
+        parts = []
         while True:
             i = self._left.find(u'\n')
             if i == -1:
-                l.append(self._left)
+                parts.append(self._left)
                 try:
                     self._left = next(self._iter)
                 except StopIteration:
                     self._left = u''
                     break
             else:
-                l.append(self._left[:i + 1])
+                parts.append(self._left[:i + 1])
                 self._left = self._left[i + 1:]
                 break
-        return u''.join(l)
+        return u''.join(parts)
 
 
 class BytesIteratorIO(io.BytesIO):
@@ -108,35 +108,35 @@ class BytesIteratorIO(io.BytesIO):
 
     def read(self, n=None):
         """Return content up to ``n`` length."""
-        l = []
+        parts = []
         if n is None or n < 0:
             while True:
                 m = self._read1()
                 if not m:
                     break
-                l.append(m)
+                parts.append(m)
         else:
             while n > 0:
                 m = self._read1(n)
                 if not m:
                     break
                 n -= len(m)
-                l.append(m)
-        return b''.join(l)
+                parts.append(m)
+        return b''.join(parts)
 
     def readline(self):
-        l = []
+        parts = []
         while True:
             i = self._left.find(b'\n')
             if i == -1:
-                l.append(self._left)
+                parts.append(self._left)
                 try:
                     self._left = next(self._iter)
                 except StopIteration:
                     self._left = b''
                     break
             else:
-                l.append(self._left[:i + 1])
+                parts.append(self._left[:i + 1])
                 self._left = self._left[i + 1:]
                 break
-        return b''.join(l)
+        return b''.join(parts)

@@ -1,5 +1,5 @@
 try:
     from django.conf.urls import patterns
-except:
+except ImportError:
     def patterns(prefix, *args):
         return list(args)
