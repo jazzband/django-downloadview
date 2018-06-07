@@ -122,6 +122,8 @@ class StorageFile(File):
         Proxy to self.storage.accessed_time(self.name).
 
         """
+        if hasattr(self.storage, "get_accessed_time"):
+            return self.storage.get_accessed_time(self.name)
         return self.storage.accessed(self.name)
 
     @property
@@ -131,6 +133,8 @@ class StorageFile(File):
         Proxy to self.storage.created_time(self.name).
 
         """
+        if hasattr(self.storage, "get_created_time"):
+            return self.storage.get_created_time(self.name)
         return self.storage.created_time(self.name)
 
     @property
@@ -140,6 +144,8 @@ class StorageFile(File):
         Proxy to self.storage.modified_time(self.name).
 
         """
+        if hasattr(self.storage, "get_modified_time"):
+            return self.storage.get_modified_time(self.name)
         return self.storage.modified_time(self.name)
 
 

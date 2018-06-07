@@ -1,7 +1,10 @@
 import os
 
 from django.core.files.base import ContentFile
-from django.core.urlresolvers import reverse
+try:
+    from django.core.urlresolvers import reverse
+except ImportError:
+    from django.urls import reverse
 import django.test
 
 from django_downloadview.apache import assert_x_sendfile

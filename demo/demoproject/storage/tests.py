@@ -2,7 +2,10 @@ import datetime
 import unittest
 
 from django.core.files.base import ContentFile
-from django.core.urlresolvers import reverse
+try:
+    from django.core.urlresolvers import reverse
+except ImportError:
+    from django.urls import reverse
 from django.http.response import HttpResponseNotModified
 import django.test
 
@@ -43,6 +46,7 @@ class StaticPathTestCase(django.test.TestCase):
             HTTP_IF_MODIFIED_SINCE='Sat, 29 Oct {year} 19:43:31 GMT'.format(
                 year=datetime.date.today().year + 4)
         )
+        
         self.assertTrue(isinstance(response, HttpResponseNotModified))
 
     @temporary_media_root()
