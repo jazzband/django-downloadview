@@ -46,7 +46,7 @@ class StaticPathTestCase(django.test.TestCase):
             HTTP_IF_MODIFIED_SINCE='Sat, 29 Oct {year} 19:43:31 GMT'.format(
                 year=datetime.date.today().year + 4)
         )
-        
+
         self.assertTrue(isinstance(response, HttpResponseNotModified))
 
     @temporary_media_root()
