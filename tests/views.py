@@ -1,14 +1,14 @@
 """Tests around :mod:`django_downloadview.views`."""
 import calendar
+from datetime import datetime
 import os
 import unittest
-from datetime import datetime
 from unittest import mock
 
-import django.test
 from django.core.files import File
 from django.http import Http404
 from django.http.response import HttpResponseNotModified
+import django.test
 
 from django_downloadview import exceptions, views
 from django_downloadview.test import setup_view

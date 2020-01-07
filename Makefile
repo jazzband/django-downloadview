@@ -104,4 +104,4 @@ black:
 
 .PHONY: isort
 isort:
-	$(ISORT) -m 3 --line-width=99 --use-parentheses --trailing-comma --recursive django_downloadview tests demo
+	$(ISORT) --recursive django_downloadview tests demo

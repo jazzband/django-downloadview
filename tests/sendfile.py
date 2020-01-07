@@ -1,6 +1,6 @@
 """Tests around :py:mod:`django_downloadview.sendfile`."""
-import django.test
 from django.http import Http404
+import django.test
 
 from django_downloadview.response import DownloadResponse
 from django_downloadview.shortcuts import sendfile

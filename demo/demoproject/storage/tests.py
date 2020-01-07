@@ -1,17 +1,18 @@
 import datetime
 import unittest
 
-import django.test
 from django.core.files.base import ContentFile
 from django.http.response import HttpResponseNotModified
+import django.test
 
-from demoproject.compat import reverse
-from demoproject.storage import views
 from django_downloadview import (
     assert_download_response,
     setup_view,
     temporary_media_root,
 )
+
+from demoproject.compat import reverse
+from demoproject.storage import views
 
 # Fixtures.
 file_content = "Hello world!\n"

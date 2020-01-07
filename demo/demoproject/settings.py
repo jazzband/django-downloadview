@@ -1,9 +1,8 @@
 """Django settings for django-downloadview demo project."""
-import os
 from distutils.version import StrictVersion
+import os
 
 from django.utils.version import get_version
-
 
 # Configure some relative directories.
 demoproject_dir = os.path.dirname(os.path.abspath(__file__))

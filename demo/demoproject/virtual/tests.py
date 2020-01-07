@@ -1,7 +1,8 @@
 import django.test
 
-from demoproject.compat import reverse
 from django_downloadview import assert_download_response
+
+from demoproject.compat import reverse
 
 
 class TextTestCase(django.test.TestCase):

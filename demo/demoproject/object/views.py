@@ -1,5 +1,6 @@
-from demoproject.object.models import Document
 from django_downloadview import ObjectDownloadView
+
+from demoproject.object.models import Document
 
 #: Serve ``file`` attribute of ``Document`` model.
 default_file_view = ObjectDownloadView.as_view(model=Document)
