@@ -1,4 +1,3 @@
-# coding=utf-8
 """Tests around :mod:`django_downloadview.io`."""
 import unittest
 

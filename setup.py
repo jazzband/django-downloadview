@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 """Python packaging."""
 import os
 import sys
@@ -23,8 +22,6 @@ class Tox(TestCommand):
 
 #: Absolute path to directory containing setup.py file.
 here = os.path.abspath(os.path.dirname(__file__))
-#: Boolean, ``True`` if environment is running Python version 2.
-IS_PYTHON2 = sys.version_info[0] == 2
 
 
 NAME = 'django-downloadview'
@@ -39,8 +36,7 @@ CLASSIFIERS = [
     'Development Status :: 5 - Production/Stable',
     'Framework :: Django',
     'License :: OSI Approved :: BSD License',
-    'Programming Language :: Python :: 2.7',
-    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3 :: Only',
     'Programming Language :: Python :: 3.6',
     'Programming Language :: Python :: 3.7',
     'Programming Language :: Python :: 3.8',
@@ -62,7 +58,6 @@ REQUIREMENTS = [
     'Django>=1.11',
     'requests',
     'setuptools',
-    'six',
     # END requirements
 ]
 ENTRY_POINTS = {}

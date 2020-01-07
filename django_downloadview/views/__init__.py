@@ -1,6 +1,3 @@
-# coding=utf-8
-"""Views."""
-# -*- coding: utf-8 -*-
 """Views to stream files."""
 # API shortcuts.
 from django_downloadview.views.base import (DownloadMixin,  # NoQA

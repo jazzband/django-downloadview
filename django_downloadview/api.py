@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Declaration of API shortcuts."""
 from django_downloadview.io import (BytesIteratorIO,  # NoQA
                                     TextIteratorIO)

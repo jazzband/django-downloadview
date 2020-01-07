@@ -1,4 +1,3 @@
-from six import iteritems
 from django_downloadview.apache.response import XSendfileResponse
 
 
@@ -22,7 +21,7 @@ class XSendfileValidator(object):
 
         """
         self.assert_x_sendfile_response(test_case, response)
-        for key, value in iteritems(assertions):
+        for key, value in assertions.items():
             assert_func = getattr(self, 'assert_%s' % key)
             assert_func(test_case, response, value)
 

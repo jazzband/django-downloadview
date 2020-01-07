@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
 """:py:class:`django.http.HttpResponse` subclasses."""
 import os
 import mimetypes
 import re
 import unicodedata
-import six
-from six.moves import urllib
+from urllib.parse import quote
 
 from django.conf import settings
 from django.http import HttpResponse, StreamingHttpResponse
@@ -31,9 +29,9 @@ def encode_basename_ascii(value):
     ea
 
     """
-    if isinstance(value, six.binary_type):
+    if isinstance(value, bytes):
         value = value.decode('utf-8')
-    ascii_basename = six.text_type(value)
+    ascii_basename = str(value)
     ascii_basename = unicodedata.normalize('NFKD', ascii_basename)
     ascii_basename = ascii_basename.encode('ascii', 'ignore')
     ascii_basename = ascii_basename.decode('ascii')
@@ -51,7 +49,7 @@ def encode_basename_utf8(value):
     %C3%A9%C3%A0
 
     """
-    return urllib.parse.quote(force_str(value))
+    return quote(force_str(value))
 
 
 def content_disposition(filename):

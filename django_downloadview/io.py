@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
 """Low-level IO operations, for use with file wrappers."""
-from __future__ import absolute_import
 import io
 
 from django.utils.encoding import force_text, force_bytes

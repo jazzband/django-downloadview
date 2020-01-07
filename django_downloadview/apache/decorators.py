@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Decorators to apply Apache X-Sendfile on a specific view."""
 from django_downloadview.decorators import DownloadDecorator
 from django_downloadview.apache.middlewares import XSendfileMiddleware

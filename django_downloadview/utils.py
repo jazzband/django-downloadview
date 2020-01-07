@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Utility functions that may be implemented in external packages."""
 import re
 

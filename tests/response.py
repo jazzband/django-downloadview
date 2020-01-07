@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Unit tests around responses."""
 import unittest
 

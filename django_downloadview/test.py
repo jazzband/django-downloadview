@@ -1,6 +1,4 @@
-"""Testing utilities."""
 import shutil
-from six import iteritems
 import tempfile
 
 from django.conf import settings
@@ -103,7 +101,7 @@ class DownloadResponseValidator(object):
 
         """
         self.assert_download_response(test_case, response)
-        for key, value in iteritems(assertions):
+        for key, value in assertions.items():
             assert_func = getattr(self, 'assert_%s' % key)
             assert_func(test_case, response, value)
 

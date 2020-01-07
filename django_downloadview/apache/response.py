@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Apache's specific responses."""
 import os.path
 
@@ -8,8 +7,7 @@ from django_downloadview.response import (ProxiedDownloadResponse,
 
 class XSendfileResponse(ProxiedDownloadResponse):
     "Delegates serving file to Apache via X-Sendfile header."
-    def __init__(self, file_path, content_type, basename=None,
-                 attachment=True):
+    def __init__(self, file_path, content_type, basename=None, attachment=True):
         """Return a HttpResponse with headers for Apache X-Sendfile."""
         super(XSendfileResponse, self).__init__(content_type=content_type)
         if attachment:

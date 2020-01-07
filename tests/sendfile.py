@@ -1,4 +1,3 @@
-# coding=utf-8
 """Tests around :py:mod:`django_downloadview.sendfile`."""
 from django.http import Http404
 import django.test

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Tests around project's distribution and packaging."""
 import os
 import unittest
