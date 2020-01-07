@@ -1,9 +1,9 @@
 from django.core.files.base import ContentFile
-from django.core.urlresolvers import reverse
 import django.test
 
 from django_downloadview import temporary_media_root, assert_download_response
 
+from demoproject.compat import reverse
 from demoproject.object.models import Document
 
 

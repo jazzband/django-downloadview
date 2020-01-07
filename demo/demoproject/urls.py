@@ -1,7 +1,7 @@
-from django.conf.urls import include, url
+from django.conf.urls import url
 from django.views.generic import TemplateView
 
-from demoproject.urlpatterns import patterns
+from demoproject.compat import patterns, include
 
 
 home = TemplateView.as_view(template_name='home.html')

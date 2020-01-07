@@ -2,8 +2,8 @@
 
 from django.conf.urls import url
 
+from demoproject.compat import patterns
 from demoproject.nginx import views
-from demoproject.urlpatterns import patterns
 
 
 urlpatterns = patterns(

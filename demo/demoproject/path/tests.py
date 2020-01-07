@@ -1,7 +1,8 @@
-from django.core.urlresolvers import reverse
 import django.test
 
 from django_downloadview import assert_download_response
+
+from demoproject.compat import reverse
 
 
 class StaticPathTestCase(django.test.TestCase):

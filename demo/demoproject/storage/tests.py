@@ -2,13 +2,13 @@ import datetime
 import unittest
 
 from django.core.files.base import ContentFile
-from django.core.urlresolvers import reverse
 from django.http.response import HttpResponseNotModified
 import django.test
 
 from django_downloadview import assert_download_response, temporary_media_root
 from django_downloadview import setup_view
 
+from demoproject.compat import reverse
 from demoproject.storage import views
 
 
