@@ -3,6 +3,7 @@ import calendar
 import os
 import unittest
 from datetime import datetime
+
 try:
     from unittest import mock
 except ImportError:
@@ -20,6 +21,7 @@ from django_downloadview import views
 
 class DownloadMixinTestCase(unittest.TestCase):
     """Test suite around :class:`django_downloadview.views.DownloadMixin`."""
+
     def test_get_file(self):
         """DownloadMixin.get_file() raise NotImplementedError.
 
@@ -34,14 +36,15 @@ class DownloadMixinTestCase(unittest.TestCase):
         """DownloadMixin.get_basename() returns basename attribute."""
         mixin = views.DownloadMixin()
         self.assertEqual(mixin.get_basename(), None)
-        mixin.basename = 'fake'
-        self.assertEqual(mixin.get_basename(), 'fake')
+        mixin.basename = "fake"
+        self.assertEqual(mixin.get_basename(), "fake")
 
     def test_was_modified_since_specific(self):
         """DownloadMixin.was_modified_since() delegates to file wrapper."""
         file_wrapper = mock.Mock()
         file_wrapper.was_modified_since = mock.Mock(
-            return_value=mock.sentinel.return_value)
+            return_value=mock.sentinel.return_value
+        )
         mixin = views.DownloadMixin()
         since = mock.sentinel.since
         return_value = mixin.was_modified_since(file_wrapper, since)
@@ -51,13 +54,14 @@ class DownloadMixinTestCase(unittest.TestCase):
     def test_was_modified_since_not_implemented(self):
         """DownloadMixin.was_modified_since() returns True if file wrapper
         does not support ``modified_time`` or ``size`` attributes."""
-        fields = ['modified_time', 'size']
-        side_effects = [AttributeError('fake'), NotImplementedError('fake')]
+        fields = ["modified_time", "size"]
+        side_effects = [AttributeError("fake"), NotImplementedError("fake")]
         for field in fields:
             for side_effect in side_effects:
                 file_wrapper = mock.Mock()
-                setattr(file_wrapper, field, mock.Mock(
-                    side_effect=AttributeError('fake')))
+                setattr(
+                    file_wrapper, field, mock.Mock(side_effect=AttributeError("fake"))
+                )
                 mixin = views.DownloadMixin()
                 since = mock.sentinel.since
                 self.assertTrue(mixin.was_modified_since(file_wrapper, since))
@@ -71,13 +75,14 @@ class DownloadMixinTestCase(unittest.TestCase):
         """
         file_wrapper = mock.Mock()
         file_wrapper.was_modified_since = mock.Mock(
-            return_value=mock.sentinel.was_modified)
+            return_value=mock.sentinel.was_modified
+        )
         mixin = views.DownloadMixin()
         self.assertIs(
             mixin.was_modified_since(file_wrapper, mock.sentinel.since),
-            mock.sentinel.was_modified)
-        file_wrapper.was_modified_since.assert_called_once_with(
-            mock.sentinel.since)
+            mock.sentinel.was_modified,
+        )
+        file_wrapper.was_modified_since.assert_called_once_with(mock.sentinel.since)
 
     def test_was_modified_since_django(self):
         """DownloadMixin.was_modified_since() tries (2) files attributes.
@@ -90,22 +95,24 @@ class DownloadMixinTestCase(unittest.TestCase):
 
         """
         file_wrapper = mock.Mock()
-        file_wrapper.was_modified_since = mock.Mock(
-            side_effect=AttributeError)
+        file_wrapper.was_modified_since = mock.Mock(side_effect=AttributeError)
         file_wrapper.size = mock.sentinel.size
         file_wrapper.modified_time = datetime.now()
-        was_modified_since_mock = mock.Mock(
-            return_value=mock.sentinel.was_modified)
+        was_modified_since_mock = mock.Mock(return_value=mock.sentinel.was_modified)
         mixin = views.DownloadMixin()
-        with mock.patch('django_downloadview.views.base.was_modified_since',
-                        new=was_modified_since_mock):
+        with mock.patch(
+            "django_downloadview.views.base.was_modified_since",
+            new=was_modified_since_mock,
+        ):
             self.assertIs(
                 mixin.was_modified_since(file_wrapper, mock.sentinel.since),
-                mock.sentinel.was_modified)
+                mock.sentinel.was_modified,
+            )
         was_modified_since_mock.assert_called_once_with(
             mock.sentinel.since,
             calendar.timegm(file_wrapper.modified_time.utctimetuple()),
-            mock.sentinel.size)
+            mock.sentinel.size,
+        )
 
     def test_was_modified_since_fallback(self):
         """DownloadMixin.was_modified_since() fallbacks to `True`.
@@ -124,14 +131,12 @@ class DownloadMixinTestCase(unittest.TestCase):
 
         """
         file_wrapper = mock.Mock()
-        file_wrapper.was_modified_since = mock.Mock(
-            side_effect=NotImplementedError)
+        file_wrapper.was_modified_since = mock.Mock(side_effect=NotImplementedError)
         type(file_wrapper).modified_time = mock.PropertyMock(
-            side_effect=NotImplementedError)
+            side_effect=NotImplementedError
+        )
         mixin = views.DownloadMixin()
-        self.assertIs(
-            mixin.was_modified_since(file_wrapper, 'fake since'),
-            True)
+        self.assertIs(mixin.was_modified_since(file_wrapper, "fake since"), True)
 
     def test_not_modified_response(self):
         "DownloadMixin.not_modified_response returns HttpResponseNotModified."
@@ -145,12 +150,14 @@ class DownloadMixinTestCase(unittest.TestCase):
         mixin.file_instance = mock.sentinel.file_wrapper
         response_factory = mock.Mock(return_value=mock.sentinel.response)
         mixin.response_class = response_factory
-        response_kwargs = {'dummy': 'value',
-                           'file_instance': mock.sentinel.file_wrapper,
-                           'attachment': True,
-                           'basename': None,
-                           'file_mimetype': None,
-                           'file_encoding': None}
+        response_kwargs = {
+            "dummy": "value",
+            "file_instance": mock.sentinel.file_wrapper,
+            "attachment": True,
+            "basename": None,
+            "file_mimetype": None,
+            "file_encoding": None,
+        }
         response = mixin.download_response(**response_kwargs)
         self.assertIs(response, mock.sentinel.response)
         response_factory.assert_called_once_with(**response_kwargs)  # Not args
@@ -161,11 +168,12 @@ class DownloadMixinTestCase(unittest.TestCase):
         # Setup.
         mixin = views.DownloadMixin()
         mixin.request = django.test.RequestFactory().get(
-            '/dummy-url',
-            HTTP_IF_MODIFIED_SINCE=mock.sentinel.http_if_modified_since)
+            "/dummy-url", HTTP_IF_MODIFIED_SINCE=mock.sentinel.http_if_modified_since
+        )
         mixin.was_modified_since = mock.Mock(return_value=False)
         mixin.not_modified_response = mock.Mock(
-            return_value=mock.sentinel.http_not_modified_response)
+            return_value=mock.sentinel.http_not_modified_response
+        )
         mixin.get_file = mock.Mock(return_value=mock.sentinel.file_wrapper)
         # Run.
         response = mixin.render_to_response()
@@ -173,8 +181,8 @@ class DownloadMixinTestCase(unittest.TestCase):
         self.assertIs(response, mock.sentinel.http_not_modified_response)
         mixin.get_file.assert_called_once_with()
         mixin.was_modified_since.assert_called_once_with(
-            mock.sentinel.file_wrapper,
-            mock.sentinel.http_if_modified_since)
+            mock.sentinel.file_wrapper, mock.sentinel.http_if_modified_since
+        )
         mixin.not_modified_response.assert_called_once_with()
 
     def test_render_to_response_modified(self):
@@ -182,11 +190,12 @@ class DownloadMixinTestCase(unittest.TestCase):
         # Setup.
         mixin = views.DownloadMixin()
         mixin.request = django.test.RequestFactory().get(
-            '/dummy-url',
-            HTTP_IF_MODIFIED_SINCE=None)
+            "/dummy-url", HTTP_IF_MODIFIED_SINCE=None
+        )
         mixin.was_modified_since = mock.Mock()
         mixin.download_response = mock.Mock(
-            return_value=mock.sentinel.download_response)
+            return_value=mock.sentinel.download_response
+        )
         mixin.get_file = mock.Mock(return_value=mock.sentinel.file_wrapper)
         # Run.
         response = mixin.render_to_response()
@@ -200,7 +209,7 @@ class DownloadMixinTestCase(unittest.TestCase):
         "DownloadMixin.render_to_response() calls file_not_found_response()."
         # Setup.
         mixin = views.DownloadMixin()
-        mixin.request = django.test.RequestFactory().get('/dummy-url')
+        mixin.request = django.test.RequestFactory().get("/dummy-url")
         mixin.get_file = mock.Mock(side_effect=exceptions.FileNotFound)
         mixin.file_not_found_response = mock.Mock()
         # Run.
@@ -217,14 +226,14 @@ class DownloadMixinTestCase(unittest.TestCase):
 
 class BaseDownloadViewTestCase(unittest.TestCase):
     "Tests around :class:`django_downloadviews.views.base.BaseDownloadView`."
+
     def test_get(self):
         """BaseDownloadView.get() calls render_to_response()."""
-        request = django.test.RequestFactory().get('/dummy-url')
-        args = ['dummy-arg']
-        kwargs = {'dummy': 'kwarg'}
+        request = django.test.RequestFactory().get("/dummy-url")
+        args = ["dummy-arg"]
+        kwargs = {"dummy": "kwarg"}
         view = setup_view(views.BaseDownloadView(), request, *args, **kwargs)
-        view.render_to_response = mock.Mock(
-            return_value=mock.sentinel.response)
+        view.render_to_response = mock.Mock(return_value=mock.sentinel.response)
         response = view.get(request, *args, **kwargs)
         self.assertIs(response, mock.sentinel.response)
         view.render_to_response.assert_called_once_with()
@@ -232,10 +241,10 @@ class BaseDownloadViewTestCase(unittest.TestCase):
 
 class PathDownloadViewTestCase(unittest.TestCase):
     "Tests for :class:`django_downloadviews.views.path.PathDownloadView`."
+
     def test_get_file_ok(self):
         "PathDownloadView.get_file() returns ``File`` instance."
-        view = setup_view(views.PathDownloadView(path=__file__),
-                          'fake request')
+        view = setup_view(views.PathDownloadView(path=__file__), "fake request")
         file_wrapper = view.get_file()
         self.assertTrue(isinstance(file_wrapper, File))
 
@@ -244,8 +253,7 @@ class PathDownloadViewTestCase(unittest.TestCase):
         exist.
 
         """
-        view = setup_view(views.PathDownloadView(path='i-do-no-exist'),
-                          'fake request')
+        view = setup_view(views.PathDownloadView(path="i-do-no-exist"), "fake request")
         with self.assertRaises(exceptions.FileNotFound):
             view.get_file()
 
@@ -253,18 +261,19 @@ class PathDownloadViewTestCase(unittest.TestCase):
         """PathDownloadView.get_file() raises FileNotFound if file is a
         directory."""
         view = setup_view(
-            views.PathDownloadView(path=os.path.dirname(__file__)),
-            'fake request')
+            views.PathDownloadView(path=os.path.dirname(__file__)), "fake request"
+        )
         with self.assertRaises(exceptions.FileNotFound):
             view.get_file()
 
 
 class ObjectDownloadViewTestCase(unittest.TestCase):
     "Tests for :class:`django_downloadviews.views.object.ObjectDownloadView`."
+
     def test_get_file_ok(self):
         "ObjectDownloadView.get_file() returns ``file`` field by default."
-        view = setup_view(views.ObjectDownloadView(), 'fake request')
-        view.object = mock.Mock(spec=['file'])
+        view = setup_view(views.ObjectDownloadView(), "fake request")
+        view.object = mock.Mock(spec=["file"])
         view.get_file()
 
     def test_get_file_wrong_field(self):
@@ -275,17 +284,19 @@ class ObjectDownloadViewTestCase(unittest.TestCase):
         i.e. it is related to Python code.
 
         """
-        view = setup_view(views.ObjectDownloadView(file_field='other_field'),
-                          'fake request')
-        view.object = mock.Mock(spec=['file'])
+        view = setup_view(
+            views.ObjectDownloadView(file_field="other_field"), "fake request"
+        )
+        view.object = mock.Mock(spec=["file"])
         with self.assertRaises(AttributeError):
             view.get_file()
 
     def test_get_file_empty_field(self):
         """ObjectDownloadView.get_file() raises FileNotFound if field does not
         exist."""
-        view = setup_view(views.ObjectDownloadView(file_field='other_field'),
-                          'fake request')
+        view = setup_view(
+            views.ObjectDownloadView(file_field="other_field"), "fake request"
+        )
         view.object = mock.Mock()
         view.object.other_field = None
         with self.assertRaises(exceptions.FileNotFound):
@@ -295,13 +306,15 @@ class ObjectDownloadViewTestCase(unittest.TestCase):
 class VirtualDownloadViewTestCase(unittest.TestCase):
     """Test suite around
     :py:class:`django_downloadview.views.VirtualDownloadView`."""
+
     def test_was_modified_since_specific(self):
         """VirtualDownloadView.was_modified_since() delegates to file wrapper.
 
         """
         file_wrapper = mock.Mock()
         file_wrapper.was_modified_since = mock.Mock(
-            return_value=mock.sentinel.from_file_wrapper)
+            return_value=mock.sentinel.from_file_wrapper
+        )
         view = views.VirtualDownloadView()
         since = mock.sentinel.since
         return_value = view.was_modified_since(file_wrapper, since)
@@ -314,9 +327,9 @@ class VirtualDownloadViewTestCase(unittest.TestCase):
         file_wrapper = mock.Mock()
         file_wrapper.was_modified_since = mock.Mock(side_effect=AttributeError)
         modified_time = mock.PropertyMock()
-        setattr(file_wrapper, 'modified_time', modified_time)
+        setattr(file_wrapper, "modified_time", modified_time)
         size = mock.PropertyMock()
-        setattr(file_wrapper, 'size', size)
+        setattr(file_wrapper, "size", size)
         view = views.VirtualDownloadView()
         since = mock.sentinel.since
         result = view.was_modified_since(file_wrapper, since)

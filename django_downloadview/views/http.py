@@ -7,8 +7,9 @@ from django_downloadview.views.base import BaseDownloadView
 
 class HTTPDownloadView(BaseDownloadView):
     """Proxy files that live on remote servers."""
+
     #: URL to download (the one we are proxying).
-    url = u''
+    url = u""
 
     #: Additional keyword arguments for request handler.
     request_kwargs = {}
@@ -39,7 +40,9 @@ class HTTPDownloadView(BaseDownloadView):
 
     def get_file(self):
         """Return wrapper which has an ``url`` attribute."""
-        return HTTPFile(request_factory=self.get_request_factory(),
-                        name=self.get_basename(),
-                        url=self.get_url(),
-                        **self.get_request_kwargs())
+        return HTTPFile(
+            request_factory=self.get_request_factory(),
+            name=self.get_basename(),
+            url=self.get_url(),
+            **self.get_request_kwargs()
+        )

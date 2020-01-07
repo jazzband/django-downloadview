@@ -8,34 +8,40 @@ from demoproject.compat import reverse
 class TextTestCase(django.test.TestCase):
     def test_download_response(self):
         """'virtual:text' serves 'hello-world.txt' from unicode."""
-        url = reverse('virtual:text')
+        url = reverse("virtual:text")
         response = self.client.get(url)
-        assert_download_response(self,
-                                 response,
-                                 content='Hello world!\n',
-                                 basename='hello-world.txt',
-                                 mime_type='text/plain')
+        assert_download_response(
+            self,
+            response,
+            content="Hello world!\n",
+            basename="hello-world.txt",
+            mime_type="text/plain",
+        )
 
 
 class StringIOTestCase(django.test.TestCase):
     def test_download_response(self):
         """'virtual:stringio' serves 'hello-world.txt' from stringio."""
-        url = reverse('virtual:stringio')
+        url = reverse("virtual:stringio")
         response = self.client.get(url)
-        assert_download_response(self,
-                                 response,
-                                 content='Hello world!\n',
-                                 basename='hello-world.txt',
-                                 mime_type='text/plain')
+        assert_download_response(
+            self,
+            response,
+            content="Hello world!\n",
+            basename="hello-world.txt",
+            mime_type="text/plain",
+        )
 
 
 class GeneratedTestCase(django.test.TestCase):
     def test_download_response(self):
         """'virtual:generated' serves 'hello-world.txt' from generator."""
-        url = reverse('virtual:generated')
+        url = reverse("virtual:generated")
         response = self.client.get(url)
-        assert_download_response(self,
-                                 response,
-                                 content='Hello world!\n',
-                                 basename='hello-world.txt',
-                                 mime_type='text/plain')
+        assert_download_response(
+            self,
+            response,
+            content="Hello world!\n",
+            basename="hello-world.txt",
+            mime_type="text/plain",
+        )

@@ -7,6 +7,7 @@ class XSendfileValidator(object):
     See also :py:func:`assert_x_sendfile` shortcut function.
 
     """
+
     def __call__(self, test_case, response, **assertions):
         """Assert that ``response`` is a valid X-Sendfile response.
 
@@ -22,7 +23,7 @@ class XSendfileValidator(object):
         """
         self.assert_x_sendfile_response(test_case, response)
         for key, value in assertions.items():
-            assert_func = getattr(self, 'assert_%s' % key)
+            assert_func = getattr(self, "assert_%s" % key)
             assert_func(test_case, response, value)
 
     def assert_x_sendfile_response(self, test_case, response):
@@ -32,15 +33,15 @@ class XSendfileValidator(object):
         test_case.assertEqual(response.basename, value)
 
     def assert_content_type(self, test_case, response, value):
-        test_case.assertEqual(response['Content-Type'], value)
+        test_case.assertEqual(response["Content-Type"], value)
 
     def assert_file_path(self, test_case, response, value):
-        test_case.assertEqual(response['X-Sendfile'], value)
+        test_case.assertEqual(response["X-Sendfile"], value)
 
     def assert_attachment(self, test_case, response, value):
-        header = 'Content-Disposition'
+        header = "Content-Disposition"
         if value:
-            test_case.assertTrue(response[header].startswith('attachment'))
+            test_case.assertTrue(response[header].startswith("attachment"))
         else:
             test_case.assertFalse(header in response)
 

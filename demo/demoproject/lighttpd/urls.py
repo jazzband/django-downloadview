@@ -6,11 +6,15 @@ from demoproject.lighttpd import views
 
 
 urlpatterns = patterns(
-    'demoproject.lighttpd.views',
-    url(r'^optimized-by-middleware/$',
+    "demoproject.lighttpd.views",
+    url(
+        r"^optimized-by-middleware/$",
         views.optimized_by_middleware,
-        name='optimized_by_middleware'),
-    url(r'^optimized-by-decorator/$',
+        name="optimized_by_middleware",
+    ),
+    url(
+        r"^optimized-by-decorator/$",
         views.optimized_by_decorator,
-        name='optimized_by_decorator'),
+        name="optimized_by_decorator",
+    ),
 )

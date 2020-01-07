@@ -6,8 +6,7 @@ from django.test.utils import override_settings
 from django.utils.encoding import force_bytes
 
 from django_downloadview.middlewares import is_download_response
-from django_downloadview.response import (encode_basename_ascii,
-                                          encode_basename_utf8)
+from django_downloadview.response import encode_basename_ascii, encode_basename_utf8
 
 
 def setup_view(view, request, *args, **kwargs):
@@ -66,11 +65,12 @@ class temporary_media_root(override_settings):
     True
 
     """
+
     def enable(self):
         """Create a temporary directory and use it to override
         settings.MEDIA_ROOT."""
         tmp_dir = tempfile.mkdtemp()
-        self.options['MEDIA_ROOT'] = tmp_dir
+        self.options["MEDIA_ROOT"] = tmp_dir
         super(temporary_media_root, self).enable()
 
     def disable(self):
@@ -82,6 +82,7 @@ class temporary_media_root(override_settings):
 
 class DownloadResponseValidator(object):
     """Utility class to validate DownloadResponse instances."""
+
     def __call__(self, test_case, response, **assertions):
         """Assert that ``response`` is a valid DownloadResponse instance.
 
@@ -102,7 +103,7 @@ class DownloadResponseValidator(object):
         """
         self.assert_download_response(test_case, response)
         for key, value in assertions.items():
-            assert_func = getattr(self, 'assert_%s' % key)
+            assert_func = getattr(self, "assert_%s" % key)
             assert_func(test_case, response, value)
 
     def assert_download_response(self, test_case, response):
@@ -116,40 +117,40 @@ class DownloadResponseValidator(object):
         check_ascii = False
         if ascii_name == utf8_name:  # Only ASCII characters.
             check_ascii = True
-            if "filename*=" in response['Content-Disposition']:
+            if "filename*=" in response["Content-Disposition"]:
                 check_utf8 = True
         else:
             check_utf8 = True
-            if "filename=" in response['Content-Disposition']:
+            if "filename=" in response["Content-Disposition"]:
                 check_ascii = True
         if check_ascii:
-            test_case.assertIn('filename="{name}"'.format(
-                name=ascii_name),
-                response['Content-Disposition'])
+            test_case.assertIn(
+                f'filename="{ascii_name}"', response["Content-Disposition"],
+            )
         if check_utf8:
             test_case.assertIn(
-                "filename*=UTF-8''{name}".format(name=utf8_name),
-                response['Content-Disposition'])
+                f"filename*=UTF-8''{utf8_name}", response["Content-Disposition"],
+            )
 
     def assert_content_type(self, test_case, response, value):
-        test_case.assertEqual(response['Content-Type'], value)
+        test_case.assertEqual(response["Content-Type"], value)
 
     def assert_mime_type(self, test_case, response, value):
-        test_case.assertTrue(response['Content-Type'].startswith(value))
+        test_case.assertTrue(response["Content-Type"].startswith(value))
 
     def assert_content(self, test_case, response, value):
         """Assert value equals response's content (byte comparison)."""
         parts = [force_bytes(s) for s in response.streaming_content]
-        test_case.assertEqual(b''.join(parts), force_bytes(value))
+        test_case.assertEqual(b"".join(parts), force_bytes(value))
 
     def assert_attachment(self, test_case, response, value):
         if value:
-            test_case.assertTrue(
-                'attachment;' in response['Content-Disposition'])
+            test_case.assertTrue("attachment;" in response["Content-Disposition"])
         else:
             test_case.assertTrue(
-                'Content-Disposition' not in response or
-                'attachment;' not in response['Content-Disposition'])
+                "Content-Disposition" not in response
+                or "attachment;" not in response["Content-Disposition"]
+            )
 
 
 def assert_download_response(test_case, response, **assertions):

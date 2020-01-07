@@ -13,7 +13,7 @@ from demoproject.storage import views
 
 
 # Fixtures.
-file_content = 'Hello world!\n'
+file_content = "Hello world!\n"
 
 
 def setup_file(path):
@@ -24,44 +24,48 @@ class StaticPathTestCase(django.test.TestCase):
     @temporary_media_root()
     def test_download_response(self):
         """'storage:static_path' streams file by path."""
-        setup_file('1.txt')
-        url = reverse('storage:static_path', kwargs={'path': '1.txt'})
+        setup_file("1.txt")
+        url = reverse("storage:static_path", kwargs={"path": "1.txt"})
         response = self.client.get(url)
-        assert_download_response(self,
-                                 response,
-                                 content=file_content,
-                                 basename='1.txt',
-                                 mime_type='text/plain')
+        assert_download_response(
+            self,
+            response,
+            content=file_content,
+            basename="1.txt",
+            mime_type="text/plain",
+        )
 
     @temporary_media_root()
     def test_not_modified_download_response(self):
         """'storage:static_path' sends not modified response if unmodified."""
-        setup_file('1.txt')
-        url = reverse('storage:static_path', kwargs={'path': '1.txt'})
+        setup_file("1.txt")
+        url = reverse("storage:static_path", kwargs={"path": "1.txt"})
+        year = datetime.date.today().year + 4
         response = self.client.get(
-            url,
-            HTTP_IF_MODIFIED_SINCE='Sat, 29 Oct {year} 19:43:31 GMT'.format(
-                year=datetime.date.today().year + 4)
+            url, HTTP_IF_MODIFIED_SINCE=f"Sat, 29 Oct {year} 19:43:31 GMT",
         )
         self.assertTrue(isinstance(response, HttpResponseNotModified))
 
     @temporary_media_root()
     def test_modified_since_download_response(self):
         """'storage:static_path' streams file if modified."""
-        setup_file('1.txt')
-        url = reverse('storage:static_path', kwargs={'path': '1.txt'})
+        setup_file("1.txt")
+        url = reverse("storage:static_path", kwargs={"path": "1.txt"})
         response = self.client.get(
-            url,
-            HTTP_IF_MODIFIED_SINCE='Sat, 29 Oct 1980 19:43:31 GMT')
-        assert_download_response(self,
-                                 response,
-                                 content=file_content,
-                                 basename='1.txt',
-                                 mime_type='text/plain')
+            url, HTTP_IF_MODIFIED_SINCE="Sat, 29 Oct 1980 19:43:31 GMT"
+        )
+        assert_download_response(
+            self,
+            response,
+            content=file_content,
+            basename="1.txt",
+            mime_type="text/plain",
+        )
 
 
 class DynamicPathIntegrationTestCase(django.test.TestCase):
     """Integration tests around ``storage:dynamic_path`` URL."""
+
     @temporary_media_root()
     def test_download_response(self):
         """'dynamic_path' streams file by generated path.
@@ -74,18 +78,21 @@ class DynamicPathIntegrationTestCase(django.test.TestCase):
         file in storage.
 
         """
-        setup_file('1.TXT')
-        url = reverse('storage:dynamic_path', kwargs={'path': '1.txt'})
+        setup_file("1.TXT")
+        url = reverse("storage:dynamic_path", kwargs={"path": "1.txt"})
         response = self.client.get(url)
-        assert_download_response(self,
-                                 response,
-                                 content=file_content,
-                                 basename='1.TXT',
-                                 mime_type='text/plain')
+        assert_download_response(
+            self,
+            response,
+            content=file_content,
+            basename="1.TXT",
+            mime_type="text/plain",
+        )
 
 
 class DynamicPathUnitTestCase(unittest.TestCase):
     """Unit tests around ``views.DynamicStorageDownloadView``."""
+
     def test_get_path(self):
         """DynamicStorageDownloadView.get_path() returns uppercase path.
 
@@ -97,8 +104,10 @@ class DynamicPathUnitTestCase(unittest.TestCase):
         URL works. It targets only custom ``DynamicStorageDownloadView`` class.
 
         """
-        view = setup_view(views.DynamicStorageDownloadView(),
-                          django.test.RequestFactory().get('/fake-url'),
-                          path='dummy path')
+        view = setup_view(
+            views.DynamicStorageDownloadView(),
+            django.test.RequestFactory().get("/fake-url"),
+            path="dummy path",
+        )
         path = view.get_path()
-        self.assertEqual(path, 'DUMMY PATH')
+        self.assertEqual(path, "DUMMY PATH")

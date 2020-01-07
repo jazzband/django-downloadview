@@ -15,7 +15,7 @@ from django.core.exceptions import ImproperlyConfigured
 
 # In version 1.3, former XAccelRedirectMiddleware has been renamed to
 # SingleXAccelRedirectMiddleware. So tell the users.
-deprecated_middleware = 'django_downloadview.nginx.XAccelRedirectMiddleware'
+deprecated_middleware = "django_downloadview.nginx.XAccelRedirectMiddleware"
 
 
 def get_middlewares():
@@ -27,15 +27,18 @@ def get_middlewares():
 
 if deprecated_middleware in get_middlewares():
     raise ImproperlyConfigured(
-        '{deprecated_middleware} middleware has been renamed as of '
-        'django-downloadview version 1.3. You may use '
+        "{deprecated_middleware} middleware has been renamed as of "
+        "django-downloadview version 1.3. You may use "
         '"django_downloadview.nginx.SingleXAccelRedirectMiddleware" instead, '
-        'or upgrade to "django_downloadview.SmartDownloadDispatcher". ')
+        'or upgrade to "django_downloadview.SmartDownloadDispatcher". '
+    )
 
 
-deprecated_msg = 'settings.{deprecated} is deprecated. You should combine ' \
-                 '"django_downloadview.SmartDownloadDispatcher" with ' \
-                 'with DOWNLOADVIEW_BACKEND and DOWNLOADVIEW_RULES instead.'
+deprecated_msg = (
+    "settings.{deprecated} is deprecated. You should combine "
+    '"django_downloadview.SmartDownloadDispatcher" with '
+    "with DOWNLOADVIEW_BACKEND and DOWNLOADVIEW_RULES instead."
+)
 
 
 #: Default value for X-Accel-Buffering header.
@@ -50,10 +53,9 @@ deprecated_msg = 'settings.{deprecated} is deprecated. You should combine ' \
 #: If set to ``False``, Nginx buffering is disabled.
 #: If set to ``True``, Nginx buffering is enabled.
 DEFAULT_WITH_BUFFERING = None
-setting_name = 'NGINX_DOWNLOAD_MIDDLEWARE_WITH_BUFFERING'
+setting_name = "NGINX_DOWNLOAD_MIDDLEWARE_WITH_BUFFERING"
 if hasattr(settings, setting_name):
-    warnings.warn(deprecated_msg.format(deprecated=setting_name),
-                  DeprecationWarning)
+    warnings.warn(deprecated_msg.format(deprecated=setting_name), DeprecationWarning)
 if not hasattr(settings, setting_name):
     setattr(settings, setting_name, DEFAULT_WITH_BUFFERING)
 
@@ -69,10 +71,9 @@ if not hasattr(settings, setting_name):
 #: If set to ``False``, Nginx limit rate is disabled.
 #: Else, it indicates the limit rate in bytes.
 DEFAULT_LIMIT_RATE = None
-setting_name = 'NGINX_DOWNLOAD_MIDDLEWARE_LIMIT_RATE'
+setting_name = "NGINX_DOWNLOAD_MIDDLEWARE_LIMIT_RATE"
 if hasattr(settings, setting_name):
-    warnings.warn(deprecated_msg.format(deprecated=setting_name),
-                  DeprecationWarning)
+    warnings.warn(deprecated_msg.format(deprecated=setting_name), DeprecationWarning)
 if not hasattr(settings, setting_name):
     setattr(settings, setting_name, DEFAULT_LIMIT_RATE)
 
@@ -88,49 +89,43 @@ if not hasattr(settings, setting_name):
 #: If set to ``False``, Nginx buffering is disabled.
 #: Else, it indicates the expiration delay, in seconds.
 DEFAULT_EXPIRES = None
-setting_name = 'NGINX_DOWNLOAD_MIDDLEWARE_EXPIRES'
+setting_name = "NGINX_DOWNLOAD_MIDDLEWARE_EXPIRES"
 if hasattr(settings, setting_name):
-    warnings.warn(deprecated_msg.format(deprecated=setting_name),
-                  DeprecationWarning)
+    warnings.warn(deprecated_msg.format(deprecated=setting_name), DeprecationWarning)
 if not hasattr(settings, setting_name):
     setattr(settings, setting_name, DEFAULT_EXPIRES)
 
 
 #: Default value for settings.NGINX_DOWNLOAD_MIDDLEWARE_SOURCE_DIR.
 DEFAULT_SOURCE_DIR = settings.MEDIA_ROOT
-setting_name = 'NGINX_DOWNLOAD_MIDDLEWARE_MEDIA_ROOT'
+setting_name = "NGINX_DOWNLOAD_MIDDLEWARE_MEDIA_ROOT"
 if hasattr(settings, setting_name):
-    warnings.warn(deprecated_msg.format(deprecated=setting_name),
-                  DeprecationWarning)
+    warnings.warn(deprecated_msg.format(deprecated=setting_name), DeprecationWarning)
     DEFAULT_SOURCE_DIR = settings.NGINX_DOWNLOAD_MIDDLEWARE_MEDIA_ROOT
-setting_name = 'NGINX_DOWNLOAD_MIDDLEWARE_SOURCE_DIR'
+setting_name = "NGINX_DOWNLOAD_MIDDLEWARE_SOURCE_DIR"
 if hasattr(settings, setting_name):
-    warnings.warn(deprecated_msg.format(deprecated=setting_name),
-                  DeprecationWarning)
+    warnings.warn(deprecated_msg.format(deprecated=setting_name), DeprecationWarning)
 if not hasattr(settings, setting_name):
     setattr(settings, setting_name, DEFAULT_SOURCE_DIR)
 
 
 #: Default value for settings.NGINX_DOWNLOAD_MIDDLEWARE_SOURCE_URL.
 DEFAULT_SOURCE_URL = settings.MEDIA_URL
-setting_name = 'NGINX_DOWNLOAD_MIDDLEWARE_SOURCE_URL'
+setting_name = "NGINX_DOWNLOAD_MIDDLEWARE_SOURCE_URL"
 if hasattr(settings, setting_name):
-    warnings.warn(deprecated_msg.format(deprecated=setting_name),
-                  DeprecationWarning)
+    warnings.warn(deprecated_msg.format(deprecated=setting_name), DeprecationWarning)
 if not hasattr(settings, setting_name):
     setattr(settings, setting_name, DEFAULT_SOURCE_URL)
 
 
 #: Default value for settings.NGINX_DOWNLOAD_MIDDLEWARE_DESTINATION_URL.
 DEFAULT_DESTINATION_URL = None
-setting_name = 'NGINX_DOWNLOAD_MIDDLEWARE_MEDIA_URL'
+setting_name = "NGINX_DOWNLOAD_MIDDLEWARE_MEDIA_URL"
 if hasattr(settings, setting_name):
-    warnings.warn(deprecated_msg.format(deprecated=setting_name),
-                  DeprecationWarning)
+    warnings.warn(deprecated_msg.format(deprecated=setting_name), DeprecationWarning)
     DEFAULT_SOURCE_DIR = settings.NGINX_DOWNLOAD_MIDDLEWARE_MEDIA_URL
-setting_name = 'NGINX_DOWNLOAD_MIDDLEWARE_DESTINATION_URL'
+setting_name = "NGINX_DOWNLOAD_MIDDLEWARE_DESTINATION_URL"
 if hasattr(settings, setting_name):
-    warnings.warn(deprecated_msg.format(deprecated=setting_name),
-                  DeprecationWarning)
+    warnings.warn(deprecated_msg.format(deprecated=setting_name), DeprecationWarning)
 if not hasattr(settings, setting_name):
     setattr(settings, setting_name, DEFAULT_DESTINATION_URL)

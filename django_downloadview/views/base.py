@@ -25,6 +25,7 @@ class DownloadMixin(object):
     returned by :py:meth:`get_file`.
 
     """
+
     #: Response class, to be used in :py:meth:`render_to_response`.
     response_class = DownloadResponse
 
@@ -113,7 +114,8 @@ class DownloadMixin(object):
         except (AttributeError, NotImplementedError):
             try:
                 modification_time = calendar.timegm(
-                    file_instance.modified_time.utctimetuple())
+                    file_instance.modified_time.utctimetuple()
+                )
                 size = file_instance.size
             except (AttributeError, NotImplementedError) as e:
                 print("!=======!", e)
@@ -127,11 +129,11 @@ class DownloadMixin(object):
 
     def download_response(self, *response_args, **response_kwargs):
         """Return :class:`~django_downloadview.response.DownloadResponse`."""
-        response_kwargs.setdefault('file_instance', self.file_instance)
-        response_kwargs.setdefault('attachment', self.attachment)
-        response_kwargs.setdefault('basename', self.get_basename())
-        response_kwargs.setdefault('file_mimetype', self.get_mimetype())
-        response_kwargs.setdefault('file_encoding', self.get_encoding())
+        response_kwargs.setdefault("file_instance", self.file_instance)
+        response_kwargs.setdefault("attachment", self.attachment)
+        response_kwargs.setdefault("basename", self.get_basename())
+        response_kwargs.setdefault("file_mimetype", self.get_mimetype())
+        response_kwargs.setdefault("file_encoding", self.get_encoding())
         response = self.response_class(*response_args, **response_kwargs)
         return response
 
@@ -155,7 +157,7 @@ class DownloadMixin(object):
         except exceptions.FileNotFound:
             return self.file_not_found_response()
         # Respect the If-Modified-Since header.
-        since = self.request.META.get('HTTP_IF_MODIFIED_SINCE', None)
+        since = self.request.META.get("HTTP_IF_MODIFIED_SINCE", None)
         if since is not None:
             if not self.was_modified_since(self.file_instance, since):
                 return self.not_modified_response(**response_kwargs)
@@ -165,6 +167,7 @@ class DownloadMixin(object):
 
 class BaseDownloadView(DownloadMixin, View):
     """A base :class:`DownloadMixin` that implements :meth:`get`."""
+
     def get(self, request, *args, **kwargs):
         """Handle GET requests: stream a file."""
         return self.render_to_response()

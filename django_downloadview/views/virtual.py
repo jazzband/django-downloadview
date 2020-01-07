@@ -8,6 +8,7 @@ class VirtualDownloadView(BaseDownloadView):
     Override the :py:meth:`get_file` method to customize file wrapper.
 
     """
+
     def was_modified_since(self, file_instance, since):
         """Delegate to file wrapper's was_modified_since, or return True.
 

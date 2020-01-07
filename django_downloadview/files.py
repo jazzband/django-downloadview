@@ -17,6 +17,7 @@ class StorageFile(File):
     but unrelated to model instance.
 
     """
+
     def __init__(self, storage, name, file=None):
         """Constructor.
 
@@ -33,8 +34,8 @@ class StorageFile(File):
 
     def _get_file(self):
         """Getter for :py:attr:``file`` property."""
-        if not hasattr(self, '_file') or self._file is None:
-            self._file = self.storage.open(self.name, 'rb')
+        if not hasattr(self, "_file") or self._file is None:
+            self._file = self.storage.open(self.name, "rb")
         return self._file
 
     def _set_file(self, file):
@@ -48,7 +49,7 @@ class StorageFile(File):
     #: Required by django.core.files.utils.FileProxy.
     file = property(_get_file, _set_file, _del_file)
 
-    def open(self, mode='rb'):
+    def open(self, mode="rb"):
         """Retrieves the specified file from storage and return open() result.
 
         Proxy to self.storage.open(self.name, mode).
@@ -152,7 +153,8 @@ class StorageFile(File):
 
 class VirtualFile(File):
     """Wrapper for files that live in memory."""
-    def __init__(self, file=None, name=u'', url='', size=None):
+
+    def __init__(self, file=None, name=u"", url="", size=None):
         """Constructor.
 
         file:
@@ -203,7 +205,7 @@ class VirtualFile(File):
 
                 # If this is the end of a line, yield
                 # otherwise, wait for the next round
-                if line[-1] in ('\n', '\r'):
+                if line[-1] in ("\n", "\r"):
                     yield line
                 else:
                     buffer_ = line
@@ -222,19 +224,19 @@ class HTTPFile(File):
     Always sets "stream=True" in requests kwargs.
 
     """
-    def __init__(self, request_factory=requests.get, url='', name=u'',
-                 **kwargs):
+
+    def __init__(self, request_factory=requests.get, url="", name=u"", **kwargs):
         self.request_factory = request_factory
         self.url = url
         if name is None:
             parts = urlparse(url)
             if parts.path:  # Name from path.
-                self.name = parts.path.strip('/').rsplit('/', 1)[-1]
+                self.name = parts.path.strip("/").rsplit("/", 1)[-1]
             else:  # Name from domain.
                 self.name = parts.netloc
         else:
             self.name = name
-        kwargs['stream'] = True
+        kwargs["stream"] = True
         self.request_kwargs = kwargs
 
     @property
@@ -242,8 +244,7 @@ class HTTPFile(File):
         try:
             return self._request
         except AttributeError:
-            self._request = self.request_factory(self.url,
-                                                 **self.request_kwargs)
+            self._request = self.request_factory(self.url, **self.request_kwargs)
             return self._request
 
     @property
@@ -262,9 +263,9 @@ class HTTPFile(File):
         Reads response's "content-length" header.
 
         """
-        return self.request.headers['Content-Length']
+        return self.request.headers["Content-Length"]
 
     @property
     def content_type(self):
         """Return content type of the file (from original response)."""
-        return self.request.headers['Content-Type']
+        return self.request.headers["Content-Type"]

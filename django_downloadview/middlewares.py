@@ -14,9 +14,11 @@ from django.core.exceptions import ImproperlyConfigured
 try:
     from django.utils.deprecation import MiddlewareMixin
 except ImportError:
+
     class MiddlewareMixin(object):
         def __init__(self, get_response=None):
             super(MiddlewareMixin, self).__init__()
+
 
 from django_downloadview.response import DownloadResponse
 from django_downloadview.utils import import_member
@@ -43,6 +45,7 @@ class BaseDownloadMiddleware(MiddlewareMixin):
     Subclasses **must** implement :py:meth:`process_download_response` method.
 
     """
+
     def is_download_response(self, response):
         """Return True if ``response`` can be considered as a file download.
 
@@ -66,6 +69,7 @@ class BaseDownloadMiddleware(MiddlewareMixin):
 
 class RealDownloadMiddleware(BaseDownloadMiddleware):
     """Download middleware that cannot handle virtual files."""
+
     def is_download_response(self, response):
         """Return True for DownloadResponse, except for "virtual" files.
 
@@ -86,6 +90,7 @@ class RealDownloadMiddleware(BaseDownloadMiddleware):
 
 class DownloadDispatcherMiddleware(BaseDownloadMiddleware):
     "Download middleware that dispatches job to several middleware instances."
+
     def __init__(self, get_response=None, middlewares=AUTO_CONFIGURE):
         super(DownloadDispatcherMiddleware, self).__init__(get_response)
         #: List of children middlewares.
@@ -96,9 +101,9 @@ class DownloadDispatcherMiddleware(BaseDownloadMiddleware):
     def auto_configure_middlewares(self):
         """Populate :attr:`middlewares` from
         ``settings.DOWNLOADVIEW_MIDDLEWARES``."""
-        for (key, import_string, kwargs) in getattr(settings,
-                                                    'DOWNLOADVIEW_MIDDLEWARES',
-                                                    []):
+        for (key, import_string, kwargs) in getattr(
+            settings, "DOWNLOADVIEW_MIDDLEWARES", []
+        ):
             factory = import_member(import_string)
             middleware = factory(**kwargs)
             self.middlewares.append((key, middleware))
@@ -112,10 +117,13 @@ class DownloadDispatcherMiddleware(BaseDownloadMiddleware):
 
 class SmartDownloadMiddleware(BaseDownloadMiddleware):
     """Easy to configure download middleware."""
-    def __init__(self,
-                 get_response=None,
-                 backend_factory=AUTO_CONFIGURE,
-                 backend_options=AUTO_CONFIGURE):
+
+    def __init__(
+        self,
+        get_response=None,
+        backend_factory=AUTO_CONFIGURE,
+        backend_options=AUTO_CONFIGURE,
+    ):
         """Constructor."""
         super(SmartDownloadMiddleware, self).__init__(get_response)
         #: :class:`DownloadDispatcher` instance that can hold multiple
@@ -137,8 +145,9 @@ class SmartDownloadMiddleware(BaseDownloadMiddleware):
         try:
             self.backend_factory = import_member(settings.DOWNLOADVIEW_BACKEND)
         except AttributeError:
-            raise ImproperlyConfigured('SmartDownloadMiddleware requires '
-                                       'settings.DOWNLOADVIEW_BACKEND')
+            raise ImproperlyConfigured(
+                "SmartDownloadMiddleware requires " "settings.DOWNLOADVIEW_BACKEND"
+            )
 
     def auto_configure_backend_options(self):
         """Populate :attr:`dispatcher` using :attr:`factory` and
@@ -146,8 +155,9 @@ class SmartDownloadMiddleware(BaseDownloadMiddleware):
         try:
             options_list = copy.deepcopy(settings.DOWNLOADVIEW_RULES)
         except AttributeError:
-            raise ImproperlyConfigured('SmartDownloadMiddleware requires '
-                                       'settings.DOWNLOADVIEW_RULES')
+            raise ImproperlyConfigured(
+                "SmartDownloadMiddleware requires " "settings.DOWNLOADVIEW_RULES"
+            )
         for key, options in enumerate(options_list):
             args = []
             kwargs = {}
@@ -155,9 +165,9 @@ class SmartDownloadMiddleware(BaseDownloadMiddleware):
                 kwargs = options
             else:
                 args = options
-            if 'backend' in kwargs:  # Specific backend for this rule.
-                factory = import_member(kwargs['backend'])
-                del kwargs['backend']
+            if "backend" in kwargs:  # Specific backend for this rule.
+                factory = import_member(kwargs["backend"])
+                del kwargs["backend"]
             else:  # Fallback to global backend.
                 factory = self.backend_factory
             middleware_instance = factory(*args, **kwargs)
@@ -174,11 +184,10 @@ class NoRedirectionMatch(Exception):
 
 class ProxiedDownloadMiddleware(RealDownloadMiddleware):
     """Base class for middlewares that use optimizations of reverse proxies."""
-    def __init__(self,
-                 get_response=None,
-                 source_dir=None,
-                 source_url=None,
-                 destination_url=None):
+
+    def __init__(
+        self, get_response=None, source_dir=None, source_url=None, destination_url=None
+    ):
         """Constructor."""
         super(ProxiedDownloadMiddleware, self).__init__(get_response)
 
@@ -189,7 +198,7 @@ class ProxiedDownloadMiddleware(RealDownloadMiddleware):
     def get_redirect_url(self, response):
         """Return redirect URL for file wrapped into response."""
         url = None
-        file_url = ''
+        file_url = ""
         if self.source_url:
             try:
                 file_url = response.file.url
@@ -197,9 +206,9 @@ class ProxiedDownloadMiddleware(RealDownloadMiddleware):
                 pass
             else:
                 if file_url.startswith(self.source_url):
-                    file_url = file_url[len(self.source_url):]
+                    file_url = file_url[len(self.source_url) :]
                     url = file_url
-        file_name = ''
+        file_name = ""
         if url is None and self.source_dir:
             try:
                 file_name = response.file.name
@@ -208,17 +217,21 @@ class ProxiedDownloadMiddleware(RealDownloadMiddleware):
             else:
                 if file_name.startswith(self.source_dir):
                     file_name = os.path.relpath(file_name, self.source_dir)
-                    url = file_name.replace(os.path.sep, '/')
+                    url = file_name.replace(os.path.sep, "/")
         if url is None:
-            message = ("""Couldn't capture/convert file attributes into a """
-                       """redirection. """
-                       """``source_url`` is "%(source_url)s", """
-                       """file's URL is "%(file_url)s". """
-                       """``source_dir`` is "%(source_dir)s", """
-                       """file's name is "%(file_name)s". """
-                       % {'source_url': self.source_url,
-                          'file_url': file_url,
-                          'source_dir': self.source_dir,
-                          'file_name': file_name})
+            message = (
+                """Couldn't capture/convert file attributes into a """
+                """redirection. """
+                """``source_url`` is "%(source_url)s", """
+                """file's URL is "%(file_url)s". """
+                """``source_dir`` is "%(source_dir)s", """
+                """file's name is "%(file_name)s". """
+                % {
+                    "source_url": self.source_url,
+                    "file_url": file_url,
+                    "source_dir": self.source_dir,
+                    "file_name": file_name,
+                }
+            )
             raise NoRedirectionMatch(message)
-        return '/'.join((self.destination_url.rstrip('/'), url.lstrip('/')))
+        return "/".join((self.destination_url.rstrip("/"), url.lstrip("/")))

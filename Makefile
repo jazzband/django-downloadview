@@ -7,6 +7,7 @@
 #
 PIP = pip
 TOX = tox
+BLACK = black
 
 
 #: help - Display callable targets.
@@ -96,3 +97,7 @@ runserver: demo
 .PHONY: release
 release:
 	$(TOX) -e release
+
+.PHONY: black
+black:
+	$(BLACK) demo tests django_downloadview
