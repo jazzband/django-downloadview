@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Lighttpd's specific responses."""
 import os.path
 

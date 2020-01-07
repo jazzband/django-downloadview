@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Optimizations for Lighttpd.
 
 See also `documentation of X-Sendfile for Lighttpd

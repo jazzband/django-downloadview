@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Base material for download views: :class:`DownloadMixin` and
 :class:`BaseDownloadView`"""
 import calendar

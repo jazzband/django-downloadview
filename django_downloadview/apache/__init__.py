@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Optimizations for Apache.
 
 See also `documentation of mod_xsendfile for Apache

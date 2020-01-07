@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Base material for download middlewares.
 
 Download middlewares capture :py:class:`django_downloadview.DownloadResponse`

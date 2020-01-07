@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Optimizations for Nginx.
 
 See also `Nginx X-accel documentation <http://wiki.nginx.org/X-accel>`_ and

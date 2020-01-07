@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Port of django-sendfile in django-downloadview."""
 from django_downloadview.views.path import PathDownloadView
 

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Stream files given an URL, i.e. files you want to proxy."""
 import requests
 

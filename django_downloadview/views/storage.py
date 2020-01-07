@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Stream files from storage."""
 from django.core.files.storage import DefaultStorage
 
