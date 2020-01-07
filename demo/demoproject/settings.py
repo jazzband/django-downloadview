@@ -138,7 +138,7 @@ if StrictVersion(get_version()) >= StrictVersion("1.8"):
     TEMPLATES = [
         {
             "BACKEND": "django.template.backends.django.DjangoTemplates",
-            "DIRS": [os.path.join(os.path.dirname(__file__), "templates"),],
+            "DIRS": [os.path.join(os.path.dirname(__file__), "templates")],
             "OPTIONS": {
                 "debug": DEBUG,
                 "context_processors": [
