@@ -127,4 +127,4 @@ TextIteratorIO
 .. target-notes::
 
 .. _`Django itself provides some file wrappers`:
-   https://docs.djangoproject.com/en/1.9/ref/files/file/
+   https://docs.djangoproject.com/en/3.0/ref/files/file/
