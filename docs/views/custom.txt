@@ -55,7 +55,7 @@ See details in :attr:`attachment API documentation
 
 .. literalinclude:: /../demo/demoproject/object/views.py
    :language: python
-   :lines: 1-5, 20-23
+   :lines: 1-2, 19
 
 
 ************************************
