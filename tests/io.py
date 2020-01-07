@@ -3,17 +3,17 @@ import unittest
 
 from django_downloadview import BytesIteratorIO, TextIteratorIO
 
-HELLO_TEXT = u"Hello world!\né\n"
+HELLO_TEXT = "Hello world!\né\n"
 HELLO_BYTES = b"Hello world!\n\xc3\xa9\n"
 
 
 def generate_hello_text():
     """Generate u'Hello world!\n'."""
-    yield u"Hello "
-    yield u"world!"
-    yield u"\n"
-    yield u"é"
-    yield u"\n"
+    yield "Hello "
+    yield "world!"
+    yield "\n"
+    yield "é"
+    yield "\n"
 
 
 def generate_hello_bytes():

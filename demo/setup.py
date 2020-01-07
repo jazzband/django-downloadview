@@ -10,8 +10,8 @@ NAME = "django-downloadview-demo"
 DESCRIPTION = "Serve files with Django and reverse-proxies."
 README = open(os.path.join(here, "README.rst")).read()
 VERSION = open(os.path.join(project_root, "VERSION")).read().strip()
-AUTHOR = u"Benoît Bryon"
-EMAIL = u"benoit@marmelune.net"
+AUTHOR = "Benoît Bryon"
+EMAIL = "benoit@marmelune.net"
 URL = "https://django-downloadview.readthedocs.io/"
 CLASSIFIERS = [
     "Development Status :: 5 - Production/Stable",

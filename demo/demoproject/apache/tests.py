@@ -12,7 +12,7 @@ from demoproject.compat import reverse
 def setup_file():
     if not os.path.exists(storage_dir):
         os.makedirs(storage_dir)
-    storage.save("hello-world.txt", ContentFile(u"Hello world!\n"))
+    storage.save("hello-world.txt", ContentFile("Hello world!\n"))
 
 
 class OptimizedByMiddlewareTestCase(django.test.TestCase):

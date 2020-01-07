@@ -13,14 +13,14 @@ class TextDownloadView(VirtualDownloadView):
 class StringIODownloadView(VirtualDownloadView):
     def get_file(self):
         """Return wrapper on ``six.StringIO`` object."""
-        file_obj = StringIO(u"Hello world!\n")
+        file_obj = StringIO("Hello world!\n")
         return VirtualFile(file_obj, name="hello-world.txt")
 
 
 def generate_hello():
-    yield u"Hello "
-    yield u"world!"
-    yield u"\n"
+    yield "Hello "
+    yield "world!"
+    yield "\n"
 
 
 class GeneratedDownloadView(VirtualDownloadView):

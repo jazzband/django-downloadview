@@ -19,7 +19,7 @@ class TextIteratorIO(io.TextIOBase):
         self._iter = iterator
 
         #: Internal buffer.
-        self._left = u""
+        self._left = ""
 
     def readable(self):
         return True
@@ -53,24 +53,24 @@ class TextIteratorIO(io.TextIOBase):
                     break
                 n -= len(m)
                 chunks.append(m)
-        return u"".join(chunks)
+        return "".join(chunks)
 
     def readline(self):
         chunks = []
         while True:
-            i = self._left.find(u"\n")
+            i = self._left.find("\n")
             if i == -1:
                 chunks.append(self._left)
                 try:
                     self._left = next(self._iter)
                 except StopIteration:
-                    self._left = u""
+                    self._left = ""
                     break
             else:
                 chunks.append(self._left[: i + 1])
                 self._left = self._left[i + 1 :]
                 break
-        return u"".join(chunks)
+        return "".join(chunks)
 
 
 class BytesIteratorIO(io.BytesIO):

@@ -153,7 +153,7 @@ class StorageFile(File):
 class VirtualFile(File):
     """Wrapper for files that live in memory."""
 
-    def __init__(self, file=None, name=u"", url="", size=None):
+    def __init__(self, file=None, name="", url="", size=None):
         """Constructor.
 
         file:
@@ -224,7 +224,7 @@ class HTTPFile(File):
 
     """
 
-    def __init__(self, request_factory=requests.get, url="", name=u"", **kwargs):
+    def __init__(self, request_factory=requests.get, url="", name="", **kwargs):
         self.request_factory = request_factory
         self.url = url
         if name is None:

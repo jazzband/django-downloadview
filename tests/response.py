@@ -10,7 +10,7 @@ class DownloadResponseTestCase(unittest.TestCase):
     def test_content_disposition_encoding(self):
         """Content-Disposition header is encoded."""
         response = DownloadResponse(
-            "fake file", attachment=True, basename=u"espacé .txt",
+            "fake file", attachment=True, basename="espacé .txt",
         )
         headers = response.default_headers
         self.assertIn('filename="espace_.txt"', headers["Content-Disposition"])

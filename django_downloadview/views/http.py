@@ -9,7 +9,7 @@ class HTTPDownloadView(BaseDownloadView):
     """Proxy files that live on remote servers."""
 
     #: URL to download (the one we are proxying).
-    url = u""
+    url = ""
 
     #: Additional keyword arguments for request handler.
     request_kwargs = {}
