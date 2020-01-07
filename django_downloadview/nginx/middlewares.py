@@ -4,8 +4,8 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 
 from django_downloadview.middlewares import (
-    ProxiedDownloadMiddleware,
     NoRedirectionMatch,
+    ProxiedDownloadMiddleware,
 )
 from django_downloadview.nginx.response import XAccelRedirectResponse
 

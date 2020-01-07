@@ -1,13 +1,12 @@
 """File wrappers for use as exchange data between views and responses."""
-from io import BytesIO
 from urllib.parse import urlparse
 
+import requests
 from django.core.files.base import File
 from django.utils.encoding import force_bytes
 
-import requests
-
 from django_downloadview.io import BytesIteratorIO
+from io import BytesIO
 
 
 class StorageFile(File):

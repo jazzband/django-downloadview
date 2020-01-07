@@ -1,8 +1,7 @@
 import django.test
 
-from django_downloadview import assert_download_response
-
 from demoproject.compat import reverse
+from django_downloadview import assert_download_response
 
 
 class StaticPathTestCase(django.test.TestCase):

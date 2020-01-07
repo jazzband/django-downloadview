@@ -2,7 +2,6 @@
 import os
 import unittest
 
-
 tests_dir = os.path.dirname(os.path.abspath(__file__))
 project_dir = os.path.dirname(tests_dir)
 build_dir = os.path.join(project_dir, "var", "docs", "html")

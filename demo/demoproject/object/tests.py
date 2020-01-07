@@ -1,11 +1,9 @@
-from django.core.files.base import ContentFile
 import django.test
-
-from django_downloadview import temporary_media_root, assert_download_response
+from django.core.files.base import ContentFile
 
 from demoproject.compat import reverse
 from demoproject.object.models import Document
-
+from django_downloadview import assert_download_response, temporary_media_root
 
 # Fixtures.
 slug = "hello-world"

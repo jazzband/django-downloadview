@@ -4,7 +4,6 @@ from django.conf.urls import url
 from demoproject.compat import patterns
 from demoproject.lighttpd import views
 
-
 urlpatterns = patterns(
     "demoproject.lighttpd.views",
     url(

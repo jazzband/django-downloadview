@@ -12,7 +12,6 @@ import warnings
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 
-
 # In version 1.3, former XAccelRedirectMiddleware has been renamed to
 # SingleXAccelRedirectMiddleware. So tell the users.
 deprecated_middleware = "django_downloadview.nginx.XAccelRedirectMiddleware"

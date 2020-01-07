@@ -3,7 +3,6 @@ from django.conf.urls import url
 from demoproject.compat import patterns
 from demoproject.path import views
 
-
 urlpatterns = patterns(
     "",
     url(r"^static-path/$", views.static_path, name="static_path"),

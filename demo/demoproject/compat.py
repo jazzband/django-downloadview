@@ -1,6 +1,6 @@
 from distutils.version import StrictVersion
-from django.utils.version import get_version
 
+from django.utils.version import get_version
 
 try:
     from django.conf.urls import patterns  # noqa

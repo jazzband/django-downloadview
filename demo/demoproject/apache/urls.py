@@ -1,9 +1,8 @@
 """URL mapping."""
 from django.conf.urls import url
 
-from demoproject.compat import patterns
 from demoproject.apache import views
-
+from demoproject.compat import patterns
 
 urlpatterns = patterns(
     "demoproject.apache.views",

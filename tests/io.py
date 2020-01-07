@@ -1,8 +1,7 @@
 """Tests around :mod:`django_downloadview.io`."""
 import unittest
 
-from django_downloadview import TextIteratorIO, BytesIteratorIO
-
+from django_downloadview import BytesIteratorIO, TextIteratorIO
 
 HELLO_TEXT = u"Hello world!\né\n"
 HELLO_BYTES = b"Hello world!\n\xc3\xa9\n"

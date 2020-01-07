@@ -1,10 +1,10 @@
 """Test suite around :mod:`django_downloadview.api` and deprecation plan."""
-from importlib import import_module, reload
 import unittest
 import warnings
+from importlib import import_module, reload
 
-from django.core.exceptions import ImproperlyConfigured
 import django.test
+from django.core.exceptions import ImproperlyConfigured
 from django.test.utils import override_settings
 
 

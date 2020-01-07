@@ -8,7 +8,7 @@
 PIP = pip
 TOX = tox
 BLACK = black
-
+ISORT = isort
 
 #: help - Display callable targets.
 .PHONY: help
@@ -101,3 +101,7 @@ release:
 .PHONY: black
 black:
 	$(BLACK) demo tests django_downloadview
+
+.PHONY: isort
+isort:
+	$(ISORT) -m 3 --line-width=99 --use-parentheses --trailing-comma --recursive django_downloadview tests demo

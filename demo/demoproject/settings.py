@@ -1,8 +1,6 @@
-# -*- coding: utf-8 -*-
 """Django settings for django-downloadview demo project."""
-
-from distutils.version import StrictVersion
 import os
+from distutils.version import StrictVersion
 
 from django.utils.version import get_version
 

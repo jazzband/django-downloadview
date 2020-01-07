@@ -1,31 +1,25 @@
 """Declaration of API shortcuts."""
+from django_downloadview.files import HTTPFile, StorageFile, VirtualFile  # NoQA
 from django_downloadview.io import BytesIteratorIO, TextIteratorIO  # NoQA
-from django_downloadview.files import StorageFile, VirtualFile, HTTPFile  # NoQA
-from django_downloadview.response import (
-    DownloadResponse,  # NoQA
-    ProxiedDownloadResponse,
-)
+from django_downloadview.middlewares import BaseDownloadMiddleware  # NoQA
 from django_downloadview.middlewares import (
-    BaseDownloadMiddleware,  # NoQA
     DownloadDispatcherMiddleware,
     SmartDownloadMiddleware,
 )
+from django_downloadview.response import DownloadResponse  # NoQA
+from django_downloadview.response import ProxiedDownloadResponse
+from django_downloadview.shortcuts import sendfile  # NoQA
+from django_downloadview.test import assert_download_response  # NoQA
+from django_downloadview.test import setup_view, temporary_media_root
+from django_downloadview.views import PathDownloadView  # NoQA
 from django_downloadview.views import (
-    PathDownloadView,  # NoQA
-    ObjectDownloadView,
-    StorageDownloadView,
-    HTTPDownloadView,
-    VirtualDownloadView,
     BaseDownloadView,
     DownloadMixin,
+    HTTPDownloadView,
+    ObjectDownloadView,
+    StorageDownloadView,
+    VirtualDownloadView,
 )
-from django_downloadview.shortcuts import sendfile  # NoQA
-from django_downloadview.test import (
-    assert_download_response,  # NoQA
-    setup_view,
-    temporary_media_root,
-)
-
 
 # Backward compatibility.
 StringIteratorIO = TextIteratorIO

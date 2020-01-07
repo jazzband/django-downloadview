@@ -1,7 +1,7 @@
 import os
 
-from django.core.files.base import ContentFile
 import django.test
+from django.core.files.base import ContentFile
 
 from django_downloadview.lighttpd import assert_x_sendfile
 

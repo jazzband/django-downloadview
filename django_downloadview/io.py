@@ -1,7 +1,7 @@
 """Low-level IO operations, for use with file wrappers."""
-import io
+from django.utils.encoding import force_bytes, force_text
 
-from django.utils.encoding import force_text, force_bytes
+import io
 
 
 class TextIteratorIO(io.TextIOBase):

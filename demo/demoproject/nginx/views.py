@@ -6,7 +6,6 @@ from django.core.files.storage import FileSystemStorage
 from django_downloadview import StorageDownloadView
 from django_downloadview.nginx import x_accel_redirect
 
-
 storage_dir = os.path.join(settings.MEDIA_ROOT, "nginx")
 storage = FileSystemStorage(
     location=storage_dir, base_url="".join([settings.MEDIA_URL, "nginx/"])

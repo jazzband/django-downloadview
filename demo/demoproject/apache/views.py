@@ -6,7 +6,6 @@ from django.core.files.storage import FileSystemStorage
 from django_downloadview import StorageDownloadView
 from django_downloadview.apache import x_sendfile
 
-
 storage_dir = os.path.join(settings.MEDIA_ROOT, "apache")
 storage = FileSystemStorage(
     location=storage_dir, base_url="".join([settings.MEDIA_URL, "apache/"])

@@ -2,7 +2,6 @@ import os
 
 from django_downloadview import PathDownloadView
 
-
 # Let's initialize some fixtures.
 app_dir = os.path.dirname(os.path.abspath(__file__))
 project_dir = os.path.dirname(app_dir)

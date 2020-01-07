@@ -2,7 +2,6 @@ from django.core.files.storage import FileSystemStorage
 
 from django_downloadview import StorageDownloadView
 
-
 storage = FileSystemStorage()
 
 

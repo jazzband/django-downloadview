@@ -1,10 +1,7 @@
-from io import StringIO
-
 from django.core.files.base import ContentFile
 
-from django_downloadview import VirtualDownloadView
-from django_downloadview import VirtualFile
-from django_downloadview import TextIteratorIO
+from django_downloadview import TextIteratorIO, VirtualDownloadView, VirtualFile
+from io import StringIO
 
 
 class TextDownloadView(VirtualDownloadView):

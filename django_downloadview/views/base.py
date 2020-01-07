@@ -2,7 +2,7 @@
 :class:`BaseDownloadView`"""
 import calendar
 
-from django.http import HttpResponseNotModified, Http404
+from django.http import Http404, HttpResponseNotModified
 from django.views.generic.base import View
 from django.views.static import was_modified_since
 

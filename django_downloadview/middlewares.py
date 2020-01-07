@@ -4,12 +4,15 @@ Download middlewares capture :py:class:`django_downloadview.DownloadResponse`
 responses and may replace them with optimized download responses.
 
 """
-import copy
 import collections
+import copy
 import os
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
+
+from django_downloadview.response import DownloadResponse
+from django_downloadview.utils import import_member
 
 try:
     from django.utils.deprecation import MiddlewareMixin
@@ -18,10 +21,6 @@ except ImportError:
     class MiddlewareMixin(object):
         def __init__(self, get_response=None):
             super(MiddlewareMixin, self).__init__()
-
-
-from django_downloadview.response import DownloadResponse
-from django_downloadview.utils import import_member
 
 
 #: Sentinel value to detect whether configuration is to be loaded from Django

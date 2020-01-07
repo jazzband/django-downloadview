@@ -1,7 +1,7 @@
 from django_downloadview.apache.response import XSendfileResponse
 from django_downloadview.middlewares import (
-    ProxiedDownloadMiddleware,
     NoRedirectionMatch,
+    ProxiedDownloadMiddleware,
 )
 
 

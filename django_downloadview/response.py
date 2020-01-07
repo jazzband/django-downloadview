@@ -1,6 +1,6 @@
 """:py:class:`django.http.HttpResponse` subclasses."""
-import os
 import mimetypes
+import os
 import re
 import unicodedata
 from urllib.parse import quote
