@@ -96,7 +96,9 @@ class DeprecatedAPITestCase(django.test.SimpleTestCase):
         "XAccelRedirectMiddleware in settings triggers ImproperlyConfigured."
         with override_settings(
             MIDDLEWARE_CLASSES=[
-                'django_downloadview.nginx.XAccelRedirectMiddleware']):
+                'django_downloadview.nginx.XAccelRedirectMiddleware'],
+            MIDDLEWARE=[
+                'django_downloadview.nginx.XAccelRedirectMiddleware'],):
             with self.assertRaises(ImproperlyConfigured):
                 import django_downloadview.nginx.settings
                 reload(django_downloadview.nginx.settings)

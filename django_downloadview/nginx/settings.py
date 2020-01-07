@@ -16,11 +16,20 @@ from django.core.exceptions import ImproperlyConfigured
 
 # In version 1.3, former XAccelRedirectMiddleware has been renamed to
 # SingleXAccelRedirectMiddleware. So tell the users.
-middleware = 'django_downloadview.nginx.XAccelRedirectMiddleware'
-if middleware in settings.MIDDLEWARE_CLASSES:
+deprecated_middleware = 'django_downloadview.nginx.XAccelRedirectMiddleware'
+
+
+def get_middlewares():
+    try:
+        return settings.MIDDLEWARE
+    except AttributeError:
+        return settings.MIDDLEWARE_CLASSES
+
+
+if deprecated_middleware in get_middlewares():
     raise ImproperlyConfigured(
-        '{middleware} middleware has been renamed as of django-downloadview '
-        'version 1.3. You may use '
+        '{deprecated_middleware} middleware has been renamed as of '
+        'django-downloadview version 1.3. You may use '
         '"django_downloadview.nginx.SingleXAccelRedirectMiddleware" instead, '
         'or upgrade to "django_downloadview.SmartDownloadDispatcher". ')
 
