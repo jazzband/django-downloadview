@@ -77,7 +77,10 @@ def content_disposition(filename):
     if ascii_filename == utf8_filename:  # ASCII only.
         return f'attachment; filename="{ascii_filename}"'
     else:
-        return f"attachment; filename=\"{ascii_filename}\"; filename*=UTF-8''{utf8_filename}"
+        return (
+            f'attachment; filename="{ascii_filename}"; '
+            f"filename*=UTF-8''{utf8_filename}"
+        )
 
 
 class DownloadResponse(StreamingHttpResponse):
