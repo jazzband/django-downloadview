@@ -2,13 +2,12 @@ import os
 
 from django_downloadview import PathDownloadView
 
-
 # Let's initialize some fixtures.
 app_dir = os.path.dirname(os.path.abspath(__file__))
 project_dir = os.path.dirname(app_dir)
-fixtures_dir = os.path.join(project_dir, 'fixtures')
+fixtures_dir = os.path.join(project_dir, "fixtures")
 #: Path to a text file that says 'Hello world!'.
-hello_world_path = os.path.join(fixtures_dir, 'hello-world.txt')
+hello_world_path = os.path.join(fixtures_dir, "hello-world.txt")
 
 #: Serve ``fixtures/hello-world.txt`` file.
 static_path = PathDownloadView.as_view(path=hello_world_path)
@@ -27,6 +26,7 @@ class DynamicPathDownloadView(PathDownloadView):
        :class:`StorageDownloadView`
 
     """
+
     def get_path(self):
         """Return path inside fixtures directory."""
         # Get path from URL resolvers or as_view kwarg.

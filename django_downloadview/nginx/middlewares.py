@@ -3,8 +3,10 @@ import warnings
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 
-from django_downloadview.middlewares import (ProxiedDownloadMiddleware,
-                                             NoRedirectionMatch)
+from django_downloadview.middlewares import (
+    NoRedirectionMatch,
+    ProxiedDownloadMiddleware,
+)
 from django_downloadview.nginx.response import XAccelRedirectResponse
 
 
@@ -17,17 +19,26 @@ class XAccelRedirectMiddleware(ProxiedDownloadMiddleware):
     :py:class:`django_downloadview.decorators.DownloadDecorator`.
 
     """
-    def __init__(self,
-                 get_response=None,
-                 source_dir=None, source_url=None, destination_url=None,
-                 expires=None, with_buffering=None, limit_rate=None,
-                 media_root=None, media_url=None):
+
+    def __init__(
+        self,
+        get_response=None,
+        source_dir=None,
+        source_url=None,
+        destination_url=None,
+        expires=None,
+        with_buffering=None,
+        limit_rate=None,
+        media_root=None,
+        media_url=None,
+    ):
         """Constructor."""
         if media_url is not None:
-            warnings.warn("%s ``media_url`` is deprecated. Use "
-                          "``destination_url`` instead."
-                          % self.__class__.__name__,
-                          DeprecationWarning)
+            warnings.warn(
+                "%s ``media_url`` is deprecated. Use "
+                "``destination_url`` instead." % self.__class__.__name__,
+                DeprecationWarning,
+            )
             if destination_url is None:
                 destination_url = media_url
             else:
@@ -35,9 +46,11 @@ class XAccelRedirectMiddleware(ProxiedDownloadMiddleware):
         else:
             destination_url = destination_url
         if media_root is not None:
-            warnings.warn("%s ``media_root`` is deprecated. Use "
-                          "``source_dir`` instead." % self.__class__.__name__,
-                          DeprecationWarning)
+            warnings.warn(
+                "%s ``media_root`` is deprecated. Use "
+                "``source_dir`` instead." % self.__class__.__name__,
+                DeprecationWarning,
+            )
             if source_dir is None:
                 source_dir = media_root
             else:
@@ -46,7 +59,8 @@ class XAccelRedirectMiddleware(ProxiedDownloadMiddleware):
             source_dir = source_dir
 
         super(XAccelRedirectMiddleware, self).__init__(
-            get_response, source_dir, source_url, destination_url)
+            get_response, source_dir, source_url, destination_url
+        )
 
         self.expires = expires
         self.with_buffering = with_buffering
@@ -65,13 +79,15 @@ class XAccelRedirectMiddleware(ProxiedDownloadMiddleware):
                 expires = response.expires
             except AttributeError:
                 expires = None
-        return XAccelRedirectResponse(redirect_url=redirect_url,
-                                      content_type=response['Content-Type'],
-                                      basename=response.basename,
-                                      expires=expires,
-                                      with_buffering=self.with_buffering,
-                                      limit_rate=self.limit_rate,
-                                      attachment=response.attachment)
+        return XAccelRedirectResponse(
+            redirect_url=redirect_url,
+            content_type=response["Content-Type"],
+            basename=response.basename,
+            expires=expires,
+            with_buffering=self.with_buffering,
+            limit_rate=self.limit_rate,
+            attachment=response.attachment,
+        )
 
 
 class SingleXAccelRedirectMiddleware(XAccelRedirectMiddleware):
@@ -108,12 +124,14 @@ class SingleXAccelRedirectMiddleware(XAccelRedirectMiddleware):
          Replaced by ``NGINX_DOWNLOAD_MIDDLEWARE_DESTINATION_URL``.
 
     """
+
     def __init__(self, get_response=None):
         """Use Django settings as configuration."""
         if settings.NGINX_DOWNLOAD_MIDDLEWARE_DESTINATION_URL is None:
             raise ImproperlyConfigured(
-                'settings.NGINX_DOWNLOAD_MIDDLEWARE_DESTINATION_URL is '
-                'required by %s middleware' % self.__class__.__name__)
+                "settings.NGINX_DOWNLOAD_MIDDLEWARE_DESTINATION_URL is "
+                "required by %s middleware" % self.__class__.__name__
+            )
         super(SingleXAccelRedirectMiddleware, self).__init__(
             get_response=get_response,
             source_dir=settings.NGINX_DOWNLOAD_MIDDLEWARE_SOURCE_DIR,
@@ -121,4 +139,5 @@ class SingleXAccelRedirectMiddleware(XAccelRedirectMiddleware):
             destination_url=settings.NGINX_DOWNLOAD_MIDDLEWARE_DESTINATION_URL,
             expires=settings.NGINX_DOWNLOAD_MIDDLEWARE_EXPIRES,
             with_buffering=settings.NGINX_DOWNLOAD_MIDDLEWARE_WITH_BUFFERING,
-            limit_rate=settings.NGINX_DOWNLOAD_MIDDLEWARE_LIMIT_RATE)
+            limit_rate=settings.NGINX_DOWNLOAD_MIDDLEWARE_LIMIT_RATE,
+        )

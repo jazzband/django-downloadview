@@ -1,6 +1,6 @@
 """:py:class:`django.http.HttpResponse` subclasses."""
-import os
 import mimetypes
+import os
 import re
 import unicodedata
 from urllib.parse import quote
@@ -11,7 +11,7 @@ from django.utils.encoding import force_str
 
 
 def encode_basename_ascii(value):
-    u"""Return US-ASCII encoded ``value`` for Content-Disposition header.
+    """Return US-ASCII encoded ``value`` for Content-Disposition header.
 
     >>> print(encode_basename_ascii(u'éà'))
     ea
@@ -30,17 +30,17 @@ def encode_basename_ascii(value):
 
     """
     if isinstance(value, bytes):
-        value = value.decode('utf-8')
+        value = value.decode("utf-8")
     ascii_basename = str(value)
-    ascii_basename = unicodedata.normalize('NFKD', ascii_basename)
-    ascii_basename = ascii_basename.encode('ascii', 'ignore')
-    ascii_basename = ascii_basename.decode('ascii')
-    ascii_basename = re.sub(r'[\s]', '_', ascii_basename)
+    ascii_basename = unicodedata.normalize("NFKD", ascii_basename)
+    ascii_basename = ascii_basename.encode("ascii", "ignore")
+    ascii_basename = ascii_basename.decode("ascii")
+    ascii_basename = re.sub(r"[\s]", "_", ascii_basename)
     return ascii_basename
 
 
 def encode_basename_utf8(value):
-    u"""Return UTF-8 encoded ``value`` for use in Content-Disposition header.
+    """Return UTF-8 encoded ``value`` for use in Content-Disposition header.
 
     >>> print(encode_basename_utf8(u' .txt'))
     %20.txt
@@ -53,7 +53,7 @@ def encode_basename_utf8(value):
 
 
 def content_disposition(filename):
-    u"""Return value of ``Content-Disposition`` header with 'attachment'.
+    """Return value of ``Content-Disposition`` header with 'attachment'.
 
     >>> print(content_disposition('demo.txt'))
     attachment; filename="demo.txt"
@@ -71,15 +71,16 @@ def content_disposition(filename):
 
     """
     if not filename:
-        return 'attachment'
+        return "attachment"
     ascii_filename = encode_basename_ascii(filename)
     utf8_filename = encode_basename_utf8(filename)
     if ascii_filename == utf8_filename:  # ASCII only.
-        return "attachment; filename=\"{ascii}\"".format(ascii=ascii_filename)
+        return f'attachment; filename="{ascii_filename}"'
     else:
-        return "attachment; filename=\"{ascii}\"; filename*=UTF-8''{utf8}" \
-               .format(ascii=ascii_filename,
-                       utf8=utf8_filename)
+        return (
+            f'attachment; filename="{ascii_filename}"; '
+            f"filename*=UTF-8''{utf8_filename}"
+        )
 
 
 class DownloadResponse(StreamingHttpResponse):
@@ -115,9 +116,17 @@ class DownloadResponse(StreamingHttpResponse):
       attributes (size, name, ...).
 
     """
-    def __init__(self, file_instance, attachment=True, basename=None,
-                 status=200, content_type=None, file_mimetype=None,
-                 file_encoding=None):
+
+    def __init__(
+        self,
+        file_instance,
+        attachment=True,
+        basename=None,
+        status=200,
+        content_type=None,
+        file_mimetype=None,
+        file_encoding=None,
+    ):
         """Constructor.
 
         :param content_type: Value for ``Content-Type`` header.
@@ -129,9 +138,9 @@ class DownloadResponse(StreamingHttpResponse):
         #: A :doc:`file wrapper instance </files>`, such as
         #: :class:`~django.core.files.base.File`.
         self.file = file_instance
-        super(DownloadResponse, self).__init__(streaming_content=self.file,
-                                               status=status,
-                                               content_type=content_type)
+        super(DownloadResponse, self).__init__(
+            streaming_content=self.file, status=status, content_type=content_type
+        )
 
         #: Client-side name of the file to stream.
         #: Only used if ``attachment`` is ``True``.
@@ -142,7 +151,7 @@ class DownloadResponse(StreamingHttpResponse):
         #: Affects ``Content-Disposition`` header.
         self.attachment = attachment
         if not content_type:
-            del self['Content-Type']  # Will be set later.
+            del self["Content-Type"]  # Will be set later.
 
         #: Value for file's mimetype.
         #: If ``None`` (the default), then the file's mimetype will be guessed
@@ -175,14 +184,14 @@ class DownloadResponse(StreamingHttpResponse):
             return self._default_headers
         except AttributeError:
             headers = {}
-            headers['Content-Type'] = self.get_content_type()
+            headers["Content-Type"] = self.get_content_type()
             try:
-                headers['Content-Length'] = self.file.size
+                headers["Content-Length"] = self.file.size
             except (AttributeError, NotImplementedError):
                 pass  # Generated files.
             if self.attachment:
                 basename = self.get_basename()
-                headers['Content-Disposition'] = content_disposition(basename)
+                headers["Content-Disposition"] = content_disposition(basename)
             self._default_headers = headers
             return self._default_headers
 
@@ -208,15 +217,13 @@ class DownloadResponse(StreamingHttpResponse):
         try:
             return self.file.content_type
         except AttributeError:
-            content_type_template = '{mime_type}; charset={charset}'
-            return content_type_template.format(mime_type=self.get_mime_type(),
-                                                charset=self.get_charset())
+            return f"{self.get_mime_type()}; charset={self.get_charset()}"
 
     def get_mime_type(self):
         """Return mime-type of the file."""
         if self.file_mimetype is not None:
             return self.file_mimetype
-        default_mime_type = 'application/octet-stream'
+        default_mime_type = "application/octet-stream"
         basename = self.get_basename()
         mime_type, encoding = mimetypes.guess_type(basename)
         return mime_type or default_mime_type

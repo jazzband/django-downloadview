@@ -7,6 +7,7 @@ class XAccelRedirectValidator(object):
     See also :py:func:`assert_x_accel_redirect` shortcut function.
 
     """
+
     def __call__(self, test_case, response, **assertions):
         """Assert that ``response`` is a valid X-Accel-Redirect response.
 
@@ -36,7 +37,7 @@ class XAccelRedirectValidator(object):
         """
         self.assert_x_accel_redirect_response(test_case, response)
         for key, value in assertions.items():
-            assert_func = getattr(self, 'assert_%s' % key)
+            assert_func = getattr(self, "assert_%s" % key)
             assert_func(test_case, response, value)
 
     def assert_x_accel_redirect_response(self, test_case, response):
@@ -46,45 +47,45 @@ class XAccelRedirectValidator(object):
         test_case.assertEqual(response.basename, value)
 
     def assert_content_type(self, test_case, response, value):
-        test_case.assertEqual(response['Content-Type'], value)
+        test_case.assertEqual(response["Content-Type"], value)
 
     def assert_redirect_url(self, test_case, response, value):
-        test_case.assertEqual(response['X-Accel-Redirect'], value)
+        test_case.assertEqual(response["X-Accel-Redirect"], value)
 
     def assert_charset(self, test_case, response, value):
-        test_case.assertEqual(response['X-Accel-Charset'], value)
+        test_case.assertEqual(response["X-Accel-Charset"], value)
 
     def assert_with_buffering(self, test_case, response, value):
-        header = 'X-Accel-Buffering'
+        header = "X-Accel-Buffering"
         if value is None:
             test_case.assertFalse(header in response)
         elif value:
-            test_case.assertEqual(header, 'yes')
+            test_case.assertEqual(header, "yes")
         else:
-            test_case.assertEqual(header, 'no')
+            test_case.assertEqual(header, "no")
 
     def assert_expires(self, test_case, response, value):
-        header = 'X-Accel-Expires'
+        header = "X-Accel-Expires"
         if value is None:
             test_case.assertFalse(header in response)
         elif not value:
-            test_case.assertEqual(header, 'off')
+            test_case.assertEqual(header, "off")
         else:
             test_case.assertEqual(header, value)
 
     def assert_limit_rate(self, test_case, response, value):
-        header = 'X-Accel-Limit-Rate'
+        header = "X-Accel-Limit-Rate"
         if value is None:
             test_case.assertFalse(header in response)
         elif not value:
-            test_case.assertEqual(header, 'off')
+            test_case.assertEqual(header, "off")
         else:
             test_case.assertEqual(header, value)
 
     def assert_attachment(self, test_case, response, value):
-        header = 'Content-Disposition'
+        header = "Content-Disposition"
         if value:
-            test_case.assertTrue(response[header].startswith('attachment'))
+            test_case.assertTrue(response[header].startswith("attachment"))
         else:
             test_case.assertFalse(header in response)
 

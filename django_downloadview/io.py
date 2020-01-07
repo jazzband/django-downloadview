@@ -1,7 +1,7 @@
 """Low-level IO operations, for use with file wrappers."""
 import io
 
-from django.utils.encoding import force_text, force_bytes
+from django.utils.encoding import force_bytes, force_text
 
 
 class TextIteratorIO(io.TextIOBase):
@@ -13,12 +13,13 @@ class TextIteratorIO(io.TextIOBase):
     * https://gist.github.com/anacrolix/3788413
 
     """
+
     def __init__(self, iterator):
         #: Iterator/generator for content.
         self._iter = iterator
 
         #: Internal buffer.
-        self._left = u''
+        self._left = ""
 
     def readable(self):
         return True
@@ -33,7 +34,7 @@ class TextIteratorIO(io.TextIOBase):
                 # Make sure we handle text.
                 self._left = force_text(self._left)
         ret = self._left[:n]
-        self._left = self._left[len(ret):]
+        self._left = self._left[len(ret) :]
         return ret
 
     def read(self, n=None):
@@ -52,24 +53,24 @@ class TextIteratorIO(io.TextIOBase):
                     break
                 n -= len(m)
                 chunks.append(m)
-        return u''.join(chunks)
+        return "".join(chunks)
 
     def readline(self):
         chunks = []
         while True:
-            i = self._left.find(u'\n')
+            i = self._left.find("\n")
             if i == -1:
                 chunks.append(self._left)
                 try:
                     self._left = next(self._iter)
                 except StopIteration:
-                    self._left = u''
+                    self._left = ""
                     break
             else:
-                chunks.append(self._left[:i + 1])
-                self._left = self._left[i + 1:]
+                chunks.append(self._left[: i + 1])
+                self._left = self._left[i + 1 :]
                 break
-        return u''.join(chunks)
+        return "".join(chunks)
 
 
 class BytesIteratorIO(io.BytesIO):
@@ -81,12 +82,13 @@ class BytesIteratorIO(io.BytesIO):
     * https://gist.github.com/anacrolix/3788413
 
     """
+
     def __init__(self, iterator):
         #: Iterator/generator for content.
         self._iter = iterator
 
         #: Internal buffer.
-        self._left = b''
+        self._left = b""
 
     def readable(self):
         return True
@@ -101,7 +103,7 @@ class BytesIteratorIO(io.BytesIO):
                 # Make sure we handle text.
                 self._left = force_bytes(self._left)
         ret = self._left[:n]
-        self._left = self._left[len(ret):]
+        self._left = self._left[len(ret) :]
         return ret
 
     def read(self, n=None):
@@ -120,21 +122,21 @@ class BytesIteratorIO(io.BytesIO):
                     break
                 n -= len(m)
                 chunks.append(m)
-        return b''.join(chunks)
+        return b"".join(chunks)
 
     def readline(self):
         chunks = []
         while True:
-            i = self._left.find(b'\n')
+            i = self._left.find(b"\n")
             if i == -1:
                 chunks.append(self._left)
                 try:
                     self._left = next(self._iter)
                 except StopIteration:
-                    self._left = b''
+                    self._left = b""
                     break
             else:
-                chunks.append(self._left[:i + 1])
-                self._left = self._left[i + 1:]
+                chunks.append(self._left[: i + 1])
+                self._left = self._left[i + 1 :]
                 break
-        return b''.join(chunks)
+        return b"".join(chunks)

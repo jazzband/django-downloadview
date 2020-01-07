@@ -8,6 +8,7 @@ class XSendfileValidator(django_downloadview.apache.tests.XSendfileValidator):
     See also :py:func:`assert_x_sendfile` shortcut function.
 
     """
+
     def assert_x_sendfile_response(self, test_case, response):
         test_case.assertTrue(isinstance(response, XSendfileResponse))
 

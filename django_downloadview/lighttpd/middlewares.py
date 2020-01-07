@@ -1,6 +1,8 @@
 from django_downloadview.lighttpd.response import XSendfileResponse
-from django_downloadview.middlewares import (ProxiedDownloadMiddleware,
-                                             NoRedirectionMatch)
+from django_downloadview.middlewares import (
+    NoRedirectionMatch,
+    ProxiedDownloadMiddleware,
+)
 
 
 class XSendfileMiddleware(ProxiedDownloadMiddleware):
@@ -12,9 +14,10 @@ class XSendfileMiddleware(ProxiedDownloadMiddleware):
     :py:class:`django_downloadview.decorators.DownloadDecorator`.
 
     """
-    def __init__(self,
-                 get_response=None,
-                 source_dir=None, source_url=None, destination_dir=None):
+
+    def __init__(
+        self, get_response=None, source_dir=None, source_url=None, destination_dir=None
+    ):
         """Constructor."""
         super(XSendfileMiddleware, self).__init__(
             get_response, source_dir, source_url, destination_dir
@@ -26,7 +29,9 @@ class XSendfileMiddleware(ProxiedDownloadMiddleware):
             redirect_url = self.get_redirect_url(response)
         except NoRedirectionMatch:
             return response
-        return XSendfileResponse(file_path=redirect_url,
-                                 content_type=response['Content-Type'],
-                                 basename=response.basename,
-                                 attachment=response.attachment)
+        return XSendfileResponse(
+            file_path=redirect_url,
+            content_type=response["Content-Type"],
+            basename=response.basename,
+            attachment=response.attachment,
+        )

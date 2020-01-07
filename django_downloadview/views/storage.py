@@ -7,6 +7,7 @@ from django_downloadview.views.path import PathDownloadView
 
 class StorageDownloadView(PathDownloadView):
     """Serve a file using storage and filename."""
+
     #: Storage the file to serve belongs to.
     storage = DefaultStorage()
 

@@ -9,6 +9,7 @@ from django_downloadview.views.base import BaseDownloadView
 
 class PathDownloadView(BaseDownloadView):
     """Serve a file using filename."""
+
     #: Server-side name (including path) of the file to serve.
     #:
     #: Filename is supposed to be an absolute filename of a file located on the
@@ -16,7 +17,7 @@ class PathDownloadView(BaseDownloadView):
     path = None
 
     #: Name of the URL argument that contains path.
-    path_url_kwarg = 'path'
+    path_url_kwarg = "path"
 
     def get_path(self):
         """Return actual path of the file to serve.
@@ -34,5 +35,5 @@ class PathDownloadView(BaseDownloadView):
         """Use path to return wrapper around file to serve."""
         filename = self.get_path()
         if not os.path.isfile(filename):
-            raise FileNotFound('File "{0}" does not exists'.format(filename))
-        return File(open(filename, 'rb'))
+            raise FileNotFound(f'File "{filename}" does not exists')
+        return File(open(filename, "rb"))

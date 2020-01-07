@@ -30,9 +30,10 @@ class ObjectDownloadView(SingleObjectMixin, BaseDownloadView):
     local filesystem.
 
     """
+
     #: Name of the model's attribute which contains the file to be streamed.
     #: Typically the name of a FileField.
-    file_field = 'file'
+    file_field = "file"
 
     #: Optional name of the model's attribute which contains the basename.
     basename_field = None
@@ -70,13 +71,11 @@ class ObjectDownloadView(SingleObjectMixin, BaseDownloadView):
         """
         file_instance = getattr(self.object, self.file_field)
         if not file_instance:
-            raise FileNotFound('Field="{field}" on object="{object}" is '
-                               'empty'.format(
-                                   field=self.file_field,
-                                   object=self.object))
-        for field in ('encoding', 'mime_type', 'charset', 'modification_time',
-                      'size'):
-            model_field = getattr(self, '%s_field' % field, False)
+            raise FileNotFound(
+                f'Field="{self.file_field}" on object="{self.object}" is empty'
+            )
+        for field in ("encoding", "mime_type", "charset", "modification_time", "size"):
+            model_field = getattr(self, "%s_field" % field, False)
             if model_field:
                 value = getattr(self.object, model_field)
                 setattr(file_instance, field, value)
@@ -86,8 +85,8 @@ class ObjectDownloadView(SingleObjectMixin, BaseDownloadView):
         """Return client-side filename."""
         basename = super(ObjectDownloadView, self).get_basename()
         if basename is None:
-            field = 'basename'
-            model_field = getattr(self, '%s_field' % field, False)
+            field = "basename"
+            model_field = getattr(self, "%s_field" % field, False)
             if model_field:
                 basename = getattr(self.object, model_field)
         return basename

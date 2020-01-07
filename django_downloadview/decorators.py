@@ -17,16 +17,18 @@ class DownloadDecorator(object):
     method is applied on response.
 
     """
+
     def __init__(self, middleware_factory):
         """Create a download view decorator."""
         self.middleware_factory = middleware_factory
 
     def __call__(self, view_func, *middleware_args, **middleware_kwargs):
         """Return ``view_func`` decorated with response middleware."""
+
         def decorated(request, *view_args, **view_kwargs):
             """Return view's response modified by middleware."""
             response = view_func(request, *view_args, **view_kwargs)
-            middleware = self.middleware_factory(*middleware_args,
-                                                 **middleware_kwargs)
+            middleware = self.middleware_factory(*middleware_args, **middleware_kwargs)
             return middleware.process_response(request, response)
+
         return decorated

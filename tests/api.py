@@ -10,6 +10,7 @@ from django.test.utils import override_settings
 
 class APITestCase(unittest.TestCase):
     """Make sure django_downloadview exposes API."""
+
     def assert_module_attributes(self, module_path, attribute_names):
         """Assert imported ``module_path`` has ``attribute_names``."""
         module = import_module(module_path)
@@ -18,8 +19,9 @@ class APITestCase(unittest.TestCase):
             if not hasattr(module, attribute_name):
                 missing_attributes.append(attribute_name)
         if missing_attributes:
-            self.fail('Missing attributes in "{module}": {attributes}'.format(
-                module=module_path, attributes=', '.join(missing_attributes)))
+            self.fail(
+                'Missing attributes in "{module_path}": {", ".join(missing_attributes)}'
+            )
 
     def test_root_attributes(self):
         """API is exposed in django_downloadview root package.
@@ -33,87 +35,93 @@ class APITestCase(unittest.TestCase):
         """
         api = [
             # Views:
-            'ObjectDownloadView',
-            'StorageDownloadView',
-            'PathDownloadView',
-            'HTTPDownloadView',
-            'VirtualDownloadView',
-            'BaseDownloadView',
-            'DownloadMixin',
+            "ObjectDownloadView",
+            "StorageDownloadView",
+            "PathDownloadView",
+            "HTTPDownloadView",
+            "VirtualDownloadView",
+            "BaseDownloadView",
+            "DownloadMixin",
             # File wrappers:
-            'StorageFile',
-            'HTTPFile',
-            'VirtualFile',
+            "StorageFile",
+            "HTTPFile",
+            "VirtualFile",
             # Responses:
-            'DownloadResponse',
-            'ProxiedDownloadResponse',
+            "DownloadResponse",
+            "ProxiedDownloadResponse",
             # Middlewares:
-            'BaseDownloadMiddleware',
-            'DownloadDispatcherMiddleware',
-            'SmartDownloadMiddleware',
+            "BaseDownloadMiddleware",
+            "DownloadDispatcherMiddleware",
+            "SmartDownloadMiddleware",
             # Testing:
-            'assert_download_response',
-            'setup_view',
-            'temporary_media_root',
+            "assert_download_response",
+            "setup_view",
+            "temporary_media_root",
             # Utilities:
-            'StringIteratorIO',
-            'sendfile']
-        self.assert_module_attributes('django_downloadview', api)
+            "StringIteratorIO",
+            "sendfile",
+        ]
+        self.assert_module_attributes("django_downloadview", api)
 
     def test_nginx_attributes(self):
         """Nginx-related API is exposed in django_downloadview.nginx."""
         api = [
-            'XAccelRedirectResponse',
-            'XAccelRedirectMiddleware',
-            'x_accel_redirect',
-            'assert_x_accel_redirect']
-        self.assert_module_attributes('django_downloadview.nginx', api)
+            "XAccelRedirectResponse",
+            "XAccelRedirectMiddleware",
+            "x_accel_redirect",
+            "assert_x_accel_redirect",
+        ]
+        self.assert_module_attributes("django_downloadview.nginx", api)
 
     def test_apache_attributes(self):
         """Apache-related API is exposed in django_downloadview.apache."""
         api = [
-            'XSendfileResponse',
-            'XSendfileMiddleware',
-            'x_sendfile',
-            'assert_x_sendfile']
-        self.assert_module_attributes('django_downloadview.apache', api)
+            "XSendfileResponse",
+            "XSendfileMiddleware",
+            "x_sendfile",
+            "assert_x_sendfile",
+        ]
+        self.assert_module_attributes("django_downloadview.apache", api)
 
     def test_lighttpd_attributes(self):
         """Lighttpd-related API is exposed in django_downloadview.lighttpd."""
         api = [
-            'XSendfileResponse',
-            'XSendfileMiddleware',
-            'x_sendfile',
-            'assert_x_sendfile']
-        self.assert_module_attributes('django_downloadview.lighttpd', api)
+            "XSendfileResponse",
+            "XSendfileMiddleware",
+            "x_sendfile",
+            "assert_x_sendfile",
+        ]
+        self.assert_module_attributes("django_downloadview.lighttpd", api)
 
 
 class DeprecatedAPITestCase(django.test.SimpleTestCase):
     """Make sure using deprecated items raise DeprecationWarning."""
+
     def test_nginx_x_accel_redirect_middleware(self):
         "XAccelRedirectMiddleware in settings triggers ImproperlyConfigured."
         with override_settings(
-            MIDDLEWARE_CLASSES=[
-                'django_downloadview.nginx.XAccelRedirectMiddleware'],
-            MIDDLEWARE=[
-                'django_downloadview.nginx.XAccelRedirectMiddleware'],):
+            MIDDLEWARE_CLASSES=["django_downloadview.nginx.XAccelRedirectMiddleware"],
+            MIDDLEWARE=["django_downloadview.nginx.XAccelRedirectMiddleware"],
+        ):
             with self.assertRaises(ImproperlyConfigured):
                 import django_downloadview.nginx.settings
+
                 reload(django_downloadview.nginx.settings)
 
     def test_nginx_x_accel_redirect_global_settings(self):
         """Global settings for Nginx middleware are deprecated."""
         settings_overrides = {
-            'NGINX_DOWNLOAD_MIDDLEWARE_WITH_BUFFERING': True,
-            'NGINX_DOWNLOAD_MIDDLEWARE_LIMIT_RATE': 32,
-            'NGINX_DOWNLOAD_MIDDLEWARE_EXPIRES': 3600,
-            'NGINX_DOWNLOAD_MIDDLEWARE_MEDIA_ROOT': '/',
-            'NGINX_DOWNLOAD_MIDDLEWARE_SOURCE_DIR': '/',
-            'NGINX_DOWNLOAD_MIDDLEWARE_SOURCE_URL': '/',
-            'NGINX_DOWNLOAD_MIDDLEWARE_MEDIA_URL': '/',
-            'NGINX_DOWNLOAD_MIDDLEWARE_DESTINATION_URL': '/',
+            "NGINX_DOWNLOAD_MIDDLEWARE_WITH_BUFFERING": True,
+            "NGINX_DOWNLOAD_MIDDLEWARE_LIMIT_RATE": 32,
+            "NGINX_DOWNLOAD_MIDDLEWARE_EXPIRES": 3600,
+            "NGINX_DOWNLOAD_MIDDLEWARE_MEDIA_ROOT": "/",
+            "NGINX_DOWNLOAD_MIDDLEWARE_SOURCE_DIR": "/",
+            "NGINX_DOWNLOAD_MIDDLEWARE_SOURCE_URL": "/",
+            "NGINX_DOWNLOAD_MIDDLEWARE_MEDIA_URL": "/",
+            "NGINX_DOWNLOAD_MIDDLEWARE_DESTINATION_URL": "/",
         }
         import django_downloadview.nginx.settings
+
         missed_warnings = []
         for setting_name, setting_value in settings_overrides.items():
             warnings.resetwarnings()
@@ -124,7 +132,7 @@ class DeprecatedAPITestCase(django.test.SimpleTestCase):
             caught = False
             for warning_item in warning_list:
                 if warning_item.category == DeprecationWarning:
-                    if 'deprecated' in str(warning_item.message):
+                    if "deprecated" in str(warning_item.message):
                         if setting_name in str(warning_item.message):
                             caught = True
                             break
@@ -132,5 +140,6 @@ class DeprecatedAPITestCase(django.test.SimpleTestCase):
                 missed_warnings.append(setting_name)
         if missed_warnings:
             self.fail(
-                'No DeprecationWarning raised about following settings: '
-                '{settings}.'.format(settings=', '.join(missed_warnings)))
+                f"No DeprecationWarning raised about following settings: "
+                f'{", ".join(missed_warnings)}.'
+            )
