@@ -116,7 +116,8 @@ class DownloadMixin(object):
                 modification_time = calendar.timegm(
                     file_instance.modified_time.utctimetuple())
                 size = file_instance.size
-            except (AttributeError, NotImplementedError):
+            except (AttributeError, NotImplementedError) as e:
+                print("!=======!", e)
                 return True
             else:
                 return was_modified_since(since, modification_time, size)

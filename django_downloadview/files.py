@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """File wrappers for use as exchange data between views and responses."""
 from __future__ import absolute_import
+
 from io import BytesIO
 from six.moves.urllib.parse import urlparse
 
@@ -122,7 +123,10 @@ class StorageFile(File):
         Proxy to self.storage.accessed_time(self.name).
 
         """
-        return self.storage.accessed(self.name)
+        try:
+            return self.storage.get_accessed_time(self.name)
+        except AttributeError:
+            return self.storage.accessed_time(self.name)
 
     @property
     def created_time(self):
@@ -131,7 +135,10 @@ class StorageFile(File):
         Proxy to self.storage.created_time(self.name).
 
         """
-        return self.storage.created_time(self.name)
+        try:
+            return self.storage.get_created_time(self.name)
+        except AttributeError:
+            return self.storage.created_time(self.name)
 
     @property
     def modified_time(self):
@@ -140,7 +147,10 @@ class StorageFile(File):
         Proxy to self.storage.modified_time(self.name).
 
         """
-        return self.storage.modified_time(self.name)
+        try:
+            return self.storage.get_modified_time(self.name)
+        except AttributeError:
+            return self.storage.modified_time(self.name)
 
 
 class VirtualFile(File):
