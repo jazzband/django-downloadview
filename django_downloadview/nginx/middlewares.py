@@ -17,7 +17,9 @@ class XAccelRedirectMiddleware(ProxiedDownloadMiddleware):
     :py:class:`django_downloadview.decorators.DownloadDecorator`.
 
     """
-    def __init__(self, source_dir=None, source_url=None, destination_url=None,
+    def __init__(self,
+                 get_response=None,
+                 source_dir=None, source_url=None, destination_url=None,
                  expires=None, with_buffering=None, limit_rate=None,
                  media_root=None, media_url=None):
         """Constructor."""
@@ -42,9 +44,10 @@ class XAccelRedirectMiddleware(ProxiedDownloadMiddleware):
                 source_dir = source_dir
         else:
             source_dir = source_dir
-        super(XAccelRedirectMiddleware, self).__init__(source_dir,
-                                                       source_url,
-                                                       destination_url)
+
+        super(XAccelRedirectMiddleware, self).__init__(
+            get_response, source_dir, source_url, destination_url)
+
         self.expires = expires
         self.with_buffering = with_buffering
         self.limit_rate = limit_rate
@@ -105,13 +108,14 @@ class SingleXAccelRedirectMiddleware(XAccelRedirectMiddleware):
          Replaced by ``NGINX_DOWNLOAD_MIDDLEWARE_DESTINATION_URL``.
 
     """
-    def __init__(self):
+    def __init__(self, get_response=None):
         """Use Django settings as configuration."""
         if settings.NGINX_DOWNLOAD_MIDDLEWARE_DESTINATION_URL is None:
             raise ImproperlyConfigured(
                 'settings.NGINX_DOWNLOAD_MIDDLEWARE_DESTINATION_URL is '
                 'required by %s middleware' % self.__class__.__name__)
         super(SingleXAccelRedirectMiddleware, self).__init__(
+            get_response=get_response,
             source_dir=settings.NGINX_DOWNLOAD_MIDDLEWARE_SOURCE_DIR,
             source_url=settings.NGINX_DOWNLOAD_MIDDLEWARE_SOURCE_URL,
             destination_url=settings.NGINX_DOWNLOAD_MIDDLEWARE_DESTINATION_URL,

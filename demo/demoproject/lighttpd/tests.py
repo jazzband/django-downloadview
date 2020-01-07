@@ -1,11 +1,11 @@
 import os
 
 from django.core.files.base import ContentFile
-from django.core.urlresolvers import reverse
 import django.test
 
 from django_downloadview.lighttpd import assert_x_sendfile
 
+from demoproject.compat import reverse
 from demoproject.lighttpd.views import storage, storage_dir
 
 

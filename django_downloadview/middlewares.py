@@ -12,6 +12,13 @@ import os
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 
+try:
+    from django.utils.deprecation import MiddlewareMixin
+except ImportError:
+    class MiddlewareMixin(object):
+        def __init__(self, get_response=None):
+            super(MiddlewareMixin, self).__init__()
+
 from django_downloadview.response import DownloadResponse
 from django_downloadview.utils import import_member
 
@@ -31,7 +38,7 @@ def is_download_response(response):
     return isinstance(response, DownloadResponse)
 
 
-class BaseDownloadMiddleware(object):
+class BaseDownloadMiddleware(MiddlewareMixin):
     """Base (abstract) Django middleware that handles download responses.
 
     Subclasses **must** implement :py:meth:`process_download_response` method.
@@ -80,7 +87,8 @@ class RealDownloadMiddleware(BaseDownloadMiddleware):
 
 class DownloadDispatcherMiddleware(BaseDownloadMiddleware):
     "Download middleware that dispatches job to several middleware instances."
-    def __init__(self, middlewares=AUTO_CONFIGURE):
+    def __init__(self, get_response=None, middlewares=AUTO_CONFIGURE):
+        super(DownloadDispatcherMiddleware, self).__init__(get_response)
         #: List of children middlewares.
         self.middlewares = middlewares
         if self.middlewares is AUTO_CONFIGURE:
@@ -106,9 +114,11 @@ class DownloadDispatcherMiddleware(BaseDownloadMiddleware):
 class SmartDownloadMiddleware(BaseDownloadMiddleware):
     """Easy to configure download middleware."""
     def __init__(self,
+                 get_response=None,
                  backend_factory=AUTO_CONFIGURE,
                  backend_options=AUTO_CONFIGURE):
         """Constructor."""
+        super(SmartDownloadMiddleware, self).__init__(get_response)
         #: :class:`DownloadDispatcher` instance that can hold multiple
         #: backend instances.
         self.dispatcher = DownloadDispatcherMiddleware(middlewares=[])
@@ -165,8 +175,14 @@ class NoRedirectionMatch(Exception):
 
 class ProxiedDownloadMiddleware(RealDownloadMiddleware):
     """Base class for middlewares that use optimizations of reverse proxies."""
-    def __init__(self, source_dir=None, source_url=None, destination_url=None):
+    def __init__(self,
+                 get_response=None,
+                 source_dir=None,
+                 source_url=None,
+                 destination_url=None):
         """Constructor."""
+        super(ProxiedDownloadMiddleware, self).__init__(get_response)
+
         self.source_dir = source_dir
         self.source_url = source_url
         self.destination_url = destination_url

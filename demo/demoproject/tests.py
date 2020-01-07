@@ -1,6 +1,7 @@
 # coding=utf8
 """Test suite for demoproject.download."""
-from django.core.urlresolvers import reverse
+from demoproject.compat import reverse
+
 from django.test import TestCase
 
 

@@ -40,9 +40,10 @@ CLASSIFIERS = [
     'Framework :: Django',
     'License :: OSI Approved :: BSD License',
     'Programming Language :: Python :: 2.7',
-    'Programming Language :: Python :: 3.3',
-    'Programming Language :: Python :: 3.4',
-    'Programming Language :: Python :: 3.5',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.6',
+    'Programming Language :: Python :: 3.7',
+    'Programming Language :: Python :: 3.8',
 ]
 KEYWORDS = ['file',
             'stream',
@@ -58,7 +59,7 @@ KEYWORDS = ['file',
 PACKAGES = [NAME.replace('-', '_')]
 REQUIREMENTS = [
     # BEGIN requirements
-    'Django>=1.5',
+    'Django>=1.11',
     'requests',
     'setuptools',
     'six',

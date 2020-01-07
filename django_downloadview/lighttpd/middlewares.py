@@ -12,11 +12,13 @@ class XSendfileMiddleware(ProxiedDownloadMiddleware):
     :py:class:`django_downloadview.decorators.DownloadDecorator`.
 
     """
-    def __init__(self, source_dir=None, source_url=None, destination_dir=None):
+    def __init__(self,
+                 get_response=None,
+                 source_dir=None, source_url=None, destination_dir=None):
         """Constructor."""
-        super(XSendfileMiddleware, self).__init__(source_dir,
-                                                  source_url,
-                                                  destination_dir)
+        super(XSendfileMiddleware, self).__init__(
+            get_response, source_dir, source_url, destination_dir
+        )
 
     def process_download_response(self, request, response):
         """Replace DownloadResponse instances by XSendfileResponse ones."""
