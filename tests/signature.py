@@ -20,6 +20,10 @@ class SignedTestStorage(SignedURLMixin, TestStorage):
     pass
 
 
+def signable_test_view(request):
+    return True
+
+
 class SignatureGeneratorTestCase(unittest.TestCase):
     def test_signed_storage(self):
         """
@@ -32,10 +36,26 @@ class SignatureGeneratorTestCase(unittest.TestCase):
 
 
 class SignatureValidatorTestCase(unittest.TestCase):
-    def test_verify_signature(self):
+    def test_signature_required(self):
         """
-        django_downloadview.decorators._signature_is_valid returns True on
-        valid signatures.
+        django_downloadview.decorators.signature_required 
+        wraps view-like callables and returns their values.
+        """
+
+        signer = TimestampSigner()
+        request = unittest.mock.MagicMock()
+
+        request.path = "test"
+        request.GET = {"X-Signature": signer.sign("test")}
+        
+        response = signature_required(signable_test_view)(request)
+
+        self.assertTrue(response)
+        
+    def test_signature_is_valid(self):
+        """
+        django_downloadview.decorators._signature_is_valid 
+        returns None on valid signatures.
         """
 
         signer = TimestampSigner()
@@ -46,10 +66,10 @@ class SignatureValidatorTestCase(unittest.TestCase):
 
         self.assertIsNone(_signature_is_valid(request))
 
-    def test_verify_signature_invalid(self):
+    def test_signature_is_valid_error(self):
         """
-        django_downloadview.decorators._signature_is_valid raises PermissionDenied
-        on invalid signatures.
+        django_downloadview.decorators._signature_is_valid 
+        raises PermissionDenied on invalid signatures.
         """
 
         request = unittest.mock.MagicMock()
