@@ -70,7 +70,7 @@ def signature_required(function):
 
     @wraps(function)
     def decorator(request, *args, **kwargs):
-        _signature_is_valid()
+        _signature_is_valid(request)
         return function(request, *args, **kwargs)
 
     return decorator
