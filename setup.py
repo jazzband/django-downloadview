@@ -16,6 +16,7 @@ class Tox(TestCommand):
 
     def run_tests(self):
         import tox  # import here, cause outside the eggs aren't loaded.
+
         errno = tox.cmdline(self.test_args)
         sys.exit(errno)
 

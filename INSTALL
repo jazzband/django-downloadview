@@ -12,7 +12,7 @@ Install
 Requirements
 ************
 
-`django-downloadview` has been tested with `Python`_ 2.7, 3.3 and 3.4. Other
+`django-downloadview` has been tested with `Python`_ 3.6, 3.7 and 3.8. Other
 versions may work, but they are not part of the test suite at the moment.
 
 Installing `django-downloadview` will automatically trigger the installation of
