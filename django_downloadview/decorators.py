@@ -5,6 +5,12 @@ See also decorators provided by server-specific modules, such as
 
 """
 
+from functools import wraps
+
+from django.conf import settings
+from django.core.exceptions import PermissionDenied
+from django.core.signing import BadSignature, SignatureExpired, TimestampSigner
+
 
 class DownloadDecorator(object):
     """View decorator factory to apply middleware to ``view_func``'s response.
@@ -32,3 +38,39 @@ class DownloadDecorator(object):
             return middleware.process_response(request, response)
 
         return decorated
+
+
+def _signature_is_valid(request):
+    """
+    Validator that raises a PermissionDenied error on invalid and
+    mismatching signatures.
+    """
+
+    signer = TimestampSigner()
+    signature = request.GET.get("X-Signature")
+    expiration = getattr(settings, "DOWNLOADVIEW_URL_EXPIRATION", None)
+
+    try:
+        signature_path = signer.unsign(signature, max_age=expiration)
+    except SignatureExpired as e:
+        raise PermissionDenied("Signature expired") from e
+    except BadSignature as e:
+        raise PermissionDenied("Signature invalid") from e
+    except Exception as e:
+        raise PermissionDenied("Signature error") from e
+
+    if request.path != signature_path:
+        raise PermissionDenied("Signature mismatch")
+
+
+def signature_required(function):
+    """
+    Decorator that checks for X-Signature query parameter to authorize access to views.
+    """
+
+    @wraps(function)
+    def decorator(request, *args, **kwargs):
+        _signature_is_valid()
+        return function(request, *args, **kwargs)
+
+    return decorator

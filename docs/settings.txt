@@ -30,6 +30,48 @@ Example:
 
 
 ********************
+DEFAULT_FILE_STORAGE
+********************
+
+django-downloadview offers a built-in signed file storage, which cryptographically
+signs requested file URLs with the Django's built-in TimeStampSigner.
+
+To utilize the signed storage views you can configure
+
+.. code:: python
+
+   DEFAULT_FILE_STORAGE='django_downloadview.storage.SignedStorage'
+
+The signed file storage system inserts a ``X-Signature`` header to the requested file
+URLs, and they can then be verified with the supplied ``signature_required`` wrapper function:
+
+.. code:: python
+
+   from django.conf.urls import url, url_patterns
+
+   from django_downloadview import ObjectDownloadView
+   from django_downloadview.decorators import signature_required
+
+   from demoproject.download.models import Document  # A model with a FileField
+
+   # ObjectDownloadView inherits from django.views.generic.BaseDetailView.
+   download = ObjectDownloadView.as_view(model=Document, file_field='file')
+
+    urlpatterns = [
+        path('download/<str:slug>/', signature_required(download),
+    ]
+
+Make sure to test the desired functionality after configuration.
+
+***************************
+DOWNLOADVIEW_URL_EXPIRATION
+***************************
+
+Number of seconds signed download URLs are valid before expiring.
+
+Default value for this flag is None and URLs never expire.
+
+********************
 DOWNLOADVIEW_BACKEND
 ********************
 
