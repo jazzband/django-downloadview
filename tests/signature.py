@@ -3,7 +3,6 @@ Test signature generation and validation.
 """
 
 import unittest
-from unittest import mock
 
 from django.core.exceptions import PermissionDenied
 from django.core.signing import TimestampSigner
@@ -24,7 +23,7 @@ class SignedTestStorage(SignedURLMixin, TestStorage):
 class SignatureGeneratorTestCase(unittest.TestCase):
     def test_signed_storage(self):
         """
-        django_downloadview.storage.SignedURLMixin adds X-Signature to URLs
+        django_downloadview.storage.SignedURLMixin adds X-Signature to URLs.
         """
 
         storage = SignedTestStorage()
@@ -35,7 +34,8 @@ class SignatureGeneratorTestCase(unittest.TestCase):
 class SignatureValidatorTestCase(unittest.TestCase):
     def test_verify_signature(self):
         """
-        django_downloadview.decorators._signature_is_valid returns True on valid signatures
+        django_downloadview.decorators._signature_is_valid returns True on
+        valid signatures.
         """
 
         signer = TimestampSigner()
@@ -48,7 +48,8 @@ class SignatureValidatorTestCase(unittest.TestCase):
 
     def test_verify_signature_invalid(self):
         """
-        django_downloadview.decorators._signature_is_valid raises PermissionDenied on invalid signatures
+        django_downloadview.decorators._signature_is_valid raises PermissionDenied
+        on invalid signatures.
         """
 
         request = unittest.mock.MagicMock()

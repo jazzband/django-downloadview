@@ -9,7 +9,7 @@ from functools import wraps
 
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
-from django.core.signing import TimestampSigner, SignatureExpired, BadSignature
+from django.core.signing import BadSignature, SignatureExpired, TimestampSigner
 
 
 class DownloadDecorator(object):
@@ -42,7 +42,8 @@ class DownloadDecorator(object):
 
 def _signature_is_valid(request):
     """
-    Validator that raises a PermissionDenied error on invalid and mismatching signatures.
+    Validator that raises a PermissionDenied error on invalid and
+    mismatching signatures.
     """
 
     signer = TimestampSigner()

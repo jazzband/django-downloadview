@@ -5,14 +5,12 @@ import os
 import unittest
 from unittest import mock
 
-from django.core.exceptions import PermissionDenied
 from django.core.files import File
 from django.http import Http404
 from django.http.response import HttpResponseNotModified
 import django.test
 
 from django_downloadview import exceptions, views
-from django_downloadview.decorators import signature_required
 from django_downloadview.test import setup_view
 
 
