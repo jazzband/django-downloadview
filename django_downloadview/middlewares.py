@@ -128,12 +128,12 @@ class SmartDownloadMiddleware(BaseDownloadMiddleware):
         #: :class:`DownloadDispatcher` instance that can hold multiple
         #: backend instances.
         self.dispatcher = DownloadDispatcherMiddleware(middlewares=[])
-        #: Callable (typically a class) to instanciate backend (typically a
+        #: Callable (typically a class) to instantiate backend (typically a
         #: :class:`DownloadMiddleware` subclass).
         self.backend_factory = backend_factory
         if self.backend_factory is AUTO_CONFIGURE:
             self.auto_configure_backend_factory()
-        #: List of positional or keyword arguments to instanciate backend
+        #: List of positional or keyword arguments to instantiate backend
         #: instances.
         self.backend_options = backend_options
         if self.backend_options is AUTO_CONFIGURE:
