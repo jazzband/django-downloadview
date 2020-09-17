@@ -137,4 +137,4 @@ setup.
 .. _`Lighttpd X-Sendfile documentation`:
    http://redmine.lighttpd.net/projects/lighttpd/wiki/X-LIGHTTPD-send-file
 .. _`X-Sendfile2 feature request on django_downloadview's bugtracker`:
-   https://github.com/benoitbryon/django-downloadview/issues/67
+   https://github.com/jazzband/django-downloadview/issues/67

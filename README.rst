@@ -2,6 +2,23 @@
 django-downloadview
 ###################
 
+.. image:: https://jazzband.co/static/img/badge.svg
+        :target: https://jazzband.co/
+        :alt: Jazzband
+
+.. image:: https://img.shields.io/pypi/v/django-downloadview.svg
+        :target: https://pypi.python.org/pypi/django-downloadview
+
+.. image:: https://img.shields.io/pypi/pyversions/django-downloadview.svg
+        :target: https://pypi.python.org/pypi/django-downloadview
+.. image:: https://img.shields.io/pypi/dm/django-downloadview.svg
+        :target: https://pypi.python.org/pypi/django-downloadview
+.. image:: https://travis-ci.org/jazzband/django-downloadview.svg?branch=master
+        :target: https://travis-ci.org/jazzband/django-downloadview
+.. image:: https://coveralls.io/repos/github/jazzband/django-downloadview/badge.svg?branch=master
+        :target: https://coveralls.io/github/jazzband/django-downloadview?branch=master
+
+			  
 `django-downloadview` makes it easy to serve files with `Django`_:
 
 * you manage files with Django (permissions, filters, generation, ...);
@@ -41,10 +58,10 @@ Resources
 
 * Documentation: https://django-downloadview.readthedocs.io
 * PyPI page: http://pypi.python.org/pypi/django-downloadview
-* Code repository: https://github.com/benoitbryon/django-downloadview
-* Bugtracker: https://github.com/benoitbryon/django-downloadview/issues
-* Continuous integration: https://travis-ci.org/benoitbryon/django-downloadview
-* Roadmap: https://github.com/benoitbryon/django-downloadview/milestones
+* Code repository: https://github.com/jazzband/django-downloadview
+* Bugtracker: https://github.com/jazzband/django-downloadview/issues
+* Continuous integration: https://travis-ci.org/jazzband/django-downloadview
+* Roadmap: https://github.com/jazzband/django-downloadview/milestones
 
 
 .. _`Django`: https://djangoproject.com
