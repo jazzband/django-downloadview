@@ -1,8 +1,6 @@
-# coding=utf8
 """Test suite for demoproject.download."""
 from django.test import TestCase
-
-from demoproject.compat import reverse
+from django.urls import reverse
 
 
 class HomeViewTestCase(TestCase):

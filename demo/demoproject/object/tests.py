@@ -1,9 +1,9 @@
 from django.core.files.base import ContentFile
 import django.test
+from django.urls import reverse
 
 from django_downloadview import assert_download_response, temporary_media_root
 
-from demoproject.compat import reverse
 from demoproject.object.models import Document
 
 # Fixtures.

@@ -2,10 +2,10 @@ import os
 
 from django.core.files.base import ContentFile
 import django.test
+from django.urls import reverse
 
 from django_downloadview.nginx import assert_x_accel_redirect
 
-from demoproject.compat import reverse
 from demoproject.nginx.views import storage, storage_dir
 
 

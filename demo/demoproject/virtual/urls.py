@@ -1,11 +1,10 @@
-from django.conf.urls import url
+from django.urls import path
 
-from demoproject.compat import patterns
 from demoproject.virtual import views
 
-urlpatterns = patterns(
-    "",
-    url(r"^text/$", views.TextDownloadView.as_view(), name="text"),
-    url(r"^stringio/$", views.StringIODownloadView.as_view(), name="stringio"),
-    url(r"^gerenated/$", views.GeneratedDownloadView.as_view(), name="generated"),
-)
+app_name = "virtual"
+urlpatterns = [
+    path("text/", views.TextDownloadView.as_view(), name="text"),
+    path("stringio/", views.StringIODownloadView.as_view(), name="stringio"),
+    path("gerenated/", views.GeneratedDownloadView.as_view(), name="generated"),
+]

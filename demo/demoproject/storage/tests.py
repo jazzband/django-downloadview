@@ -4,6 +4,7 @@ import unittest
 from django.core.files.base import ContentFile
 from django.http.response import HttpResponseNotModified
 import django.test
+from django.urls import reverse
 
 from django_downloadview import (
     assert_download_response,
@@ -11,7 +12,6 @@ from django_downloadview import (
     temporary_media_root,
 )
 
-from demoproject.compat import reverse
 from demoproject.storage import views
 
 # Fixtures.
