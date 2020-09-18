@@ -303,9 +303,7 @@ class VirtualDownloadViewTestCase(unittest.TestCase):
     :py:class:`django_downloadview.views.VirtualDownloadView`."""
 
     def test_was_modified_since_specific(self):
-        """VirtualDownloadView.was_modified_since() delegates to file wrapper.
-
-        """
+        """VirtualDownloadView.was_modified_since() delegates to file wrapper."""
         file_wrapper = mock.Mock()
         file_wrapper.was_modified_since = mock.Mock(
             return_value=mock.sentinel.from_file_wrapper

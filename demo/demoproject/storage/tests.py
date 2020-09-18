@@ -44,7 +44,8 @@ class StaticPathTestCase(django.test.TestCase):
         url = reverse("storage:static_path", kwargs={"path": "1.txt"})
         year = datetime.date.today().year + 4
         response = self.client.get(
-            url, HTTP_IF_MODIFIED_SINCE=f"Sat, 29 Oct {year} 19:43:31 GMT",
+            url,
+            HTTP_IF_MODIFIED_SINCE=f"Sat, 29 Oct {year} 19:43:31 GMT",
         )
         self.assertTrue(isinstance(response, HttpResponseNotModified))
 
