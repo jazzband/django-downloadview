@@ -1,14 +1,13 @@
-from django.conf.urls import url
+from django.urls import path, re_path
 
-from demoproject.compat import patterns
 from demoproject.path import views
 
-urlpatterns = patterns(
-    "",
-    url(r"^static-path/$", views.static_path, name="static_path"),
-    url(
+app_name = "path"
+urlpatterns = [
+    path("static-path/", views.static_path, name="static_path"),
+    re_path(
         r"^dynamic-path/(?P<path>[a-zA-Z0-9_-]+\.[a-zA-Z0-9]{1,4})$",
         views.dynamic_path,
         name="dynamic_path",
     ),
-)
+]

@@ -1,8 +1,7 @@
 import django.test
+from django.urls import reverse
 
 from django_downloadview import assert_download_response
-
-from demoproject.compat import reverse
 
 
 class SimpleURLTestCase(django.test.TestCase):
