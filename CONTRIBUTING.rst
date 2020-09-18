@@ -2,6 +2,14 @@
 Contributing
 ############
 
+
+.. image:: https://jazzband.co/static/img/jazzband.svg
+   :target: https://jazzband.co/
+   :alt: Jazzband
+
+This is a `Jazzband <https://jazzband.co>`_ project. By contributing you agree to abide by the `Contributor Code of Conduct <https://jazzband.co/about/conduct>`_ and follow the `guidelines <https://jazzband.co/about/guidelines>`_.
+
+
 This document provides guidelines for people who want to contribute to
 `django-downloadview`.
 
@@ -46,7 +54,7 @@ Clone `django-downloadview` repository (adapt to use your own fork):
 
 .. code:: sh
 
-   git clone git@github.com:benoitbryon/django-downloadview.git
+   git clone git@github.com:jazzband/django-downloadview.git
    cd django-downloadview/
 
 
@@ -85,7 +93,7 @@ documentation. Maintain it along with code and documentation.
 .. target-notes::
 
 .. _`bugtracker`: 
-   https://github.com/benoitbryon/django-downloadview/issues
+   https://github.com/jazzband/django-downloadview/issues
 .. _`rebase`: http://git-scm.com/book/en/Git-Branching-Rebasing
 .. _`merge-based rebase`: https://tech.people-doc.com/psycho-rebasing.html
 .. _`pip`: https://pypi.python.org/pypi/pip/

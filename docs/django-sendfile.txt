@@ -54,4 +54,4 @@ API reference
 
 .. _`django-sendfile`: http://pypi.python.org/pypi/django-sendfile
 .. _`django-downloadview's bugtracker`:
-   https://github.com/benoitbryon/django-downloadview/issues
+   https://github.com/jazzband/django-downloadview/issues

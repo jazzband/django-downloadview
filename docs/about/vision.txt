@@ -19,7 +19,7 @@ optimizations.
 
    * :doc:`/about/alternatives`
    * `roadmap
-     <https://github.com/benoitbryon/django-downloadview/milestones>`_
+     <https://github.com/jazzband/django-downloadview/milestones>`_
 
 .. target-notes::
 

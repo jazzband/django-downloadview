@@ -87,6 +87,6 @@ Here are optimizations builtin `django_downloadview`:
 .. target-notes::
 
 .. _`tell us`:
-   https://github.com/benoitbryon/django-downloadview/issues?labels=optimizations
+   https://github.com/jazzband/django-downloadview/issues?labels=optimizations
 .. _`a feature request about "local cache" for streamed files`:
-   https://github.com/benoitbryon/django-downloadview/issues/70
+   https://github.com/jazzband/django-downloadview/issues/70
