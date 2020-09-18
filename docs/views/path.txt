@@ -54,7 +54,7 @@ via URLconfs:
 
 .. literalinclude:: /../demo/demoproject/path/urls.py
    :language: python
-   :lines: 1-7, 11-13, 14
+   :lines: 1-13
 
 
 *************
