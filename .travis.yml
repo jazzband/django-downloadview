@@ -10,3 +10,7 @@ install:
   - pip install -q tox-travis
 script:
   - tox
+arch:
+  - amd64
+  - ppc64le
+
