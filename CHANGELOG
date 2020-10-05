@@ -8,7 +8,11 @@ future releases, check `milestones`_ and :doc:`/about/vision`.
 2.2 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Remove support for Python 3.5 and Django 1.11
+- Add support for Python 3.9 and Django 3.1
+- Remove old urls syntax and adopt the new one
+- Move the project to the jazzband organization
+- Adopt black automatic formatting rules
 
 
 2.1.1 (2020-01-14)

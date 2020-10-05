@@ -30,7 +30,7 @@ NAME = "django-downloadview"
 DESCRIPTION = "Serve files with Django and reverse-proxies."
 README = open(os.path.join(here, "README.rst")).read()
 VERSION = open(os.path.join(here, "VERSION")).read().strip()
-AUTHOR = u"Benoît Bryon"
+AUTHOR = "Benoît Bryon"
 EMAIL = "benoit@marmelune.net"
 LICENSE = "BSD"
 URL = "https://{name}.readthedocs.io/".format(name=NAME)

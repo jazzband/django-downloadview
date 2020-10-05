@@ -36,11 +36,11 @@ source_encoding = "utf-8"
 master_doc = "index"
 
 # General information about the project.
-project = u"django-downloadview"
-project_slug = re.sub(r"([\w_.-]+)", u"-", project)
-copyright = u"2012-2015, Benoît Bryon"
-author = u"Benoît Bryon"
-author_slug = re.sub(r"([\w_.-]+)", u"-", author)
+project = "django-downloadview"
+project_slug = re.sub(r"([\w_.-]+)", "-", project)
+copyright = "2012-2015, Benoît Bryon"
+author = "Benoît Bryon"
+author_slug = re.sub(r"([\w_.-]+)", "-", author)
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -83,7 +83,7 @@ html_sidebars = {
 }
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = u"{project}doc".format(project=project_slug)
+htmlhelp_basename = "{project}doc".format(project=project_slug)
 
 
 # -- Options for sphinx.ext.intersphinx ---------------------------------------
@@ -108,8 +108,8 @@ latex_elements = {}
 latex_documents = [
     (
         "index",
-        u"{project}.tex".format(project=project_slug),
-        u"{project} Documentation".format(project=project),
+        "{project}.tex".format(project=project_slug),
+        "{project} Documentation".format(project=project),
         author,
         "manual",
     ),
@@ -121,7 +121,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ("index", project, u"{project} Documentation".format(project=project), [author], 1)
+    ("index", project, "{project} Documentation".format(project=project), [author], 1)
 ]
 
 
@@ -134,7 +134,7 @@ texinfo_documents = [
     (
         "index",
         project_slug,
-        u"{project} Documentation".format(project=project),
+        "{project} Documentation".format(project=project),
         author,
         project,
         "One line description of project.",

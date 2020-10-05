@@ -87,7 +87,7 @@ Modified" response:
    class TextDownloadView(VirtualDownloadView):
        def get_file(self):
            """Return :class:`django.core.files.base.ContentFile` object."""
-           return ContentFile(u"Hello world!", name='hello-world.txt')
+           return ContentFile("Hello world!", name='hello-world.txt')
 
        def was_modified_since(self, file_instance, since):
-           return False  # Never modified, always u"Hello world!".
+           return False  # Never modified, always "Hello world!".
