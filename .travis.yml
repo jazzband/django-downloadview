@@ -1,34 +1,16 @@
 language: python
 dist: bionic
 python:
-- 3.6
-- 3.7
-- 3.8
-- 3.9-dev
+  - 3.6
+  - 3.7
+  - 3.8
+  - 3.9-dev
 install:
-- pip install tox tox-travis
+  - pip install tox
+  - pip install -q tox-travis
 script:
-- tox -v
-jobs:
-  fast_finish: true
-  include:
-    - stage: deploy
-      env:
-      python: 3.7
-      script: skip
-      deploy:
-        provider: pypi
-        user: jazzband
-        server: https://jazzband.co/projects/django-downloadview/upload
-        distributions: sdist bdist_wheel
-        password:
-          secure: TYFfz5OkSH0YwTKh0lc0PbddcuZh5oL2H1AVIXHs2dODQ46PNgLYgDRe9k9PItAenxm7QCnGRONJo2o1GNuiCcAOWK84jbrmufHZ5EeKTOVtssyrffSA/Oxfs5mFJ/Kgy3o8FC1hGRKXrXFN3bvedmVHERGQimQESPxHQ9sPWhc=
-        skip_existing: true
-        skip_cleanup: true
-        on:
-          tags: true
-          repo: jazzband/django-downloadview
-          python: 3.7
-after_success:
-  - pip install coveralls
-  - coveralls
+  - tox
+arch:
+  - amd64
+  - ppc64le
+
