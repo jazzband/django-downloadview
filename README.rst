@@ -64,8 +64,7 @@ Resources
 * PyPI page: http://pypi.python.org/pypi/django-downloadview
 * Code repository: https://github.com/jazzband/django-downloadview
 * Bugtracker: https://github.com/jazzband/django-downloadview/issues
-* Continuous integration: https://travis-ci.org/jazzband/django-downloadview
+* Continuous integration: https://github.com/jazzband/django-downloadview/actions
 * Roadmap: https://github.com/jazzband/django-downloadview/milestones
-
 
 .. _`Django`: https://djangoproject.com
