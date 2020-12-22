@@ -61,4 +61,3 @@ setup(
         "test": ["tox"],
     },
 )
-s
