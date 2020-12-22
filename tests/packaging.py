@@ -44,17 +44,3 @@ class VersionTestCase(unittest.TestCase):
             "installed version in development environment."
             % (self.get_version(), installed_version),
         )
-
-    def test_version_file(self):
-        """django_downloadview.__version__ matches VERSION file info."""
-        version_file = os.path.join(project_dir, "VERSION")
-        file_version = open(version_file).read().strip()
-        self.assertEqual(
-            file_version,
-            self.get_version(),
-            "Version mismatch: django_downloadview.__version__ "
-            'is "%s" whereas VERSION file tells "%s". '
-            "You may need to run ``make develop`` to update the "
-            "installed version in development environment."
-            % (self.get_version(), file_version),
-        )
