@@ -6,6 +6,8 @@
 
 # Data files.
 /var/
+coverage.xml
+.coverage/
 
 # Python files.
 *.pyc
@@ -14,6 +16,8 @@
 
 # Tox files.
 /.tox/
+.eggs
+*.egg-info
 
 # Virtualenv files (created by tox).
 /build/
