@@ -92,12 +92,6 @@ demo:
 runserver: demo
 	demo runserver
 
-
-#: release - Tag and push to PyPI.
-.PHONY: release
-release:
-	$(TOX) -e release
-
 .PHONY: black
 black:
 	$(BLACK) demo tests django_downloadview

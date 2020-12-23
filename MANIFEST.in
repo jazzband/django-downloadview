@@ -6,4 +6,3 @@ include CONTRIBUTING.rst
 include INSTALL
 include LICENSE
 include README.rst
-include VERSION
