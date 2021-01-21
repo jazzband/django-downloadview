@@ -69,7 +69,7 @@ Then here is the code to serve "another_file" instead of the default "file":
 
 .. literalinclude:: /../demo/demoproject/object/views.py
    :language: python
-   :lines: 1-5, 10-12
+   :lines: 1-4, 8-11
 
 
 **********************************
