@@ -51,7 +51,7 @@ setup(
     zip_safe=False,
     install_requires=[
         # BEGIN requirements
-        "Django>=1.11",
+        "Django>=2.2",
         "requests",
         "setuptools",
         # END requirements
