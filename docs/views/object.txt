@@ -90,7 +90,7 @@ Then you can configure the :attr:`ObjectDownloadView.basename_field` option:
 
 .. literalinclude:: /../demo/demoproject/object/views.py
    :language: python
-   :lines: 1-5, 16-18
+   :lines: 1-4, 13-17
 
 .. note::
 
