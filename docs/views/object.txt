@@ -30,7 +30,7 @@ Setup a view to stream the ``file`` attribute:
 
 .. literalinclude:: /../demo/demoproject/object/views.py
    :language: python
-   :lines: 1-5, 7
+   :lines: 1-6
 
 :class:`~django_downloadview.views.object.ObjectDownloadView` inherits from
 :class:`~django.views.generic.detail.BaseDetailView`, i.e. it expects either
@@ -38,7 +38,7 @@ Setup a view to stream the ``file`` attribute:
 
 .. literalinclude:: /../demo/demoproject/object/urls.py
    :language: python
-   :lines: 1-7, 8-11, 20
+   :lines: 1-7, 8-11, 27
 
 
 ************
@@ -69,7 +69,7 @@ Then here is the code to serve "another_file" instead of the default "file":
 
 .. literalinclude:: /../demo/demoproject/object/views.py
    :language: python
-   :lines: 1-5, 10-12
+   :lines: 1-4, 8-11
 
 
 **********************************
@@ -90,7 +90,7 @@ Then you can configure the :attr:`ObjectDownloadView.basename_field` option:
 
 .. literalinclude:: /../demo/demoproject/object/views.py
    :language: python
-   :lines: 1-5, 16-18
+   :lines: 1-4, 13-17
 
 .. note::
 
