@@ -87,10 +87,10 @@ htmlhelp_basename = "{project}doc".format(project=project_slug)
 # -- Options for sphinx.ext.intersphinx ---------------------------------------
 
 intersphinx_mapping = {
-    "python": ("https://docs.python.org/2.7", None),
+    "python": ("https://docs.python.org/3", None),
     "django": (
-        "https://docs.djangoproject.com/en/1.8/",
-        "https://docs.djangoproject.com/en/1.8/_objects/",
+        "https://docs.djangoproject.com/en/3.1/",
+        "https://docs.djangoproject.com/en/3.1/_objects/",
     ),
     "requests": ("https://requests.readthedocs.io/en/master/", None),
 }
