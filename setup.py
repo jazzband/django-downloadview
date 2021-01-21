@@ -53,7 +53,6 @@ setup(
         # BEGIN requirements
         "Django>=1.11",
         "requests",
-        "setuptools",
         # END requirements
     ],
     extras_require={
