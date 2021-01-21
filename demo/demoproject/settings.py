@@ -1,8 +1,7 @@
 """Django settings for django-downloadview demo project."""
-from distutils.version import StrictVersion
+
 import os
 
-from django.utils.version import get_version
 
 # Configure some relative directories.
 demoproject_dir = os.path.dirname(os.path.abspath(__file__))
@@ -61,24 +60,14 @@ INSTALLED_APPS = (
 
 
 # BEGIN middlewares
-if StrictVersion(get_version()) >= StrictVersion("1.10"):
-    MIDDLEWARE = [
-        "django.middleware.common.CommonMiddleware",
-        "django.contrib.sessions.middleware.SessionMiddleware",
-        "django.middleware.csrf.CsrfViewMiddleware",
-        "django.contrib.auth.middleware.AuthenticationMiddleware",
-        "django.contrib.messages.middleware.MessageMiddleware",
-        "django_downloadview.SmartDownloadMiddleware",
-    ]
-else:
-    MIDDLEWARE_CLASSES = [
-        "django.middleware.common.CommonMiddleware",
-        "django.contrib.sessions.middleware.SessionMiddleware",
-        "django.middleware.csrf.CsrfViewMiddleware",
-        "django.contrib.auth.middleware.AuthenticationMiddleware",
-        "django.contrib.messages.middleware.MessageMiddleware",
-        "django_downloadview.SmartDownloadMiddleware",
-    ]
+MIDDLEWARE = [
+    "django.middleware.common.CommonMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django_downloadview.SmartDownloadMiddleware",
+]
 # END middlewares
 
 
@@ -133,27 +122,24 @@ NOSE_ARGS = [
     "--with-doctest",
 ]
 
-if StrictVersion(get_version()) >= StrictVersion("1.8"):
-    TEMPLATES = [
-        {
-            "BACKEND": "django.template.backends.django.DjangoTemplates",
-            "DIRS": [os.path.join(os.path.dirname(__file__), "templates")],
-            "OPTIONS": {
-                "debug": DEBUG,
-                "context_processors": [
-                    # Insert your TEMPLATE_CONTEXT_PROCESSORS here or use this
-                    # list if you haven't customized them:
-                    "django.contrib.auth.context_processors.auth",
-                    "django.template.context_processors.debug",
-                    "django.template.context_processors.i18n",
-                    "django.template.context_processors.media",
-                    "django.template.context_processors.static",
-                    "django.template.context_processors.tz",
-                    "django.contrib.messages.context_processors.messages",
-                ],
-            },
+
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [os.path.join(os.path.dirname(__file__), "templates")],
+        "OPTIONS": {
+            "debug": DEBUG,
+            "context_processors": [
+                # Insert your TEMPLATE_CONTEXT_PROCESSORS here or use this
+                # list if you haven't customized them:
+                "django.contrib.auth.context_processors.auth",
+                "django.template.context_processors.debug",
+                "django.template.context_processors.i18n",
+                "django.template.context_processors.media",
+                "django.template.context_processors.static",
+                "django.template.context_processors.tz",
+                "django.contrib.messages.context_processors.messages",
+            ],
         },
-    ]
-else:
-    TEMPLATE_DEBUG = DEBUG
-    TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), "templates"),)
+    },
+]
