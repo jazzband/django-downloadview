@@ -53,7 +53,6 @@ setup(
         # BEGIN requirements
         "Django>=2.2",
         "requests",
-        "setuptools",
         # END requirements
     ],
     extras_require={
