@@ -30,7 +30,7 @@ Setup a view to stream the ``file`` attribute:
 
 .. literalinclude:: /../demo/demoproject/object/views.py
    :language: python
-   :lines: 1-5, 7
+   :lines: 1-6
 
 :class:`~django_downloadview.views.object.ObjectDownloadView` inherits from
 :class:`~django.views.generic.detail.BaseDetailView`, i.e. it expects either
