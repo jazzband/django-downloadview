@@ -28,7 +28,7 @@ Let's consider the following view:
 
 .. literalinclude:: /../demo/demoproject/nginx/views.py
    :language: python
-   :lines: 1-6, 8-16
+   :lines: 1-6, 8-17
 
 What is important here is that the files will have an ``url`` property
 implemented by storage. Let's setup an optimization rule based on that URL.
@@ -46,26 +46,26 @@ Setup XAccelRedirect middlewares
 ********************************
 
 Make sure ``django_downloadview.SmartDownloadMiddleware`` is in
-``MIDDLEWARE_CLASSES`` of your `Django` settings.
+``MIDDLEWARE`` of your `Django` settings.
 
 Example:
 
 .. literalinclude:: /../demo/demoproject/settings.py
    :language: python
-   :lines: 63-70
+   :lines: 62-69
 
 Then set ``django_downloadview.nginx.XAccelRedirectMiddleware`` as
 ``DOWNLOADVIEW_BACKEND``:
 
 .. literalinclude:: /../demo/demoproject/settings.py
    :language: python
-   :lines: 76
+   :lines: 75
 
 Then register as many ``DOWNLOADVIEW_RULES`` as you wish:
 
 .. literalinclude:: /../demo/demoproject/settings.py
    :language: python
-   :lines: 84-89
+   :lines: 83-88
 
 Each item in ``DOWNLOADVIEW_RULES`` is a dictionary of keyword arguments passed
 to the middleware factory. In the example above, we capture responses by
