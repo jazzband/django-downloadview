@@ -183,7 +183,7 @@ Add ``charset utf-8;`` in your nginx configuration file.
 ``open() "path/to/something" failed (2: No such file or directory)``
 ====================================================================
 
-Check your ``settings.NGINX_DOWNLOAD_MIDDLEWARE_MEDIA_ROOT`` in Django
+Check your ``settings.NGINX_DOWNLOAD_MIDDLEWARE_SOURCE_DIR`` in Django
 configuration VS ``alias`` in nginx configuration: in a standard configuration,
 they should be equal.
 
