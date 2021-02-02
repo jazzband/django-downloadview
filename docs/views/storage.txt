@@ -18,20 +18,20 @@ Given a storage:
 
 .. literalinclude:: /../demo/demoproject/storage/views.py
    :language: python
-   :lines: 1, 4-6
+   :lines: 1, 4-5
 
 Setup a view to stream files in storage:
 
 .. literalinclude:: /../demo/demoproject/storage/views.py
    :language: python
-   :lines: 3-5, 10
+   :lines: 3-6, 8-9
 
 The view accepts a ``path`` argument you can setup either in ``as_view`` or
 via URLconfs:
 
 .. literalinclude:: /../demo/demoproject/storage/urls.py
    :language: python
-   :lines: 1-7, 8-10, 14
+   :lines: 1-6, 7-11, 17
 
 
 ************
@@ -56,7 +56,7 @@ uppercase:
 
 .. literalinclude:: /../demo/demoproject/storage/views.py
    :language: python
-   :lines: 3-5, 13-20
+   :lines: 3-5, 11-20
 
 
 *************
