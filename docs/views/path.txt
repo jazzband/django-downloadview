@@ -24,8 +24,8 @@ Setup a view to stream files given path:
 
 .. literalinclude:: /../demo/demoproject/path/views.py
    :language: python
-   :lines: 1-14
-   :emphasize-lines: 14
+   :lines: 1-13
+   :emphasize-lines: 13
 
 
 ************
