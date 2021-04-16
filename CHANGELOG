@@ -8,7 +8,7 @@ future releases, check `milestones`_ and :doc:`/about/vision`.
 2.3 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Drop Django 3.0 support
 
 
 2.2 (unreleased)
