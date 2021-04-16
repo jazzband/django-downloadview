@@ -12,6 +12,9 @@ django-downloadview
 .. image:: https://img.shields.io/pypi/pyversions/django-downloadview.svg
     :target: https://pypi.python.org/pypi/django-downloadview
 
+.. image:: https://img.shields.io/pypi/djversions/django-downloadview.svg
+    :target: https://pypi.python.org/pypi/django-downloadview
+
 .. image:: https://img.shields.io/pypi/dm/django-downloadview.svg
     :target: https://pypi.python.org/pypi/django-downloadview
 
