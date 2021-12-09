@@ -1,7 +1,7 @@
 """Low-level IO operations, for use with file wrappers."""
 import io
 
-from django.utils.encoding import force_bytes, force_text
+from django.utils.encoding import force_bytes, force_str
 
 
 class TextIteratorIO(io.TextIOBase):
@@ -32,7 +32,7 @@ class TextIteratorIO(io.TextIOBase):
                 break
             else:
                 # Make sure we handle text.
-                self._left = force_text(self._left)
+                self._left = force_str(self._left)
         ret = self._left[:n]
         self._left = self._left[len(ret) :]
         return ret
