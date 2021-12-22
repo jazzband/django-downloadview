@@ -4,7 +4,7 @@ Download middlewares capture :py:class:`django_downloadview.DownloadResponse`
 responses and may replace them with optimized download responses.
 
 """
-import collections
+import collections.abc
 import copy
 import os
 
@@ -160,7 +160,7 @@ class SmartDownloadMiddleware(BaseDownloadMiddleware):
         for key, options in enumerate(options_list):
             args = []
             kwargs = {}
-            if isinstance(options, collections.Mapping):  # Using kwargs.
+            if isinstance(options, collections.abc.Mapping):  # Using kwargs.
                 kwargs = options
             else:
                 args = options
