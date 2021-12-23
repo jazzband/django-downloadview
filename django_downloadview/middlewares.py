@@ -14,14 +14,6 @@ from django.core.exceptions import ImproperlyConfigured
 from django_downloadview.response import DownloadResponse
 from django_downloadview.utils import import_member
 
-try:
-    from django.utils.deprecation import MiddlewareMixin
-except ImportError:
-
-    class MiddlewareMixin(object):
-        def __init__(self, get_response=None):
-            super(MiddlewareMixin, self).__init__()
-
 
 #: Sentinel value to detect whether configuration is to be loaded from Django
 #: settings or not.
@@ -38,12 +30,18 @@ def is_download_response(response):
     return isinstance(response, DownloadResponse)
 
 
-class BaseDownloadMiddleware(MiddlewareMixin):
+class BaseDownloadMiddleware:
     """Base (abstract) Django middleware that handles download responses.
 
     Subclasses **must** implement :py:meth:`process_download_response` method.
 
     """
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.get_response(request)
+        return self.process_response(request, response)
 
     def is_download_response(self, response):
         """Return True if ``response`` can be considered as a file download.
