@@ -85,11 +85,8 @@ class RealDownloadMiddleware(BaseDownloadMiddleware):
         return False
 
 
-class DownloadDispatcherMiddleware(BaseDownloadMiddleware):
-    "Download middleware that dispatches job to several middleware instances."
-
-    def __init__(self, get_response=None, middlewares=AUTO_CONFIGURE):
-        super(DownloadDispatcherMiddleware, self).__init__(get_response)
+class DownloadDispatcher:
+    def __init__(self, middlewares=AUTO_CONFIGURE):
         #: List of children middlewares.
         self.middlewares = middlewares
         if self.middlewares is AUTO_CONFIGURE:
@@ -105,27 +102,35 @@ class DownloadDispatcherMiddleware(BaseDownloadMiddleware):
             middleware = factory(**kwargs)
             self.middlewares.append((key, middleware))
 
-    def process_download_response(self, request, response):
+    def dispatch(self, request, response):
         """Dispatches job to children middlewares."""
         for (key, middleware) in self.middlewares:
             response = middleware.process_response(request, response)
         return response
 
 
-class SmartDownloadMiddleware(BaseDownloadMiddleware):
+class DownloadDispatcherMiddleware(BaseDownloadMiddleware):
+    "Download middleware that dispatches job to several middleware instances."
+
+    def __init__(self, get_response, middlewares=AUTO_CONFIGURE):
+        super(DownloadDispatcherMiddleware, self).__init__(get_response)
+        self.dispatcher = DownloadDispatcher(middlewares)
+
+    def process_download_response(self, request, response):
+        return self.dispatcher.dispatch(request, response)
+
+
+class SmartDownloadMiddleware(DownloadDispatcherMiddleware):
     """Easy to configure download middleware."""
 
     def __init__(
         self,
-        get_response=None,
+        get_response,
         backend_factory=AUTO_CONFIGURE,
         backend_options=AUTO_CONFIGURE,
     ):
         """Constructor."""
-        super(SmartDownloadMiddleware, self).__init__(get_response)
-        #: :class:`DownloadDispatcher` instance that can hold multiple
-        #: backend instances.
-        self.dispatcher = DownloadDispatcherMiddleware(middlewares=[])
+        super(SmartDownloadMiddleware, self).__init__(get_response, middlewares=[])
         #: Callable (typically a class) to instantiate backend (typically a
         #: :class:`DownloadMiddleware` subclass).
         self.backend_factory = backend_factory
@@ -170,10 +175,6 @@ class SmartDownloadMiddleware(BaseDownloadMiddleware):
             middleware_instance = factory(*args, **kwargs)
             self.dispatcher.middlewares.append((key, middleware_instance))
 
-    def process_download_response(self, request, response):
-        """Use :attr:`dispatcher` to process download response."""
-        return self.dispatcher.process_download_response(request, response)
-
 
 class NoRedirectionMatch(Exception):
     """Response object does not match redirection rules."""
@@ -183,7 +184,7 @@ class ProxiedDownloadMiddleware(RealDownloadMiddleware):
     """Base class for middlewares that use optimizations of reverse proxies."""
 
     def __init__(
-        self, get_response=None, source_dir=None, source_url=None, destination_url=None
+        self, get_response, source_dir=None, source_url=None, destination_url=None
     ):
         """Constructor."""
         super(ProxiedDownloadMiddleware, self).__init__(get_response)
