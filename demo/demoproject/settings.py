@@ -53,8 +53,6 @@ INSTALLED_APPS = (
     "django.contrib.sites",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # Stuff that must be at the end.
-    "django_nose",
 )
 
 
@@ -111,15 +109,6 @@ DOWNLOADVIEW_RULES += [
 
 # Test/development settings.
 DEBUG = True
-TEST_RUNNER = "django_nose.NoseTestSuiteRunner"
-NOSE_ARGS = [
-    "--verbosity=2",
-    "--no-path-adjustment",
-    "--nocapture",
-    "--all-modules",
-    "--with-coverage",
-    "--with-doctest",
-]
 
 
 TEMPLATES = [

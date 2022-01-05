@@ -4,7 +4,7 @@ Download middlewares capture :py:class:`django_downloadview.DownloadResponse`
 responses and may replace them with optimized download responses.
 
 """
-import collections
+import collections.abc
 import copy
 import os
 
@@ -13,14 +13,6 @@ from django.core.exceptions import ImproperlyConfigured
 
 from django_downloadview.response import DownloadResponse
 from django_downloadview.utils import import_member
-
-try:
-    from django.utils.deprecation import MiddlewareMixin
-except ImportError:
-
-    class MiddlewareMixin(object):
-        def __init__(self, get_response=None):
-            super(MiddlewareMixin, self).__init__()
 
 
 #: Sentinel value to detect whether configuration is to be loaded from Django
@@ -38,12 +30,18 @@ def is_download_response(response):
     return isinstance(response, DownloadResponse)
 
 
-class BaseDownloadMiddleware(MiddlewareMixin):
+class BaseDownloadMiddleware:
     """Base (abstract) Django middleware that handles download responses.
 
     Subclasses **must** implement :py:meth:`process_download_response` method.
 
     """
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.get_response(request)
+        return self.process_response(request, response)
 
     def is_download_response(self, response):
         """Return True if ``response`` can be considered as a file download.
@@ -87,11 +85,8 @@ class RealDownloadMiddleware(BaseDownloadMiddleware):
         return False
 
 
-class DownloadDispatcherMiddleware(BaseDownloadMiddleware):
-    "Download middleware that dispatches job to several middleware instances."
-
-    def __init__(self, get_response=None, middlewares=AUTO_CONFIGURE):
-        super(DownloadDispatcherMiddleware, self).__init__(get_response)
+class DownloadDispatcher:
+    def __init__(self, middlewares=AUTO_CONFIGURE):
         #: List of children middlewares.
         self.middlewares = middlewares
         if self.middlewares is AUTO_CONFIGURE:
@@ -107,27 +102,35 @@ class DownloadDispatcherMiddleware(BaseDownloadMiddleware):
             middleware = factory(**kwargs)
             self.middlewares.append((key, middleware))
 
-    def process_download_response(self, request, response):
+    def dispatch(self, request, response):
         """Dispatches job to children middlewares."""
         for (key, middleware) in self.middlewares:
             response = middleware.process_response(request, response)
         return response
 
 
-class SmartDownloadMiddleware(BaseDownloadMiddleware):
+class DownloadDispatcherMiddleware(BaseDownloadMiddleware):
+    "Download middleware that dispatches job to several middleware instances."
+
+    def __init__(self, get_response, middlewares=AUTO_CONFIGURE):
+        super(DownloadDispatcherMiddleware, self).__init__(get_response)
+        self.dispatcher = DownloadDispatcher(middlewares)
+
+    def process_download_response(self, request, response):
+        return self.dispatcher.dispatch(request, response)
+
+
+class SmartDownloadMiddleware(DownloadDispatcherMiddleware):
     """Easy to configure download middleware."""
 
     def __init__(
         self,
-        get_response=None,
+        get_response,
         backend_factory=AUTO_CONFIGURE,
         backend_options=AUTO_CONFIGURE,
     ):
         """Constructor."""
-        super(SmartDownloadMiddleware, self).__init__(get_response)
-        #: :class:`DownloadDispatcher` instance that can hold multiple
-        #: backend instances.
-        self.dispatcher = DownloadDispatcherMiddleware(middlewares=[])
+        super(SmartDownloadMiddleware, self).__init__(get_response, middlewares=[])
         #: Callable (typically a class) to instantiate backend (typically a
         #: :class:`DownloadMiddleware` subclass).
         self.backend_factory = backend_factory
@@ -160,7 +163,7 @@ class SmartDownloadMiddleware(BaseDownloadMiddleware):
         for key, options in enumerate(options_list):
             args = []
             kwargs = {}
-            if isinstance(options, collections.Mapping):  # Using kwargs.
+            if isinstance(options, collections.abc.Mapping):  # Using kwargs.
                 kwargs = options
             else:
                 args = options
@@ -172,10 +175,6 @@ class SmartDownloadMiddleware(BaseDownloadMiddleware):
             middleware_instance = factory(*args, **kwargs)
             self.dispatcher.middlewares.append((key, middleware_instance))
 
-    def process_download_response(self, request, response):
-        """Use :attr:`dispatcher` to process download response."""
-        return self.dispatcher.process_download_response(request, response)
-
 
 class NoRedirectionMatch(Exception):
     """Response object does not match redirection rules."""
@@ -185,7 +184,7 @@ class ProxiedDownloadMiddleware(RealDownloadMiddleware):
     """Base class for middlewares that use optimizations of reverse proxies."""
 
     def __init__(
-        self, get_response=None, source_dir=None, source_url=None, destination_url=None
+        self, get_response, source_dir=None, source_url=None, destination_url=None
     ):
         """Constructor."""
         super(ProxiedDownloadMiddleware, self).__init__(get_response)

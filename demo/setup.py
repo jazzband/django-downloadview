@@ -21,6 +21,6 @@ setup(
     packages=["demoproject"],
     include_package_data=True,
     zip_safe=False,
-    install_requires=["django-downloadview", "django-nose"],
+    install_requires=["django-downloadview", "pytest-django"],
     entry_points={"console_scripts": ["demo = demoproject.manage:main"]},
 )
