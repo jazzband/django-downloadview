@@ -58,7 +58,7 @@ URLs, and they can then be verified with the supplied ``signature_required`` wra
    download = ObjectDownloadView.as_view(model=Document, file_field='file')
 
     urlpatterns = [
-        path('download/<str:slug>/', signature_required(download),
+        path('download/<str:slug>/', signature_required(download)),
     ]
 
 Make sure to test the desired functionality after configuration.
