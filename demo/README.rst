@@ -31,7 +31,7 @@ Deploy the demo
 
 System requirements:
 
-* `Python`_ version 3.6+, available as ``python`` command.
+* `Python`_ version 3.7+, available as ``python`` command.
   
   .. note::
 
