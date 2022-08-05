@@ -102,9 +102,9 @@ class DownloadMixin(object):
         Else, fallbacks to default implementation, which uses
         :py:func:`django.views.static.was_modified_since`.
 
-        Django's ``was_modified_since`` function needs a datetime and a size.
-        It is passed ``modified_time`` and ``size`` attributes from file
-        wrapper. If file wrapper does not support these attributes
+        Django's ``was_modified_since`` function needs a datetime.
+        It is passed the ``modified_time`` attribute from file
+        wrapper. If file wrapper does not support this attribute
         (``AttributeError`` or ``NotImplementedError`` is raised), then
         the file is considered as modified and ``True`` is returned.
 
@@ -116,12 +116,11 @@ class DownloadMixin(object):
                 modification_time = calendar.timegm(
                     file_instance.modified_time.utctimetuple()
                 )
-                size = file_instance.size
             except (AttributeError, NotImplementedError) as e:
                 print("!=======!", e)
                 return True
             else:
-                return was_modified_since(since, modification_time, size)
+                return was_modified_since(since, modification_time)
 
     def not_modified_response(self, *response_args, **response_kwargs):
         """Return :class:`django.http.HttpResponseNotModified` instance."""

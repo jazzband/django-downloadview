@@ -85,13 +85,12 @@ class DownloadMixinTestCase(unittest.TestCase):
         When calling file wrapper's ``was_modified_since()`` raises
         ``NotImplementedError`` or ``AttributeError``,
         :meth:`django_downloadview.views.base.DownloadMixin.was_modified_since`
-        tries to pass file wrapper's ``size`` and ``modified_time`` to
+        tries to pass file wrapper's ``modified_time`` to
         :func:`django.views.static import was_modified_since`.
 
         """
         file_wrapper = mock.Mock()
         file_wrapper.was_modified_since = mock.Mock(side_effect=AttributeError)
-        file_wrapper.size = mock.sentinel.size
         file_wrapper.modified_time = datetime.now()
         was_modified_since_mock = mock.Mock(return_value=mock.sentinel.was_modified)
         mixin = views.DownloadMixin()
@@ -106,7 +105,6 @@ class DownloadMixinTestCase(unittest.TestCase):
         was_modified_since_mock.assert_called_once_with(
             mock.sentinel.since,
             calendar.timegm(file_wrapper.modified_time.utctimetuple()),
-            mock.sentinel.size,
         )
 
     def test_was_modified_since_fallback(self):
@@ -117,7 +115,7 @@ class DownloadMixinTestCase(unittest.TestCase):
         * calling file wrapper's ``was_modified_since()`` raises
           ``NotImplementedError`` or ``AttributeError``;
 
-        * and accessing ``size`` and ``modified_time`` from file wrapper raises
+        * and accessing ``modified_time`` from file wrapper raises
           ``NotImplementedError`` or ``AttributeError``...
 
         ... then
