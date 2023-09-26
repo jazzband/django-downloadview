@@ -75,7 +75,7 @@ class RealDownloadMiddleware(BaseDownloadMiddleware):
         whose file attribute have either an URL or a file name.
 
         """
-        if super(RealDownloadMiddleware, self).is_download_response(response):
+        if super().is_download_response(response):
             try:
                 return response.file.url or response.file.name
             except AttributeError:
@@ -113,7 +113,7 @@ class DownloadDispatcherMiddleware(BaseDownloadMiddleware):
     "Download middleware that dispatches job to several middleware instances."
 
     def __init__(self, get_response, middlewares=AUTO_CONFIGURE):
-        super(DownloadDispatcherMiddleware, self).__init__(get_response)
+        super().__init__(get_response)
         self.dispatcher = DownloadDispatcher(middlewares)
 
     def process_download_response(self, request, response):
@@ -130,7 +130,7 @@ class SmartDownloadMiddleware(DownloadDispatcherMiddleware):
         backend_options=AUTO_CONFIGURE,
     ):
         """Constructor."""
-        super(SmartDownloadMiddleware, self).__init__(get_response, middlewares=[])
+        super().__init__(get_response, middlewares=[])
         #: Callable (typically a class) to instantiate backend (typically a
         #: :class:`DownloadMiddleware` subclass).
         self.backend_factory = backend_factory
@@ -187,7 +187,7 @@ class ProxiedDownloadMiddleware(RealDownloadMiddleware):
         self, get_response, source_dir=None, source_url=None, destination_url=None
     ):
         """Constructor."""
-        super(ProxiedDownloadMiddleware, self).__init__(get_response)
+        super().__init__(get_response)
 
         self.source_dir = source_dir
         self.source_url = source_url

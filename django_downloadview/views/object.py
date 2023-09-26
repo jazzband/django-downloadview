@@ -83,7 +83,7 @@ class ObjectDownloadView(SingleObjectMixin, BaseDownloadView):
 
     def get_basename(self):
         """Return client-side filename."""
-        basename = super(ObjectDownloadView, self).get_basename()
+        basename = super().get_basename()
         if basename is None:
             field = "basename"
             model_field = getattr(self, "%s_field" % field, False)
@@ -93,4 +93,4 @@ class ObjectDownloadView(SingleObjectMixin, BaseDownloadView):
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        return super(ObjectDownloadView, self).get(request, *args, **kwargs)
+        return super().get(request, *args, **kwargs)

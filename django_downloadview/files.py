@@ -167,7 +167,7 @@ class VirtualFile(File):
           File URL.
 
         """
-        super(VirtualFile, self).__init__(file, name)
+        super().__init__(file, name)
         self.url = url
         if size is not None:
             self._size = size
@@ -183,7 +183,7 @@ class VirtualFile(File):
         return self._size
 
     def _set_size(self, value):
-        return super(VirtualFile, self)._set_size(value)
+        return super()._set_size(value)
 
     size = property(_get_size, _set_size)
 

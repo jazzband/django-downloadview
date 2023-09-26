@@ -138,7 +138,7 @@ class DownloadResponse(StreamingHttpResponse):
         #: A :doc:`file wrapper instance </files>`, such as
         #: :class:`~django.core.files.base.File`.
         self.file = file_instance
-        super(DownloadResponse, self).__init__(
+        super().__init__(
             streaming_content=self.file, status=status, content_type=content_type
         )
 
@@ -194,16 +194,6 @@ class DownloadResponse(StreamingHttpResponse):
                 headers["Content-Disposition"] = content_disposition(basename)
             self._default_headers = headers
             return self._default_headers
-
-    def items(self):
-        """Return iterable of (header, value).
-
-        This method is called by http handlers just before WSGI's
-        start_response() is called... but it is not called by
-        django.test.ClientHandler! :'(
-
-        """
-        return super(DownloadResponse, self).items()
 
     def get_basename(self):
         """Return basename."""

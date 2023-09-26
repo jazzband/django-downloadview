@@ -30,7 +30,7 @@ class DynamicPathDownloadView(PathDownloadView):
     def get_path(self):
         """Return path inside fixtures directory."""
         # Get path from URL resolvers or as_view kwarg.
-        relative_path = super(DynamicPathDownloadView, self).get_path()
+        relative_path = super().get_path()
         # Make it absolute.
         absolute_path = os.path.join(fixtures_dir, relative_path)
         return absolute_path
