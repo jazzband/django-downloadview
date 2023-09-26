@@ -14,7 +14,7 @@ class DynamicStorageDownloadView(StorageDownloadView):
 
     def get_path(self):
         """Return uppercase path."""
-        return super(DynamicStorageDownloadView, self).get_path().upper()
+        return super().get_path().upper()
 
 
 dynamic_path = DynamicStorageDownloadView.as_view(storage=storage)

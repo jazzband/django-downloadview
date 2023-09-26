@@ -10,7 +10,7 @@ class SignedURLMixin:
     """
 
     def url(self, name):
-        path = super(SignedURLMixin, self).url(name)
+        path = super().url(name)
         signer = TimestampSigner()
         signature = signer.sign(path)
         return "{}?X-Signature={}".format(path, signature)

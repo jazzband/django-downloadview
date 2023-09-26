@@ -71,13 +71,13 @@ class temporary_media_root(override_settings):
         settings.MEDIA_ROOT."""
         tmp_dir = tempfile.mkdtemp()
         self.options["MEDIA_ROOT"] = tmp_dir
-        super(temporary_media_root, self).enable()
+        super().enable()
 
     def disable(self):
         """Remove directory settings.MEDIA_ROOT then restore original
         setting."""
         shutil.rmtree(settings.MEDIA_ROOT)
-        super(temporary_media_root, self).disable()
+        super().disable()
 
 
 class DownloadResponseValidator(object):

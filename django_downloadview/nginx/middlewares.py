@@ -58,9 +58,7 @@ class XAccelRedirectMiddleware(ProxiedDownloadMiddleware):
         else:
             source_dir = source_dir
 
-        super(XAccelRedirectMiddleware, self).__init__(
-            get_response, source_dir, source_url, destination_url
-        )
+        super().__init__(get_response, source_dir, source_url, destination_url)
 
         self.expires = expires
         self.with_buffering = with_buffering
@@ -132,7 +130,7 @@ class SingleXAccelRedirectMiddleware(XAccelRedirectMiddleware):
                 "settings.NGINX_DOWNLOAD_MIDDLEWARE_DESTINATION_URL is "
                 "required by %s middleware" % self.__class__.__name__
             )
-        super(SingleXAccelRedirectMiddleware, self).__init__(
+        super().__init__(
             get_response=get_response,
             source_dir=settings.NGINX_DOWNLOAD_MIDDLEWARE_SOURCE_DIR,
             source_url=settings.NGINX_DOWNLOAD_MIDDLEWARE_SOURCE_URL,
