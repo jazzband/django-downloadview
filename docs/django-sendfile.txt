@@ -31,7 +31,7 @@ Here are tips to migrate from `django-sendfile` to `django-downloadview`...
    * setup ``DOWNLOADVIEW_RULES``. It replaces ``SENDFILE_ROOT`` and can do
      more.
    * register ``django_downloadview.SmartDownloadMiddleware`` in
-     ``MIDDLEWARE_CLASSES``.
+     ``MIDDLEWARE``.
 
 4. Change your tests if any. You can no longer use `django-senfile`'s
    ``development`` backend. See :doc:`/testing` for `django-downloadview`'s
