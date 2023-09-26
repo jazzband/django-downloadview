@@ -45,7 +45,7 @@ Setup XSendfile middlewares
 ***************************
 
 Make sure ``django_downloadview.SmartDownloadMiddleware`` is in
-``MIDDLEWARE_CLASSES`` of your `Django` settings.
+``MIDDLEWARE`` of your `Django` settings.
 
 Example:
 
@@ -128,4 +128,4 @@ setup.
 
 .. target-notes::
 
-.. _`Apache mod_xsendfile documentation`: https://tn123.org/mod_xsendfile/ 
+.. _`Apache mod_xsendfile documentation`: https://tn123.org/mod_xsendfile/

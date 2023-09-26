@@ -17,14 +17,7 @@ from django.core.exceptions import ImproperlyConfigured
 deprecated_middleware = "django_downloadview.nginx.XAccelRedirectMiddleware"
 
 
-def get_middlewares():
-    try:
-        return settings.MIDDLEWARE
-    except AttributeError:
-        return settings.MIDDLEWARE_CLASSES
-
-
-if deprecated_middleware in get_middlewares():
+if deprecated_middleware in settings.MIDDLEWARE:
     raise ImproperlyConfigured(
         "{deprecated_middleware} middleware has been renamed as of "
         "django-downloadview version 1.3. You may use "
