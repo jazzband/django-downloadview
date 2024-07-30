@@ -13,11 +13,11 @@ There is no need to register this application in ``INSTALLED_APPS``.
 
 
 ******************
-MIDDLEWARE_CLASSES
+MIDDLEWARE
 ******************
 
 If you plan to setup :doc:`reverse-proxy optimizations </optimizations/index>`,
-add ``django_downloadview.SmartDownloadMiddleware`` to ``MIDDLEWARE_CLASSES``.
+add ``django_downloadview.SmartDownloadMiddleware`` to ``MIDDLEWARE``.
 It is a response middleware. Move it after middlewares that compute the
 response content such as gzip middleware.
 
@@ -91,7 +91,7 @@ Example:
 See :doc:`/optimizations/index` for a list of available backends (middlewares).
 
 When ``django_downloadview.SmartDownloadMiddleware`` is in your
-``MIDDLEWARE_CLASSES``, this setting must be explicitely configured (no default
+``MIDDLEWARE``, this setting must be explicitely configured (no default
 value). Else, you can ignore this setting.
 
 
@@ -119,5 +119,5 @@ See :doc:`/optimizations/index` for details about builtin backends
 (middlewares) and their options.
 
 When ``django_downloadview.SmartDownloadMiddleware`` is in your
-``MIDDLEWARE_CLASSES``, this setting must be explicitely configured (no default
+``MIDDLEWARE``, this setting must be explicitely configured (no default
 value). Else, you can ignore this setting.
