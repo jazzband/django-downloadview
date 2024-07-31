@@ -75,14 +75,10 @@ class RealDownloadMiddleware(BaseDownloadMiddleware):
         whose file attribute have either an URL or a file name.
 
         """
-        if super().is_download_response(response):
-            try:
-                return response.file.url or response.file.name
-            except AttributeError:
-                return False
-            else:
-                return True
-        return False
+        return (
+            super().is_download_response(response)
+            and bool(getattr(response.file, 'url', None) or getattr(response.file, 'name', None))
+        )
 
 
 class DownloadDispatcher:
