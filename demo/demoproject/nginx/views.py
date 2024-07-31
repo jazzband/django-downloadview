@@ -22,3 +22,17 @@ optimized_by_decorator = x_accel_redirect(
     source_url=storage.base_url,
     destination_url="/nginx-optimized-by-decorator/",
 )
+
+
+def _modified_headers(request):
+    view = StorageDownloadView.as_view(storage=storage, path="hello-world.txt")
+    response = view(request)
+    response["X-Test"] = 'header'
+    return response
+
+
+modified_headers = x_accel_redirect(
+    _modified_headers,
+    source_url=storage.base_url,
+    destination_url="/nginx-modified-headers/",
+)

@@ -16,4 +16,9 @@ urlpatterns = [
         views.optimized_by_decorator,
         name="optimized_by_decorator",
     ),
+    path(
+        "modified_headers/",
+        views.modified_headers,
+        name="modified_headers",
+    ),
 ]

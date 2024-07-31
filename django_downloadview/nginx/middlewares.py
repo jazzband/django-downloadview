@@ -85,6 +85,7 @@ class XAccelRedirectMiddleware(ProxiedDownloadMiddleware):
             with_buffering=self.with_buffering,
             limit_rate=self.limit_rate,
             attachment=response.attachment,
+            headers=response.headers,
         )
 
 

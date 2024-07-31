@@ -51,3 +51,23 @@ class OptimizedByDecoratorTestCase(django.test.TestCase):
             with_buffering=None,
             limit_rate=None,
         )
+
+
+class ModifiedHeadersTestCase(django.test.TestCase):
+    def test_response(self):
+        """'nginx:modified_headers' returns X-Sendfile response."""
+        setup_file()
+        url = reverse("nginx:modified_headers")
+        response = self.client.get(url)
+        assert_x_accel_redirect(
+            self,
+            response,
+            content_type="text/plain; charset=utf-8",
+            charset="utf-8",
+            basename="hello-world.txt",
+            redirect_url="/nginx-modified-headers/hello-world.txt",
+            expires=None,
+            with_buffering=None,
+            limit_rate=None,
+        )
+        self.assertEqual(response['X-Test'], 'header')

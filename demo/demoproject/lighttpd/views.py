@@ -22,3 +22,17 @@ optimized_by_decorator = x_sendfile(
     source_url=storage.base_url,
     destination_dir="/lighttpd-optimized-by-decorator/",
 )
+
+
+def _modified_headers(request):
+    view = StorageDownloadView.as_view(storage=storage, path="hello-world.txt")
+    response = view(request)
+    response["X-Test"] = 'header'
+    return response
+
+
+modified_headers = x_sendfile(
+    _modified_headers,
+    source_url=storage.base_url,
+    destination_dir="/lighttpd-modified-headers/",
+)

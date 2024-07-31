@@ -1,7 +1,7 @@
 from django_downloadview.nginx.response import XAccelRedirectResponse
 
 
-class XAccelRedirectValidator(object):
+class XAccelRedirectValidator:
     """Utility class to validate XAccelRedirectResponse instances.
 
     See also :py:func:`assert_x_accel_redirect` shortcut function.
