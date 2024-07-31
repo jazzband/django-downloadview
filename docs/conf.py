@@ -2,7 +2,8 @@
 """django-downloadview documentation build configuration file."""
 import os
 import re
-from pkg_resources import get_distribution
+
+import importlib.metadata
 
 # Minimal Django settings. Required to use sphinx.ext.autodoc, because
 # django-downloadview depends on Django...
@@ -48,7 +49,7 @@ author_slug = re.sub(r"([\w_.-]+)", "-", author)
 # built documents.
 
 # The full version, including alpha/beta/rc tags.
-release = get_distribution("django-downloadview").version
+release = importlib.metadata.version("django-downloadview")
 # The short X.Y version.
 version = '.'.join(release.split('.')[:2])
 

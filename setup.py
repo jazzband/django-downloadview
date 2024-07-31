@@ -56,7 +56,6 @@ setup(
     install_requires=[
         # BEGIN requirements
         "Django>=4.2",
-        "setuptools",
         "requests",
         # END requirements
     ],
