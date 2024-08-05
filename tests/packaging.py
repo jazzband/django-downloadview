@@ -1,4 +1,5 @@
 """Tests around project's distribution and packaging."""
+import importlib.metadata
 import os
 import unittest
 

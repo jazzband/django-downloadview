@@ -72,9 +72,16 @@ def content_disposition(filename):
     """
     if not filename:
         return "attachment"
-    ascii_filename = encode_basename_ascii(filename)
+    # ASCII filenames are quoted and must ensure escape sequences
+    # in the filename won't break out of the quoted header value
+    # which can permit a reflected file download attack. The UTF-8
+    # version is immune because it's not quoted.
+    ascii_filename = (
+        encode_basename_ascii(filename).replace("\\", "\\\\").replace('"', r'\"')
+    )
     utf8_filename = encode_basename_utf8(filename)
     if ascii_filename == utf8_filename:  # ASCII only.
+
         return f'attachment; filename="{ascii_filename}"'
     else:
         return (
