@@ -43,3 +43,19 @@ class OptimizedByDecoratorTestCase(django.test.TestCase):
             basename="hello-world.txt",
             file_path="/apache-optimized-by-decorator/hello-world.txt",
         )
+
+
+class ModifiedHeadersTestCase(django.test.TestCase):
+    def test_response(self):
+        """'apache:modified_headers' returns X-Sendfile response."""
+        setup_file()
+        url = reverse("apache:modified_headers")
+        response = self.client.get(url)
+        assert_x_sendfile(
+            self,
+            response,
+            content_type="text/plain; charset=utf-8",
+            basename="hello-world.txt",
+            file_path="/apache-modified-headers/hello-world.txt",
+        )
+        self.assertEqual(response['X-Test'], 'header')

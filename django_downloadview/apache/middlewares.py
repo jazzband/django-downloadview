@@ -32,4 +32,5 @@ class XSendfileMiddleware(ProxiedDownloadMiddleware):
             content_type=response["Content-Type"],
             basename=response.basename,
             attachment=response.attachment,
+            headers=response.headers,
         )

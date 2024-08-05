@@ -1,7 +1,7 @@
 from django_downloadview.apache.response import XSendfileResponse
 
 
-class XSendfileValidator(object):
+class XSendfileValidator:
     """Utility class to validate XSendfileResponse instances.
 
     See also :py:func:`assert_x_sendfile` shortcut function.

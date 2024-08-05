@@ -19,9 +19,7 @@ class XSendfileMiddleware(ProxiedDownloadMiddleware):
         self, get_response=None, source_dir=None, source_url=None, destination_dir=None
     ):
         """Constructor."""
-        super(XSendfileMiddleware, self).__init__(
-            get_response, source_dir, source_url, destination_dir
-        )
+        super().__init__(get_response, source_dir, source_url, destination_dir)
 
     def process_download_response(self, request, response):
         """Replace DownloadResponse instances by XSendfileResponse ones."""
@@ -34,4 +32,5 @@ class XSendfileMiddleware(ProxiedDownloadMiddleware):
             content_type=response["Content-Type"],
             basename=response.basename,
             attachment=response.attachment,
+            headers=response.headers,
         )

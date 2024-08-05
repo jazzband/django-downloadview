@@ -19,9 +19,13 @@ class XAccelRedirectResponse(ProxiedDownloadResponse):
         with_buffering=None,
         limit_rate=None,
         attachment=True,
+        headers=None,
     ):
         """Return a HttpResponse with headers for Nginx X-Accel-Redirect."""
-        super(XAccelRedirectResponse, self).__init__(content_type=content_type)
+        # content-type must be porvided only as keyword argument to response
+        if headers and content_type:
+            headers.pop('Content-Type', None)
+        super().__init__(content_type=content_type, headers=headers)
         if attachment:
             self.basename = basename or url_basename(redirect_url, content_type)
             self["Content-Disposition"] = content_disposition(self.basename)
