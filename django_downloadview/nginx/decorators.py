@@ -1,4 +1,5 @@
 """Decorators to apply Nginx X-Accel on a specific view."""
+
 from django_downloadview.decorators import DownloadDecorator
 from django_downloadview.nginx.middlewares import XAccelRedirectMiddleware
 

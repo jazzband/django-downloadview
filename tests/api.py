@@ -1,4 +1,5 @@
 """Test suite around :mod:`django_downloadview.api` and deprecation plan."""
+
 from importlib import import_module, reload
 import unittest
 import warnings
@@ -130,7 +131,7 @@ class DeprecatedAPITestCase(django.test.SimpleTestCase):
                     reload(django_downloadview.nginx.settings)
             caught = False
             for warning_item in warning_list:
-                if warning_item.category == DeprecationWarning:
+                if warning_item.category is DeprecationWarning:
                     if "deprecated" in str(warning_item.message):
                         if setting_name in str(warning_item.message):
                             caught = True

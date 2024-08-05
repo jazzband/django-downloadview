@@ -1,4 +1,5 @@
 """Views to stream files."""
+
 # API shortcuts.
 from django_downloadview.views.base import BaseDownloadView, DownloadMixin  # NoQA
 from django_downloadview.views.http import HTTPDownloadView  # NoQA

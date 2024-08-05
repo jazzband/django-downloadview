@@ -27,7 +27,7 @@ optimized_by_decorator = x_sendfile(
 def _modified_headers(request):
     view = StorageDownloadView.as_view(storage=storage, path="hello-world.txt")
     response = view(request)
-    response["X-Test"] = 'header'
+    response["X-Test"] = "header"
     return response
 
 

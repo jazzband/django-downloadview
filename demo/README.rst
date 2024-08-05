@@ -3,7 +3,7 @@ Demo project
 ############
 
 `Demo folder in project's repository`_ contains a Django project to illustrate
-`django-downloadview` usage.
+``django-downloadview`` usage.
 
 
 *****************************************
@@ -32,7 +32,7 @@ Deploy the demo
 System requirements:
 
 * `Python`_ version 3.7+, available as ``python`` command.
-  
+
   .. note::
 
      You may use `Virtualenv`_ to make sure the active ``python`` is the right

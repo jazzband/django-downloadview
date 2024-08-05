@@ -1,4 +1,5 @@
 """URL mapping."""
+
 from django.urls import path
 
 from demoproject.lighttpd import views

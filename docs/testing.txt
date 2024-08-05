@@ -41,4 +41,3 @@ Example, related to :doc:`StorageDownloadView demo </views/storage>`:
 .. literalinclude:: /../demo/demoproject/storage/tests.py
    :language: python
    :lines: 1-2, 8-12, 59-
-

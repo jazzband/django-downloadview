@@ -5,10 +5,12 @@ This document describes changes between past releases. For information about
 future releases, check `milestones`_ and :doc:`/about/vision`.
 
 
-2.4 (Unreleased)
+2.4 (2024-08-05)
 ----------------
 
 - Drop support for Python 3.6
+- Escape malicious filenames
+- Handle headers in XAccel responses
 
 
 2.3 (2022-01-11)

@@ -1,4 +1,5 @@
 """:class:`PathDownloadView`."""
+
 import os
 
 from django.core.files import File

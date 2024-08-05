@@ -1,4 +1,5 @@
 """:py:class:`django.http.HttpResponse` subclasses."""
+
 import mimetypes
 import os
 import re
@@ -77,11 +78,10 @@ def content_disposition(filename):
     # which can permit a reflected file download attack. The UTF-8
     # version is immune because it's not quoted.
     ascii_filename = (
-        encode_basename_ascii(filename).replace("\\", "\\\\").replace('"', r'\"')
+        encode_basename_ascii(filename).replace("\\", "\\\\").replace('"', r"\"")
     )
     utf8_filename = encode_basename_utf8(filename)
     if ascii_filename == utf8_filename:  # ASCII only.
-
         return f'attachment; filename="{ascii_filename}"'
     else:
         return (
