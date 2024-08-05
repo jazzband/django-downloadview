@@ -1,4 +1,5 @@
 """Unit tests around responses."""
+
 import unittest
 
 from django_downloadview.response import DownloadResponse
@@ -23,12 +24,9 @@ class DownloadResponseTestCase(unittest.TestCase):
     def test_content_disposition_escaping(self):
         """Content-Disposition headers escape special characters."""
         response = DownloadResponse(
-            "fake file",
-            attachment=True,
-            basename=r'"malicious\file.exe'
+            "fake file", attachment=True, basename=r'"malicious\file.exe'
         )
         headers = response.default_headers
         self.assertIn(
-            r'filename="\"malicious\\file.exe"',
-            headers["Content-Disposition"]
+            r'filename="\"malicious\\file.exe"', headers["Content-Disposition"]
         )

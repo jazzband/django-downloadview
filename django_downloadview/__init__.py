@@ -1,4 +1,5 @@
 """Serve files with Django and reverse proxies."""
+
 from django_downloadview.api import *  # NoQA
 
 import importlib.metadata

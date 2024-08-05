@@ -142,7 +142,7 @@ Here is what you could have in :file:`/etc/nginx/sites-available/default`:
            internal;
            # Location to files on disk.
            alias /var/www/files/;
-       } 
+       }
 
        # Proxy to Django-powered frontend.
        location / {
@@ -154,7 +154,7 @@ Here is what you could have in :file:`/etc/nginx/sites-available/default`:
    }
 
 ... where specific configuration is the ``location /optimized-download``
-section.  
+section.
 
 .. note::
 
@@ -192,4 +192,4 @@ they should be equal.
 
 .. target-notes::
 
-.. _`Nginx X-accel documentation`: http://wiki.nginx.org/X-accel 
+.. _`Nginx X-accel documentation`: http://wiki.nginx.org/X-accel

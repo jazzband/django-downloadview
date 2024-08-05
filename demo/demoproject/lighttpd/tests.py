@@ -58,4 +58,4 @@ class ModifiedHeadersTestCase(django.test.TestCase):
             basename="hello-world.txt",
             file_path="/lighttpd-modified-headers/hello-world.txt",
         )
-        self.assertEqual(response['X-Test'], 'header')
+        self.assertEqual(response["X-Test"], "header")

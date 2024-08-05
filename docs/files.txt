@@ -21,7 +21,7 @@ Django's builtins
   wrapper in :doc:`/views/path`.
 
 * :class:`django.db.models.fields.files.FieldFile` wraps a file that is
-  managed in a model. ``django-downloadview`` uses this wrapper in 
+  managed in a model. ``django-downloadview`` uses this wrapper in
   :doc:`/views/object`.
 
 * :class:`django.core.files.base.ContentFile` wraps a bytes, string or

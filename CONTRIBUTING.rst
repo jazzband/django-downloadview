@@ -11,7 +11,7 @@ This is a `Jazzband <https://jazzband.co>`_ project. By contributing you agree t
 
 
 This document provides guidelines for people who want to contribute to
-`django-downloadview`.
+``django-downloadview``.
 
 
 **************
@@ -50,7 +50,7 @@ Use topic branches
 Fork, clone
 ***********
 
-Clone `django-downloadview` repository (adapt to use your own fork):
+Clone ``django-downloadview`` repository (adapt to use your own fork):
 
 .. code:: sh
 
@@ -62,7 +62,7 @@ Clone `django-downloadview` repository (adapt to use your own fork):
 Usual actions
 *************
 
-The `Makefile` is the reference card for usual actions in development
+The ``Makefile`` is the reference card for usual actions in development
 environment:
 
 * Install development toolkit with `pip`_: ``make develop``.
@@ -70,7 +70,7 @@ environment:
 * Run tests with `tox`_: ``make test``.
 
 * Build documentation: ``make documentation``. It builds `Sphinx`_
-  documentation in `var/docs/html/index.html`.
+  documentation in ``var/docs/html/index.html``.
 
 * Release project with `zest.releaser`_: ``make release``.
 
@@ -84,7 +84,7 @@ See also ``make help``.
 Demo project included
 *********************
 
-The `demo` included in project's repository is part of the tests and
+The ``demo`` included in project's repository is part of the tests and
 documentation. Maintain it along with code and documentation.
 
 
@@ -92,7 +92,7 @@ documentation. Maintain it along with code and documentation.
 
 .. target-notes::
 
-.. _`bugtracker`: 
+.. _`bugtracker`:
    https://github.com/jazzband/django-downloadview/issues
 .. _`rebase`: http://git-scm.com/book/en/Git-Branching-Rebasing
 .. _`merge-based rebase`: https://tech.people-doc.com/psycho-rebasing.html

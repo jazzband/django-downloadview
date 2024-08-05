@@ -1,4 +1,5 @@
 """Stream files given an URL, i.e. files you want to proxy."""
+
 from django_downloadview.files import HTTPFile
 from django_downloadview.views.base import BaseDownloadView
 
@@ -44,5 +45,5 @@ class HTTPDownloadView(BaseDownloadView):
             request_factory=self.get_request_factory(),
             name=self.get_basename(),
             url=self.get_url(),
-            **self.get_request_kwargs()
+            **self.get_request_kwargs(),
         )

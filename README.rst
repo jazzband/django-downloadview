@@ -26,16 +26,16 @@ django-downloadview
     :target: https://codecov.io/gh/jazzband/django-downloadview
     :alt: Coverage
 
-`django-downloadview` makes it easy to serve files with `Django`_:
+``django-downloadview`` makes it easy to serve files with `Django`_:
 
 * you manage files with Django (permissions, filters, generation, ...);
 
 * files are stored somewhere or generated somehow (local filesystem, remote
   storage, memory...);
 
-* `django-downloadview` helps you stream the files with very little code;
+* ``django-downloadview`` helps you stream the files with very little code;
 
-* `django-downloadview` helps you improve performances with reverse proxies,
+* ``django-downloadview`` helps you improve performances with reverse proxies,
   via mechanisms such as Nginx's X-Accel or Apache's X-Sendfile.
 
 

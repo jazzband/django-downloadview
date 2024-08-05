@@ -1,4 +1,5 @@
 """Decorators to apply Lighttpd X-Sendfile on a specific view."""
+
 from django_downloadview.decorators import DownloadDecorator
 from django_downloadview.lighttpd.middlewares import XSendfileMiddleware
 

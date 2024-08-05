@@ -1,4 +1,5 @@
 """Decorators to apply Apache X-Sendfile on a specific view."""
+
 from django_downloadview.apache.middlewares import XSendfileMiddleware
 from django_downloadview.decorators import DownloadDecorator
 

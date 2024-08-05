@@ -70,4 +70,4 @@ class ModifiedHeadersTestCase(django.test.TestCase):
             with_buffering=None,
             limit_rate=None,
         )
-        self.assertEqual(response['X-Test'], 'header')
+        self.assertEqual(response["X-Test"], "header")

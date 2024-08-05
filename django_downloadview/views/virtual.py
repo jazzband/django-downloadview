@@ -1,4 +1,5 @@
 """Stream files that you generate or that live in memory."""
+
 from django_downloadview.views.base import BaseDownloadView
 
 

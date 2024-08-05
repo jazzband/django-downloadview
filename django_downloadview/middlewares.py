@@ -4,6 +4,7 @@ Download middlewares capture :py:class:`django_downloadview.DownloadResponse`
 responses and may replace them with optimized download responses.
 
 """
+
 import collections.abc
 import copy
 import os
@@ -36,6 +37,7 @@ class BaseDownloadMiddleware:
     Subclasses **must** implement :py:meth:`process_download_response` method.
 
     """
+
     def __init__(self, get_response):
         self.get_response = get_response
 
@@ -75,9 +77,8 @@ class RealDownloadMiddleware(BaseDownloadMiddleware):
         whose file attribute have either an URL or a file name.
 
         """
-        return (
-            super().is_download_response(response)
-            and bool(getattr(response.file, 'url', None) or getattr(response.file, 'name', None))
+        return super().is_download_response(response) and bool(
+            getattr(response.file, "url", None) or getattr(response.file, "name", None)
         )
 
 
@@ -91,7 +92,7 @@ class DownloadDispatcher:
     def auto_configure_middlewares(self):
         """Populate :attr:`middlewares` from
         ``settings.DOWNLOADVIEW_MIDDLEWARES``."""
-        for (key, import_string, kwargs) in getattr(
+        for key, import_string, kwargs in getattr(
             settings, "DOWNLOADVIEW_MIDDLEWARES", []
         ):
             factory = import_member(import_string)
@@ -100,7 +101,7 @@ class DownloadDispatcher:
 
     def dispatch(self, request, response):
         """Dispatches job to children middlewares."""
-        for (key, middleware) in self.middlewares:
+        for key, middleware in self.middlewares:
             response = middleware.process_response(request, response)
         return response
 

@@ -10,7 +10,7 @@ setup(
     setup_requires=["setuptools_scm"],
     description="Serve files with Django and reverse-proxies.",
     long_description=open(os.path.join(here, "README.rst")).read(),
-    long_description_content_type='text/x-rst',
+    long_description_content_type="text/x-rst",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "License :: OSI Approved :: BSD License",
@@ -20,9 +20,9 @@ setup(
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
-        'Framework :: Django',
-        'Framework :: Django :: 4.2',
-        'Framework :: Django :: 5.0',
+        "Framework :: Django",
+        "Framework :: Django :: 4.2",
+        "Framework :: Django :: 5.0",
     ],
     keywords=" ".join(
         [

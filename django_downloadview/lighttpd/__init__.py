@@ -6,6 +6,7 @@ See also `documentation of X-Sendfile for Lighttpd
 </optimizations/lighttpd>`.
 
 """
+
 # API shortcuts.
 from django_downloadview.lighttpd.decorators import x_sendfile  # NoQA
 from django_downloadview.lighttpd.middlewares import XSendfileMiddleware  # NoQA

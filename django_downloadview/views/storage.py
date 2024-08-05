@@ -1,4 +1,5 @@
 """Stream files from storage."""
+
 from django.core.files.storage import DefaultStorage
 
 from django_downloadview.files import StorageFile

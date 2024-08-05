@@ -5,6 +5,7 @@ See also `documentation of mod_xsendfile for Apache
 Apache optimizations </optimizations/apache>`.
 
 """
+
 # API shortcuts.
 from django_downloadview.apache.decorators import x_sendfile  # NoQA
 from django_downloadview.apache.middlewares import XSendfileMiddleware  # NoQA

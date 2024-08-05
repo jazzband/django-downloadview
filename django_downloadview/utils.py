@@ -1,4 +1,5 @@
 """Utility functions that may be implemented in external packages."""
+
 import re
 
 charset_pattern = re.compile(r"charset=(?P<charset>.+)$", re.I | re.U)

@@ -1,5 +1,6 @@
 # flake8: noqa
 """Declaration of API shortcuts."""
+
 from django_downloadview.files import HTTPFile, StorageFile, VirtualFile
 from django_downloadview.io import BytesIteratorIO, TextIteratorIO
 from django_downloadview.middlewares import (

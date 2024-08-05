@@ -61,7 +61,7 @@ possible, file wrappers do not embed file data, in order to save memory.
 
 Learn more about available file wrappers in :doc:`files`.
 
-   
+
 *****************************************************************
 Middlewares convert DownloadResponse into ProxiedDownloadResponse
 *****************************************************************

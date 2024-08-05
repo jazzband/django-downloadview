@@ -1,4 +1,5 @@
 """File wrappers for use as exchange data between views and responses."""
+
 from io import BytesIO
 from urllib.parse import urlparse
 

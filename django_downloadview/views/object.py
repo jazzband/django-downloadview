@@ -1,4 +1,5 @@
 """Stream files that live in models."""
+
 from django.views.generic.detail import SingleObjectMixin
 
 from django_downloadview.exceptions import FileNotFound
