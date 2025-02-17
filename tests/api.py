@@ -141,5 +141,5 @@ class DeprecatedAPITestCase(django.test.SimpleTestCase):
         if missed_warnings:
             self.fail(
                 f"No DeprecationWarning raised about following settings: "
-                f'{", ".join(missed_warnings)}.'
+                f"{', '.join(missed_warnings)}."
             )
