@@ -145,7 +145,7 @@ class SmartDownloadMiddleware(DownloadDispatcherMiddleware):
             self.backend_factory = import_member(settings.DOWNLOADVIEW_BACKEND)
         except AttributeError:
             raise ImproperlyConfigured(
-                "SmartDownloadMiddleware requires " "settings.DOWNLOADVIEW_BACKEND"
+                "SmartDownloadMiddleware requires settings.DOWNLOADVIEW_BACKEND"
             )
 
     def auto_configure_backend_options(self):
@@ -155,7 +155,7 @@ class SmartDownloadMiddleware(DownloadDispatcherMiddleware):
             options_list = copy.deepcopy(settings.DOWNLOADVIEW_RULES)
         except AttributeError:
             raise ImproperlyConfigured(
-                "SmartDownloadMiddleware requires " "settings.DOWNLOADVIEW_RULES"
+                "SmartDownloadMiddleware requires settings.DOWNLOADVIEW_RULES"
             )
         for key, options in enumerate(options_list):
             args = []
