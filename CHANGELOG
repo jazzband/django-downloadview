@@ -4,10 +4,10 @@ Changelog
 This document describes changes between past releases. For information about
 future releases, check `milestones`_ and :doc:`/about/vision`.
 
-2.5 (unreleased)
+2.5.0 (2025-10-28)
 ----------------
 
-- No changes yet.
+- Upgrade to Django 5.2 and Python 3.14
 
 
 2.4.0 (2024-08-05)
