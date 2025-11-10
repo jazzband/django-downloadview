@@ -32,7 +32,7 @@ repos:
         args:
         - --trailing-comma=es5
 -   repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v9.38.0
+    rev: v9.39.1
     hooks:
     -   id: eslint
         additional_dependencies:
@@ -44,13 +44,13 @@ repos:
         args:
         - --fix
 -   repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: 'v0.14.2'
+    rev: 'v0.14.4'
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
       - id: ruff-format
 -   repo: https://github.com/tox-dev/pyproject-fmt
-    rev: v2.11.0
+    rev: v2.11.1
     hooks:
       - id: pyproject-fmt
 -   repo: https://github.com/abravalheri/validate-pyproject
