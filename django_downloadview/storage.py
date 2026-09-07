@@ -13,7 +13,7 @@ class SignedURLMixin:
         path = super().url(name)
         signer = TimestampSigner()
         signature = signer.sign(path)
-        return "{}?X-Signature={}".format(path, signature)
+        return f"{path}?X-Signature={signature}"
 
 
 class SignedFileSystemStorage(SignedURLMixin, FileSystemStorage):
