@@ -2,7 +2,6 @@
 
 import os
 
-
 # Configure some relative directories.
 demoproject_dir = os.path.dirname(os.path.abspath(__file__))
 demo_dir = os.path.dirname(demoproject_dir)

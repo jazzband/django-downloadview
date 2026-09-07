@@ -12,7 +12,7 @@ from django.core.exceptions import PermissionDenied
 from django.core.signing import BadSignature, SignatureExpired, TimestampSigner
 
 
-class DownloadDecorator(object):
+class DownloadDecorator:
     """View decorator factory to apply middleware to ``view_func``'s response.
 
     Middleware instance is built from ``middleware_factory`` with ``*args`` and
