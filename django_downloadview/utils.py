@@ -2,7 +2,7 @@
 
 import re
 
-charset_pattern = re.compile(r"charset=(?P<charset>.+)$", re.I | re.U)
+charset_pattern = re.compile(r"charset=(?P<charset>.+)$", re.IGNORECASE | re.UNICODE)
 
 
 def content_type_to_charset(content_type):
