@@ -13,7 +13,7 @@ from django_downloadview.storage import SignedURLMixin
 
 class TestStorage:
     def url(self, name):
-        return "https://example.com/{name}".format(name=name)
+        return f"https://example.com/{name}"
 
 
 class SignedTestStorage(SignedURLMixin, TestStorage):

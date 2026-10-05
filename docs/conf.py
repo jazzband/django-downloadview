@@ -1,9 +1,7 @@
-# -*- coding: utf-8 -*-
 """django-downloadview documentation build configuration file."""
 
-import re
-
 import importlib.metadata
+import re
 
 # Minimal Django settings. Required to use sphinx.ext.autodoc, because
 # django-downloadview depends on Django...
@@ -82,7 +80,7 @@ html_sidebars = {
 }
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = "{project}doc".format(project=project_slug)
+htmlhelp_basename = f"{project_slug}doc"
 
 
 # -- Options for sphinx.ext.intersphinx ---------------------------------------
@@ -107,8 +105,8 @@ latex_elements = {}
 latex_documents = [
     (
         "index",
-        "{project}.tex".format(project=project_slug),
-        "{project} Documentation".format(project=project),
+        f"{project_slug}.tex",
+        f"{project} Documentation",
         author,
         "manual",
     ),
@@ -119,9 +117,7 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [
-    ("index", project, "{project} Documentation".format(project=project), [author], 1)
-]
+man_pages = [("index", project, f"{project} Documentation", [author], 1)]
 
 
 # -- Options for Texinfo output -----------------------------------------------
@@ -133,7 +129,7 @@ texinfo_documents = [
     (
         "index",
         project_slug,
-        "{project} Documentation".format(project=project),
+        f"{project} Documentation",
         author,
         project,
         "One line description of project.",

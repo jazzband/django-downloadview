@@ -11,7 +11,7 @@ from django_downloadview import exceptions
 from django_downloadview.response import DownloadResponse
 
 
-class DownloadMixin(object):
+class DownloadMixin:
     """Placeholders and base implementation to create file download views.
 
     .. note::
