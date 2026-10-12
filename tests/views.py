@@ -1,15 +1,15 @@
 """Tests around :mod:`django_downloadview.views`."""
 
 import calendar
-from datetime import datetime
 import os
 import unittest
+from datetime import datetime
 from unittest import mock
 
+import django.test
 from django.core.files import File
 from django.http import Http404
 from django.http.response import HttpResponseNotModified
-import django.test
 
 from django_downloadview import exceptions, views
 from django_downloadview.test import setup_view
@@ -319,9 +319,9 @@ class VirtualDownloadViewTestCase(unittest.TestCase):
         file_wrapper = mock.Mock()
         file_wrapper.was_modified_since = mock.Mock(side_effect=AttributeError)
         modified_time = mock.PropertyMock()
-        setattr(file_wrapper, "modified_time", modified_time)
+        file_wrapper.modified_time = modified_time
         size = mock.PropertyMock()
-        setattr(file_wrapper, "size", size)
+        file_wrapper.size = size
         view = views.VirtualDownloadView()
         since = mock.sentinel.since
         result = view.was_modified_since(file_wrapper, since)
