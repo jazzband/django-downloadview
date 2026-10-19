@@ -15,7 +15,6 @@ from django.core.exceptions import ImproperlyConfigured
 from django_downloadview.response import DownloadResponse
 from django_downloadview.utils import import_member
 
-
 #: Sentinel value to detect whether configuration is to be loaded from Django
 #: settings or not.
 AUTO_CONFIGURE = object()

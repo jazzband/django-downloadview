@@ -80,7 +80,7 @@ class temporary_media_root(override_settings):
         super().disable()
 
 
-class DownloadResponseValidator(object):
+class DownloadResponseValidator:
     """Utility class to validate DownloadResponse instances."""
 
     def __call__(self, test_case, response, **assertions):
