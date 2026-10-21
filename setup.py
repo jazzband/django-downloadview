@@ -1,4 +1,5 @@
 import os
+
 from setuptools import setup
 
 #: Absolute path to directory containing setup.py file.
