@@ -44,7 +44,7 @@ Execute:
 
 .. code-block:: sh
 
-   git clone git@github.com:jazzband/django-downloadview.git
+   git clone git@github.com:django-commons/django-downloadview.git
    cd django-downloadview/
    make runserver
 
@@ -66,7 +66,7 @@ References
 .. target-notes::
 
 .. _`demo folder in project's repository`:
-   https://github.com/jazzband/django-downloadview/tree/master/demo/demoproject/
+   https://github.com/django-commons/django-downloadview/tree/master/demo/demoproject/
 
 .. _`Python`: http://python.org
 .. _`Virtualenv`: http://virtualenv.org
