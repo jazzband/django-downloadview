@@ -41,10 +41,7 @@ class XAccelRedirectMiddleware(ProxiedDownloadMiddleware):
             )
             if destination_url is None:
                 destination_url = media_url
-            else:
-                destination_url = destination_url  # noqa: PLW0127
-        else:
-            destination_url = destination_url  # noqa: PLW0127
+
         if media_root is not None:
             warnings.warn(
                 f"{self.__class__.__name__} ``media_root`` is deprecated. Use "
@@ -53,10 +50,6 @@ class XAccelRedirectMiddleware(ProxiedDownloadMiddleware):
             )
             if source_dir is None:
                 source_dir = media_root
-            else:
-                source_dir = source_dir  # noqa: PLW0127
-        else:
-            source_dir = source_dir  # noqa: PLW0127
 
         super().__init__(get_response, source_dir, source_url, destination_url)
 
