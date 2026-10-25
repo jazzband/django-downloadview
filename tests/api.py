@@ -1,11 +1,11 @@
 """Test suite around :mod:`django_downloadview.api` and deprecation plan."""
 
-from importlib import import_module, reload
 import unittest
 import warnings
+from importlib import import_module, reload
 
-from django.core.exceptions import ImproperlyConfigured
 import django.test
+from django.core.exceptions import ImproperlyConfigured
 from django.test.utils import override_settings
 
 
@@ -100,13 +100,15 @@ class DeprecatedAPITestCase(django.test.SimpleTestCase):
 
     def test_nginx_x_accel_redirect_middleware(self):
         "XAccelRedirectMiddleware in settings triggers ImproperlyConfigured."
-        with override_settings(
-            MIDDLEWARE=["django_downloadview.nginx.XAccelRedirectMiddleware"],
+        with (
+            override_settings(
+                MIDDLEWARE=["django_downloadview.nginx.XAccelRedirectMiddleware"],
+            ),
+            self.assertRaises(ImproperlyConfigured),
         ):
-            with self.assertRaises(ImproperlyConfigured):
-                import django_downloadview.nginx.settings
+            import django_downloadview.nginx.settings
 
-                reload(django_downloadview.nginx.settings)
+            reload(django_downloadview.nginx.settings)
 
     def test_nginx_x_accel_redirect_global_settings(self):
         """Global settings for Nginx middleware are deprecated."""
@@ -126,16 +128,13 @@ class DeprecatedAPITestCase(django.test.SimpleTestCase):
         for setting_name, setting_value in settings_overrides.items():
             warnings.resetwarnings()
             warnings.simplefilter("always")
-            with warnings.catch_warnings(record=True) as warning_list:
-                with override_settings(**{setting_name: setting_value}):
-                    reload(django_downloadview.nginx.settings)
+            with warnings.catch_warnings(record=True) as warning_list, override_settings(**{setting_name: setting_value}):
+                reload(django_downloadview.nginx.settings)
             caught = False
             for warning_item in warning_list:
-                if warning_item.category is DeprecationWarning:
-                    if "deprecated" in str(warning_item.message):
-                        if setting_name in str(warning_item.message):
-                            caught = True
-                            break
+                if warning_item.category is DeprecationWarning and "deprecated" in str(warning_item.message) and setting_name in str(warning_item.message):
+                    caught = True
+                    break
             if not caught:
                 missed_warnings.append(setting_name)
         if missed_warnings:

@@ -15,7 +15,6 @@ from django.core.exceptions import ImproperlyConfigured
 from django_downloadview.response import DownloadResponse
 from django_downloadview.utils import import_member
 
-
 #: Sentinel value to detect whether configuration is to be loaded from Django
 #: settings or not.
 AUTO_CONFIGURE = object()
@@ -217,16 +216,10 @@ class ProxiedDownloadMiddleware(RealDownloadMiddleware):
             message = (
                 """Couldn't capture/convert file attributes into a """
                 """redirection. """
-                """``source_url`` is "%(source_url)s", """
-                """file's URL is "%(file_url)s". """
-                """``source_dir`` is "%(source_dir)s", """
-                """file's name is "%(file_name)s". """
-                % {
-                    "source_url": self.source_url,
-                    "file_url": file_url,
-                    "source_dir": self.source_dir,
-                    "file_name": file_name,
-                }
+                f"""``source_url`` is "{self.source_url}", """
+                f"""file's URL is "{file_url}". """
+                f"""``source_dir`` is "{self.source_dir}", """
+                f"""file's name is "{file_name}". """
             )
             raise NoRedirectionMatch(message)
         return "/".join((self.destination_url.rstrip("/"), url.lstrip("/")))

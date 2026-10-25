@@ -8,7 +8,7 @@ from django_downloadview.lighttpd import x_sendfile
 
 storage_dir = os.path.join(settings.MEDIA_ROOT, "lighttpd")
 storage = FileSystemStorage(
-    location=storage_dir, base_url="".join([settings.MEDIA_URL, "lighttpd/"])
+    location=storage_dir, base_url=f"{settings.MEDIA_URL}lighttpd/"
 )
 
 

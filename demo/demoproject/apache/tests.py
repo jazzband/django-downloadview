@@ -1,12 +1,11 @@
 import os
 
-from django.core.files.base import ContentFile
 import django.test
+from django.core.files.base import ContentFile
 from django.urls import reverse
 
-from django_downloadview.apache import assert_x_sendfile
-
 from demoproject.apache.views import storage, storage_dir
+from django_downloadview.apache import assert_x_sendfile
 
 
 def setup_file():
