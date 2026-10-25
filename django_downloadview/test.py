@@ -80,7 +80,7 @@ class temporary_media_root(override_settings):
         super().disable()
 
 
-class DownloadResponseValidator(object):
+class DownloadResponseValidator:
     """Utility class to validate DownloadResponse instances."""
 
     def __call__(self, test_case, response, **assertions):
@@ -103,7 +103,7 @@ class DownloadResponseValidator(object):
         """
         self.assert_download_response(test_case, response)
         for key, value in assertions.items():
-            assert_func = getattr(self, "assert_%s" % key)
+            assert_func = getattr(self, f"assert_{key}")
             assert_func(test_case, response, value)
 
     def assert_download_response(self, test_case, response):

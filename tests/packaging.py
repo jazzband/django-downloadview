@@ -33,8 +33,7 @@ class VersionTestCase(unittest.TestCase):
             installed_version,
             self.get_version(),
             "Version mismatch: django_downloadview.__version__ "
-            'is "%s" whereas importlib.metadata tells "%s". '
+            f'is "{self.get_version()}" whereas importlib.metadata tells "{installed_version}". '
             "You may need to run ``make develop`` to update the "
-            "installed version in development environment."
-            % (self.get_version(), installed_version),
+            "installed version in development environment.",
         )

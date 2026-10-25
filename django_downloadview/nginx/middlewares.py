@@ -35,28 +35,21 @@ class XAccelRedirectMiddleware(ProxiedDownloadMiddleware):
         """Constructor."""
         if media_url is not None:
             warnings.warn(
-                "%s ``media_url`` is deprecated. Use "
-                "``destination_url`` instead." % self.__class__.__name__,
+                f"{self.__class__.__name__} ``media_url`` is deprecated. Use "
+                "``destination_url`` instead.",
                 DeprecationWarning,
             )
             if destination_url is None:
                 destination_url = media_url
-            else:
-                destination_url = destination_url
-        else:
-            destination_url = destination_url
+
         if media_root is not None:
             warnings.warn(
-                "%s ``media_root`` is deprecated. Use "
-                "``source_dir`` instead." % self.__class__.__name__,
+                f"{self.__class__.__name__} ``media_root`` is deprecated. Use "
+                "``source_dir`` instead.",
                 DeprecationWarning,
             )
             if source_dir is None:
                 source_dir = media_root
-            else:
-                source_dir = source_dir
-        else:
-            source_dir = source_dir
 
         super().__init__(get_response, source_dir, source_url, destination_url)
 
@@ -129,7 +122,7 @@ class SingleXAccelRedirectMiddleware(XAccelRedirectMiddleware):
         if settings.NGINX_DOWNLOAD_MIDDLEWARE_DESTINATION_URL is None:
             raise ImproperlyConfigured(
                 "settings.NGINX_DOWNLOAD_MIDDLEWARE_DESTINATION_URL is "
-                "required by %s middleware" % self.__class__.__name__
+                f"required by {self.__class__.__name__} middleware"
             )
         super().__init__(
             get_response=get_response,

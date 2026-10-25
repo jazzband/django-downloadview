@@ -222,7 +222,7 @@ class DownloadResponse(StreamingHttpResponse):
             return self.file_mimetype
         default_mime_type = "application/octet-stream"
         basename = self.get_basename()
-        mime_type, encoding = mimetypes.guess_type(basename)
+        mime_type, _encoding = mimetypes.guess_type(basename)
         return mime_type or default_mime_type
 
     def get_encoding(self):
@@ -230,7 +230,7 @@ class DownloadResponse(StreamingHttpResponse):
         if self.file_encoding is not None:
             return self.file_encoding
         basename = self.get_basename()
-        mime_type, encoding = mimetypes.guess_type(basename)
+        _mime_type, encoding = mimetypes.guess_type(basename)
         return encoding
 
     def get_charset(self):
