@@ -40,4 +40,4 @@ class XAccelRedirectResponse(ProxiedDownloadResponse):
         elif expires is not None:  # We explicitely want it off.
             self["X-Accel-Expires"] = "off"
         if limit_rate is not None:
-            self["X-Accel-Limit-Rate"] =  limit_rate and "%d" % limit_rate or "off"  # noqa: UP031
+            self["X-Accel-Limit-Rate"] = limit_rate and "%d" % limit_rate or "off"  # noqa: UP031

@@ -128,11 +128,18 @@ class DeprecatedAPITestCase(django.test.SimpleTestCase):
         for setting_name, setting_value in settings_overrides.items():
             warnings.resetwarnings()
             warnings.simplefilter("always")
-            with warnings.catch_warnings(record=True) as warning_list, override_settings(**{setting_name: setting_value}):
+            with (
+                warnings.catch_warnings(record=True) as warning_list,
+                override_settings(**{setting_name: setting_value}),
+            ):
                 reload(django_downloadview.nginx.settings)
             caught = False
             for warning_item in warning_list:
-                if warning_item.category is DeprecationWarning and "deprecated" in str(warning_item.message) and setting_name in str(warning_item.message):
+                if (
+                    warning_item.category is DeprecationWarning
+                    and "deprecated" in str(warning_item.message)
+                    and setting_name in str(warning_item.message)
+                ):
                     caught = True
                     break
             if not caught:
