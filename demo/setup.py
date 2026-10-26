@@ -1,4 +1,5 @@
 import os
+
 from setuptools import setup
 
 here = os.path.abspath(os.path.dirname(__file__))
@@ -7,7 +8,7 @@ setup(
     name="django-downloadview-demo",
     version="1.0",
     description="Serve files with Django and reverse-proxies.",
-    long_description=open(os.path.join(here, "README.rst")).read(),
+    long_description=open(os.path.join(here, "README.rst")).read(),  # noqa: SIM115
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "License :: OSI Approved :: BSD License",

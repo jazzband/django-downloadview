@@ -37,7 +37,7 @@ class XAccelRedirectValidator:
         """
         self.assert_x_accel_redirect_response(test_case, response)
         for key, value in assertions.items():
-            assert_func = getattr(self, "assert_%s" % key)
+            assert_func = getattr(self, f"assert_{key}")
             assert_func(test_case, response, value)
 
     def assert_x_accel_redirect_response(self, test_case, response):

@@ -76,7 +76,7 @@ class ObjectDownloadView(SingleObjectMixin, BaseDownloadView):
                 f'Field="{self.file_field}" on object="{self.object}" is empty'
             )
         for field in ("encoding", "mime_type", "charset", "modification_time", "size"):
-            model_field = getattr(self, "%s_field" % field, False)
+            model_field = getattr(self, f"{field}_field", False)
             if model_field:
                 value = getattr(self.object, model_field)
                 setattr(file_instance, field, value)
@@ -87,7 +87,7 @@ class ObjectDownloadView(SingleObjectMixin, BaseDownloadView):
         basename = super().get_basename()
         if basename is None:
             field = "basename"
-            model_field = getattr(self, "%s_field" % field, False)
+            model_field = getattr(self, f"{field}_field", False)
             if model_field:
                 basename = getattr(self.object, model_field)
         return basename
