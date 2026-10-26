@@ -136,3 +136,9 @@ texinfo_documents = [
         "Miscellaneous",
     ),
 ]
+
+
+# -- Options for linkcheck builder ---------------------------------------------
+
+# StackOverflow rejects automated requests with "403 Forbidden".
+linkcheck_ignore = [r"https?://stackoverflow\.com/"]

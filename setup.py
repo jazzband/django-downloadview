@@ -14,12 +14,12 @@ setup(
     long_description_content_type="text/x-rst",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
-        "License :: OSI Approved :: BSD License",
         "Programming Language :: Python :: 3 :: Only",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
         "Programming Language :: Python :: 3.14",
+        "Programming Language :: Python :: 3.15",
         "Framework :: Django",
         "Framework :: Django :: 5.2",
         "Framework :: Django :: 6.0",
