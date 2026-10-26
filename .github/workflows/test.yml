@@ -9,16 +9,21 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.11', '3.12', '3.13', '3.14']
+        python-version: ['3.11', '3.12', '3.13', '3.14', '3.15']
         django-version: ['5.2', '6.0', '6.1', 'main']
         exclude:
-        # Django 5.0 dropped support for Python <3.10
+        # Django 6.0 dropped support for Python <3.12
         - django-version: '6.0'
           python-version: '3.11'
         - django-version: '6.1'
           python-version: '3.11'
         - django-version: 'main'
           python-version: '3.11'
+        # Python 3.15 is supported from Django 6.1
+        - django-version: '5.2'
+          python-version: '3.15'
+        - django-version: '6.0'
+          python-version: '3.15'
 
     steps:
     - uses: actions/checkout@v7
@@ -27,20 +32,8 @@ jobs:
       uses: actions/setup-python@v7
       with:
         python-version: ${{ matrix.python-version }}
-
-    - name: Get pip cache dir
-      id: pip-cache
-      run: |
-        echo "::set-output name=dir::$(pip cache dir)"
-
-    - name: Cache
-      uses: actions/cache@v6
-      with:
-        path: ${{ steps.pip-cache.outputs.dir }}
-        key:
-          ${{ matrix.python-version }}-v1-${{ hashFiles('**/setup.py') }}
-        restore-keys: |
-          ${{ matrix.python-version }}-v1-
+        cache: pip
+        cache-dependency-path: '**/setup.py'
 
     - name: Install dependencies
       run: |
@@ -57,3 +50,28 @@ jobs:
       uses: codecov/codecov-action@v7
       with:
         name: Python ${{ matrix.python-version }}
+
+  docs:
+    name: docs
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v7
+      with:
+        fetch-depth: 0
+
+    - name: Set up Python
+      uses: actions/setup-python@v7
+      with:
+        python-version: '3.12'
+        cache: pip
+        cache-dependency-path: '**/setup.py'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install --upgrade tox
+
+    - name: Build docs and check README
+      run: |
+        tox -v -e readme,sphinx

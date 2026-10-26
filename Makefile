@@ -7,8 +7,7 @@
 #
 PIP = pip
 TOX = tox
-BLACK = black
-ISORT = isort
+PRE_COMMIT = pre-commit
 
 #: help - Display callable targets.
 .PHONY: help
@@ -92,10 +91,7 @@ demo:
 runserver: demo
 	demo runserver
 
-.PHONY: black
-black:
-	$(BLACK) demo tests django_downloadview
-
-.PHONY: isort
-isort:
-	$(ISORT) --recursive django_downloadview tests demo
+#: lint - Run linters and formatters (pre-commit hooks).
+.PHONY: lint
+lint:
+	$(PRE_COMMIT) run --all-files

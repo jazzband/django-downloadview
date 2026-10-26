@@ -43,7 +43,7 @@ Use topic branches
   documentation, name your branch like ``23-contribute-doc``.
 
 * If you work in a development branch and want to refresh it with changes from
-  master, please `rebase`_ or `merge-based rebase`_, i.e. do not merge master.
+  master, please `rebase`_ rather than merge master.
 
 
 ***********
@@ -94,8 +94,7 @@ documentation. Maintain it along with code and documentation.
 
 .. _`bugtracker`:
    https://github.com/jazzband/django-downloadview/issues
-.. _`rebase`: http://git-scm.com/book/en/Git-Branching-Rebasing
-.. _`merge-based rebase`: https://tech.people-doc.com/psycho-rebasing.html
+.. _`rebase`: https://git-scm.com/book/en/Git-Branching-Rebasing
 .. _`pip`: https://pypi.python.org/pypi/pip/
 .. _`tox`: https://tox.readthedocs.io/
 .. _`Sphinx`: https://pypi.python.org/pypi/Sphinx/
