@@ -87,7 +87,9 @@ class XAccelRedirectValidator:
         if value:
             test_case.assertTrue(response[header].startswith("attachment"))
         else:
-            test_case.assertFalse(header in response)
+            test_case.assertTrue(
+                header not in response or response[header].startswith("inline")
+            )
 
 
 def assert_x_accel_redirect(test_case, response, **assertions):

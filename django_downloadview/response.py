@@ -53,16 +53,25 @@ def encode_basename_utf8(value):
     return quote(force_str(value))
 
 
-def content_disposition(filename):
-    """Return value of ``Content-Disposition`` header with 'attachment'.
+def content_disposition(filename, attachment=True):
+    """Return value of ``Content-Disposition`` header.
+
+    If ``attachment`` is True, the disposition type is ``attachment``,
+    otherwise ``inline``.
 
     >>> print(content_disposition('demo.txt'))
     attachment; filename="demo.txt"
 
-    If filename is empty, only "attachment" is returned.
+    >>> print(content_disposition('demo.txt', attachment=False))
+    inline; filename="demo.txt"
+
+    If filename is empty, only the disposition type is returned.
 
     >>> print(content_disposition(''))
     attachment
+
+    >>> print(content_disposition('', attachment=False))
+    inline
 
     If filename contains non US-ASCII characters, the returned value contains
     UTF-8 encoded filename and US-ASCII fallback.
@@ -70,9 +79,13 @@ def content_disposition(filename):
     >>> print(content_disposition(u'é.txt'))
     attachment; filename="e.txt"; filename*=UTF-8''%C3%A9.txt
 
+    >>> print(content_disposition(u'é.txt', attachment=False))
+    inline; filename="e.txt"; filename*=UTF-8''%C3%A9.txt
+
     """
+    disposition = "attachment" if attachment else "inline"
     if not filename:
-        return "attachment"
+        return disposition
     # ASCII filenames are quoted and must ensure escape sequences
     # in the filename won't break out of the quoted header value
     # which can permit a reflected file download attack. The UTF-8
@@ -82,10 +95,10 @@ def content_disposition(filename):
     )
     utf8_filename = encode_basename_utf8(filename)
     if ascii_filename == utf8_filename:  # ASCII only.
-        return f'attachment; filename="{ascii_filename}"'
+        return f'{disposition}; filename="{ascii_filename}"'
     else:
         return (
-            f'attachment; filename="{ascii_filename}"; '
+            f'{disposition}; filename="{ascii_filename}"; '
             f"filename*=UTF-8''{utf8_filename}"
         )
 
@@ -150,7 +163,6 @@ class DownloadResponse(StreamingHttpResponse):
         )
 
         #: Client-side name of the file to stream.
-        #: Only used if ``attachment`` is ``True``.
         #: Affects ``Content-Disposition`` header.
         self.basename = basename
 
@@ -196,9 +208,10 @@ class DownloadResponse(StreamingHttpResponse):
                 headers["Content-Length"] = self.file.size
             except (AttributeError, NotImplementedError):
                 pass  # Generated files.
-            if self.attachment:
-                basename = self.get_basename()
-                headers["Content-Disposition"] = content_disposition(basename)
+            basename = self.get_basename()
+            headers["Content-Disposition"] = content_disposition(
+                basename, attachment=self.attachment
+            )
             self._default_headers = headers
             return self._default_headers
 

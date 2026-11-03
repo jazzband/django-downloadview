@@ -16,7 +16,8 @@ class XSendfileResponse(ProxiedDownloadResponse):
         if headers and content_type:
             headers.pop("Content-Type", None)
         super().__init__(content_type=content_type, headers=headers)
-        if attachment:
-            self.basename = basename or os.path.basename(file_path)
-            self["Content-Disposition"] = content_disposition(self.basename)
+        self.basename = basename or os.path.basename(file_path)
+        self["Content-Disposition"] = content_disposition(
+            self.basename, attachment=attachment
+        )
         self["X-Sendfile"] = file_path
