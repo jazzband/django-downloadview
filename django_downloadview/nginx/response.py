@@ -27,9 +27,10 @@ class XAccelRedirectResponse(ProxiedDownloadResponse):
         if headers and content_type:
             headers.pop("Content-Type", None)
         super().__init__(content_type=content_type, headers=headers)
-        if attachment:
-            self.basename = basename or url_basename(redirect_url, content_type)
-            self["Content-Disposition"] = content_disposition(self.basename)
+        self.basename = basename or url_basename(redirect_url, content_type)
+        self["Content-Disposition"] = content_disposition(
+            self.basename, attachment=attachment
+        )
         self["X-Accel-Redirect"] = redirect_url
         self["X-Accel-Charset"] = content_type_to_charset(content_type)
         if with_buffering is not None:
