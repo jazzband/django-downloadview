@@ -2,10 +2,6 @@
 django-downloadview
 ###################
 
-.. image:: https://jazzband.co/static/img/badge.svg
-    :target: https://jazzband.co/
-    :alt: Jazzband
-
 .. image:: https://img.shields.io/pypi/v/django-downloadview.svg
     :target: https://pypi.python.org/pypi/django-downloadview
 
@@ -18,12 +14,12 @@ django-downloadview
 .. image:: https://img.shields.io/pypi/dm/django-downloadview.svg
     :target: https://pypi.python.org/pypi/django-downloadview
 
-.. image:: https://github.com/jazzband/django-downloadview/workflows/Test/badge.svg
-    :target: https://github.com/jazzband/django-downloadview/actions
+.. image:: https://github.com/django-commons/django-downloadview/workflows/Test/badge.svg
+    :target: https://github.com/django-commons/django-downloadview/actions
     :alt: GitHub Actions
 
-.. image:: https://codecov.io/gh/jazzband/django-downloadview/branch/master/graph/badge.svg
-    :target: https://codecov.io/gh/jazzband/django-downloadview
+.. image:: https://codecov.io/gh/django-commons/django-downloadview/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/django-commons/django-downloadview
     :alt: Coverage
 
 ``django-downloadview`` makes it easy to serve files with `Django`_:
@@ -65,9 +61,9 @@ Resources
 
 * Documentation: https://django-downloadview.readthedocs.io
 * PyPI page: http://pypi.python.org/pypi/django-downloadview
-* Code repository: https://github.com/jazzband/django-downloadview
-* Bugtracker: https://github.com/jazzband/django-downloadview/issues
-* Continuous integration: https://github.com/jazzband/django-downloadview/actions
-* Roadmap: https://github.com/jazzband/django-downloadview/milestones
+* Code repository: https://github.com/django-commons/django-downloadview
+* Bugtracker: https://github.com/django-commons/django-downloadview/issues
+* Continuous integration: https://github.com/django-commons/django-downloadview/actions
+* Roadmap: https://github.com/django-commons/django-downloadview/milestones
 
 .. _`Django`: https://djangoproject.com
